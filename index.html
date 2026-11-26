@@ -582,7 +582,7 @@
         <p>With love,<br>Crystal</p>
       </div>
     </details>
-    <p class="notice"><strong>Before you give:</strong> Some deadlines are the day your gift must arrive, so make sure to order early. You can give to most New York City programs from anywhere by shipping, mailing or giving money.</p>
+    <p class="notice"><strong>Before you give:</strong> Some deadlines are the day your gift must arrive, so make sure to order early.</p>
     <!-- The date is filled in by the script, the same as in "About this list". The date written here only shows if JavaScript is off. -->
     <div class="fineprint">
       <p>This website is not affiliated with any listed organization.</p>
@@ -688,6 +688,8 @@
         status:  "open", "confirm" (something is unconfirmed), "waitlist" (full)
         deadline: "YYYY-MM-DD" or null. Past deadlines are marked on their own.
         closesAt: only when a program closes at a set time, such as "2026-12-12T20:00:00-05:00" (8 pm Eastern).
+        mustArrive: true when the gift must be there by the date, including drop-off. Leave it out when you can still
+                 order, ship, or give on the date itself.
         ends:    on one row or option, "YYYY-MM-DD", when only that way to give has a deadline. The card stays open
                  while any other way is still open.
         openLabel: words for the label when there is no deadline, such as "Dates vary by area". Leave it out to show "Open now".
@@ -1024,6 +1026,7 @@ const PROGRAMS = [
     "cost": "About $15 to $30 for each gift.",
     "costMin": 40,
     "deadline": null,
+    "mustArrive": true,
     "action": {
       "type": "email",
       "label": "Email Siona for a wish",
@@ -1119,6 +1122,7 @@ const PROGRAMS = [
     "cost": "Gifts range from under $10 to about $100.",
     "costMin": 8,
     "deadline": "2026-12-01",
+    "mustArrive": true,
     "stepGroups": [
       {
         "title": "Buy from their wish list",
@@ -1164,6 +1168,7 @@ const PROGRAMS = [
     "cost": "Up to $40 per letter, plus postage.",
     "costMin": 40,
     "deadline": "2026-12-04",
+    "mustArrive": true,
     "stepGroups": [
       {
         "title": "Mail a gift yourself",
@@ -1497,6 +1502,7 @@ const PROGRAMS = [
     "cost": "$25 minimum per child. $25 to $50 is suggested.",
     "costMin": 25,
     "deadline": "2026-12-14",
+    "mustArrive": true,
     "stepGroups": [
       {
         "title": "Mail or drop off a gift",
@@ -1721,6 +1727,7 @@ const PROGRAMS = [
     "cost": "You choose the toy.",
     "costMin": null,
     "deadline": "2026-12-11",
+    "mustArrive": true,
     "stepGroups": [
       {
         "title": "Drop off a gift",
@@ -1766,6 +1773,7 @@ const PROGRAMS = [
     "cost": "You choose the gift.",
     "costMin": null,
     "deadline": "2026-12-17",
+    "mustArrive": true,
     "stepGroups": [
       {
         "title": "Drop off a gift",
@@ -1883,6 +1891,7 @@ const PROGRAMS = [
     "cost": "You choose the toy.",
     "costMin": null,
     "deadline": "2026-12-18",
+    "mustArrive": true,
     "stepGroups": [
       {
         "title": "Drop off a gift",
@@ -2038,6 +2047,7 @@ const PROGRAMS = [
     "cost": "You choose the toy or the amount.",
     "costMin": null,
     "deadline": "2026-12-17",
+    "mustArrive": true,
     "stepGroups": [
       {
         "title": "Mail a gift yourself",
@@ -2300,8 +2310,9 @@ function badgeFor(p) {
   const next = nextDeadline(p);
   if (next) {
     const n = daysUntil(next);
-    // Every card uses the same word, so dates are easy to compare down the page
-    const base = "Deadline: " + shortDate(next);
+    // Two labels: "Must arrive by" when the gift has to be there by the date, and "Closes on" when you can still
+    // order, ship, or give on the date itself. The date always comes last, so dates are still easy to compare down the page.
+    const base = (p.mustArrive ? "Must arrive by " : "Closes on ") + shortDate(next);
     if (n === 0) return { text: base, cls: "urgent", soon: "Today" };
     if (n === 1) return { text: base, cls: "urgent", soon: "Tomorrow" };
     if (n <= 7) return { text: base, cls: "urgent" };   // red in the last week, with no extra words
