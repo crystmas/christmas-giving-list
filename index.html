@@ -465,6 +465,34 @@
     .results-head { grid-row: 3; }
     #results { grid-row: 4; }
   }
+  /* Quiet controls: "Filters" and "Sort" are small pills, and the phone filter panel has no box, like the
+     desktop rail. Each pill looks 36px tall. Its tap area is 44px tall. */
+  .sort-face { min-width: 0; min-height: 36px; padding: 0 12px 0 14px; font-size: 0.875rem; border-color: var(--line); border-radius: 18px; }
+  .sort select { inset: -4px 0; height: calc(100% + 8px); }
+  @media (max-width: 699px) {
+    .page { grid-template-columns: 6.25rem minmax(0, 1fr); column-gap: 8px; }
+    .page:has(.fs-count) { grid-template-columns: 7.75rem minmax(0, 1fr); }
+    .filters > summary { position: relative; width: 6.25rem; min-height: 36px; padding: 0 12px; font-size: 0.875rem; border-color: var(--line); border-radius: 18px; }
+    .filters > summary:has(.fs-count) { width: 7.75rem; }
+    .filters > summary::after { content: ""; position: absolute; inset: -4px 0 -5px; }
+    .fs-count { min-width: 20px; height: 20px; }
+    .sort { justify-self: start; }
+    .sort-face { padding: 0 12px 0 14px; }
+    #sortText { overflow-wrap: anywhere; }   /* with very large text the label breaks instead of pushing the page sideways */
+    .filters-body { margin-top: 12px; border: 0; border-top: 1px solid var(--line-soft); border-radius: 0; background: transparent; box-shadow: none; }
+    .filters-body > * { padding: 10px 0; }
+    .filters-body > * + * { border-top: 1px solid var(--line-soft); }
+    .filters h2 { font-size: 0.875rem; color: var(--ink-soft); }
+    .filters fieldset > legend { font-size: 0.8125rem; color: var(--ink-soft); }
+    .filters .check { font-size: 0.9375rem; }
+    .filters .check input { width: 20px; height: 20px; }
+    .filters-body > label.check { padding: 8px 0; }
+    .sheet-foot { background: var(--bg); border-radius: 0; box-shadow: none; }
+    #showResults { min-height: 44px; }
+  }
+  @media (max-width: 359px), (max-width: 22.4em) {
+    .page, .page:has(.fs-count) { grid-template-columns: minmax(0, 1fr); }
+  }
 </style>
 <!-- The folded feedback form needs JavaScript. Without it, only the plain link to the form shows. -->
 <noscript><style>#feedback { display: none; }</style></noscript>
