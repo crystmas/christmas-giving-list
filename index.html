@@ -164,9 +164,10 @@
   /* A short note before the list, in a light card */
   .notice {
     margin-top: 6px; padding: 12px 16px; background: var(--notice-bg); border: 1px solid var(--notice-line);
-    border-radius: 12px; font-size: 0.9375rem; color: var(--ink-soft);
+    border-radius: 12px; font-size: 0.9375rem; color: var(--ink);
   }
-  .notice strong { color: var(--ink); }
+  /* Small print under the card. The grid gap adds 4px, so it sits 8px below the card. */
+  .fineprint { margin-top: 4px; font-size: 0.8125rem; color: var(--ink-soft); }
   /* The tree and gifts sit to the right of the words on wider screens */
   .holiday-art { position: absolute; right: 20px; bottom: 14px; width: 168px; height: auto; }
   @media (max-width: 699px) { .holiday-art { width: 96px; top: 14px; bottom: auto; } h1 { max-width: 16ch; } .site-name { max-width: calc(100% - 104px); } }
@@ -556,7 +557,7 @@
 
 <main>
   <div class="wrap intro">
-    <p class="lead">There are so many incredible organizations making Christmas special for people of all ages. I created this website to make it easier to discover them and find a way to give that speaks to you and fits your budget.</p>
+    <p class="lead">There are so many incredible organizations making Christmas special for people of all ages, so I created this website to make it easier to discover them and find one that fits your budget.</p>
     <details class="story">
       <summary>How this all started<svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></summary>
       <div class="story-body">
@@ -569,8 +570,12 @@
         <p>With love,<br>Crystal</p>
       </div>
     </details>
+    <p class="notice"><strong>Before you give:</strong> Some deadlines are the day your gift must arrive, so make sure to order early.</p>
     <!-- The date is filled in by the script, the same as in "About this list". The date written here only shows if JavaScript is off. -->
-    <p class="notice"><strong>Before you give:</strong> Some deadlines are the day your gift must arrive, so order early and confirm with the organization. Checked <span class="newest-checked">November 25, 2026</span>. Independent, not part of any listed organization.</p>
+    <div class="fineprint">
+      <p>This website is not affiliated with any listed organization.</p>
+      <p>Last updated: <span class="newest-checked">November 25, 2026</span></p>
+    </div>
   </div>
   <div class="wrap page" id="app" hidden>
   <details class="filters" id="filterPanel" open>
@@ -2465,7 +2470,7 @@ window.addEventListener("resize", fitSticky);
 if (window.ResizeObserver) new ResizeObserver(fitSticky).observe($("filterPanel"));
 
 const newest = PROGRAMS.map((p) => p.checked).sort().pop();
-// The newest check date, shown in the notice at the top and in "About this list"
+// The newest check date, shown in the small print at the top and in "About this list"
 document.querySelectorAll(".newest-checked").forEach((el) => { el.textContent = longDate(newest); });
 
 if (SITE.makerName) $("maker").textContent = SITE.makerName;
