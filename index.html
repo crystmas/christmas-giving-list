@@ -606,6 +606,7 @@
       <li><span id="makerLead">I'm <span id="maker">Crystal Marte</span>. </span>I put this website together to make it a little easier for anyone who wants to give this holiday season. It is independent and is not part of any organization on it.</li>
       <li>Every listing was checked on <span id="checkedOn">November 25, 2026</span>, and will continue to be checked on a regular basis. However, dates and openings change, so confirm with the organization before you buy.</li>
       <li>For some programs, <strong>the deadline is the day your gift must arrive</strong>. An order placed on the last day can be too late.</li>
+      <li>This site counts visits and button clicks without cookies or personal data.</li>
       <li>See a mistake, know a program that belongs on the list, or find something hard to use? Tell us using the form below.
         <details class="feedback" id="feedback">
           <summary>Open the feedback form</summary>
@@ -2041,12 +2042,12 @@ function srName(a) {
 }
 
 // What a person needs if the email button does nothing, folded into one line under that button
-function emailHelpHTML(a) {
+function emailHelpHTML(a, id) {
   return '<details class="msg"><summary>If your email app does not open</summary><div class="msg-body">' +
         '<p class="hint">Copy the address and the message, then paste them into any email.</p>' +
         '<div class="action-row copy-row">' +
-          '<button type="button" class="btn secondary small" data-copy="addr">Copy email address</button>' +
-          '<button type="button" class="btn secondary small" data-copy="msg">Copy message text</button>' +
+          '<button type="button" class="btn secondary small" data-copy="addr" data-program="' + esc(id) + '">Copy email address</button>' +
+          '<button type="button" class="btn secondary small" data-copy="msg" data-program="' + esc(id) + '">Copy message text</button>' +
         "</div>" +
         '<p class="copy-status" role="status" aria-live="polite"></p>' +
         '<p><strong>To:</strong> <span class="addr">' + esc(a.email) + "</span></p>" +
@@ -2120,7 +2121,7 @@ function giveHTML(p) {
       if (ic) used.push(ic);
       const cls = filled ? "secondary" : "primary";
       filled = true;
-      return '<a class="btn ' + cls + '" href="' + esc(x.type === "email" ? mailto(x) : x.url) + '">' + (ic ? ICON[ic] : "") +
+      return '<a class="btn ' + cls + '" data-program="' + esc(p.id) + '" href="' + esc(x.type === "email" ? mailto(x) : x.url) + '">' + (ic ? ICON[ic] : "") +
         '<span class="btn-label">' + esc(x.label) + srName(x) + "</span></a>";
     }).join("");
     const detail = o.text
@@ -2130,7 +2131,7 @@ function giveHTML(p) {
     html += '<li class="give' + (act ? " has-act" : "") + (o.text ? "" : " no-text") + '">' +
       '<div class="give-text"><p class="give-name">' + esc(o.name) + "</p>" + detail + "</div>" +
       (act ? '<div class="give-act">' + act + "</div>" : "") +
-      (email ? emailHelpHTML(email) : "") + "</li>";
+      (email ? emailHelpHTML(email, p.id) : "") + "</li>";
   });
   return html + "</ul></div>";
 }
@@ -2444,6 +2445,23 @@ if (SITE.contactEmail) {
     '<a href="mailto:' + esc(SITE.contactEmail) + '">' + esc(SITE.contactEmail) + "</a>.";
 }
 
+// Visit counts (GoatCounter, no cookies or personal data). The cards are drawn by this script and redrawn
+// when filters change, so one listener on the list counts clicks on every card's buttons, old or new.
+// If the GoatCounter script did not load (for example, an ad blocker stopped it), nothing is counted and nothing breaks.
+$("list").addEventListener("click", (e) => {
+  const btn = e.target.closest("[data-program]");
+  if (!btn || !window.goatcounter || typeof window.goatcounter.count !== "function") return;
+  const p = PROGRAMS.find((x) => x.id === btn.dataset.program);
+  if (!p) return;
+  // The words on the button, without the extra words only screen readers hear
+  const face = (btn.querySelector(".btn-label") || btn).cloneNode(true);
+  face.querySelectorAll(".sr-only").forEach((x) => x.remove());
+  const label = face.textContent.trim();
+  try {
+    window.goatcounter.count({ path: "give/" + p.id + "/" + label, title: p.name + ": " + label, event: true });
+  } catch (err) { /* counting must never get in the way of giving */ }
+});
+
 // Bring back the filters this visitor had on, for example after pressing Back
 try {
   const st = JSON.parse(sessionStorage.getItem("wishFinderFilters") || "null");
@@ -2462,5 +2480,7 @@ lastSig = dateSig();
 update();
 fitSticky();
 </script>
+<script data-goatcounter="https://thechristmasgivinglist.goatcounter.com/count"
+        async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
