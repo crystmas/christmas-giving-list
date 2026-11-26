@@ -331,6 +331,8 @@
   .more-body, .email-lead, .glance dd, .second { overflow-wrap: anywhere; }
   .card h4 { font-size: 0.9375rem; }
   .steps { list-style: decimal; padding-left: 1.4em; display: grid; gap: 4px; max-width: 54ch; margin-top: -6px; }
+  /* Choices inside a step: the giver picks one, so they are bullets, not numbers */
+  .steps .choices { list-style: disc; padding-left: 1.2em; display: grid; gap: 4px; margin-top: 4px; font-size: inherit; }
   .goodtoknow { color: var(--ink-soft); max-width: 52ch; }
 
   details.more { border-top: 1px solid var(--line-soft); margin-top: -2px; }
@@ -686,7 +688,10 @@
         openLabel: words for the label when there is no deadline, such as "Dates vary by area". Leave it out to show "Open now".
         summary: one or two short sentences: what the gift is and who gets it.
         about:   background on the organization. Shown inside "Steps and details", not on the card.
-        stepGroups: only when two ways need their own steps. A list of { title, steps } shown in place of "steps".
+        stepGroups: every program has stepGroups, a list of { title, steps }. Use one group per way to give, titled with the
+                 filter's words ("Buy from their wish list", "Drop off a gift", "Mail a gift yourself", "Give money").
+                 Use "Mail or drop off a gift" when the same steps end in either. Number only steps that happen in order.
+                 When the giver picks one option, use { text: "… one of these ways:", choices: [ … ] }.
         Buttons: the first button on a card is solid, the rest are outlined. A button gets a small picture only when the
                  picture shows what the button does. To choose it by hand, add "icon" to "action" or to a "link"
                  (ship, money, mail, drop, signup, info, or "" for none).
@@ -731,17 +736,28 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Choose a letter to Santa from a child or family and send a gift they asked for.",
+    "about": "USPS Operation Santa is a US Postal Service program, started in 1912. It lets people adopt letters sent to Santa and send the gifts. It is not a charity.",
     "whoText": "Children and families who wrote to Santa",
     "cost": "You choose. You also pay for shipping.",
     "costMin": null,
     "deadline": "2026-12-12",
-    "steps": [
-      "Create a free account and verify your identity.",
-      "Read the letters and adopt one or more.",
-      "Buy the gifts. Ship them from a participating Post Office, or order from Santa's Gift Shoppe and USPS delivers them.",
-      "The site closes at 8 pm Eastern on December 12."
+    "stepGroups": [
+      {
+        "title": "Mail a gift yourself",
+        "steps": [
+          "Create a free account and verify your identity.",
+          "Read the letters and adopt one or more.",
+          {
+            "text": "Send the gifts by December 12 one of these ways:",
+            "choices": [
+              "Buy them yourself and ship them from a participating Post Office.",
+              "Order them from Santa's Gift Shoppe, and USPS delivers them."
+            ]
+          }
+        ]
+      }
     ],
-    "note": "Open to people in the continental US, Hawaii, and Puerto Rico. Letters go quickly and the ID check takes time, so start early.",
+    "note": "The site closes at 8 pm Eastern on December 12. It is open to people in the continental US, Hawaii, and Puerto Rico. Letters go quickly and the ID check takes time, so start early.",
     "action": {
       "type": "link",
       "label": "Sign up with USPS",
@@ -788,14 +804,20 @@ const PROGRAMS = [
     "status": "open",
     "yearRound": true,
     "summary": "Fund a wish, like art supplies or a bike, for a child or young adult affected by foster care or a crisis.",
+    "about": "One Simple Wish is a nonprofit, founded in 2008. It grants wishes for children and young adults affected by foster care and crisis, working with agencies across the US.",
     "whoText": "Children and young adults affected by foster care or crisis",
     "cost": "Full wishes range from under $25 to over $200. Some accept partial donations.",
     "costMin": null,
     "deadline": null,
-    "steps": [
-      "Browse the wishes. Choose “Holiday Wishes” to see the seasonal list.",
-      "Pay for a wish, or pay part of a wish that allows it.",
-      "One Simple Wish buys the gift and gets it to the child."
+    "stepGroups": [
+      {
+        "title": "Give money",
+        "steps": [
+          "Browse the wishes. Choose “Holiday Wishes” to see the seasonal list.",
+          "Pay for a wish, or pay part of a wish that allows it.",
+          "One Simple Wish buys the gift and gets it to the child."
+        ]
+      }
     ],
     "action": {
       "type": "link",
@@ -824,14 +846,29 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Pick a child's Angel Tree tag or shop your local Walmart registry to give toys or clothes to kids in your community.",
+    "about": "The Salvation Army is a Christian church that also runs social services, active in the US since 1880. It started Angel Tree in 1979 to give Christmas gifts to children in need.",
     "whoText": "Children in your own community",
     "cost": "You choose from the wish list.",
     "costMin": null,
     "deadline": null,
-    "steps": [
-      "Enter your ZIP code to find your local Salvation Army.",
-      "Add gifts from the wish list to your Walmart cart.",
-      "Choose delivery. Walmart ships the gifts to the Salvation Army for you."
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Enter your ZIP code to find your local Salvation Army.",
+          "Add gifts from its wish list to your Walmart cart.",
+          "Check out with delivery. Walmart ships the gifts to the Salvation Army for you."
+        ]
+      },
+      {
+        "title": "Drop off a gift",
+        "steps": [
+          "Find an Angel Tree in a participating Walmart or Sam's Club.",
+          "Take a paper tag from the tree. Each tag lists what one child wished for.",
+          "Buy the gifts.",
+          "Leave them unwrapped in the store's collection bin."
+        ]
+      }
     ],
     "note": "Dates are different in each area. Check with your local Salvation Army.",
     "action": {
@@ -858,25 +895,7 @@ const PROGRAMS = [
       "needed": false,
       "text": "None. You enter your ZIP code."
     },
-    "openLabel": "Dates vary by area",
-    "stepGroups": [
-      {
-        "title": "To buy from the wish list",
-        "steps": [
-          "Enter your ZIP code to find your local Salvation Army.",
-          "Add gifts from the wish list to your Walmart cart.",
-          "Choose delivery. Walmart ships the gifts to the Salvation Army for you."
-        ]
-      },
-      {
-        "title": "To drop off a gift in a store",
-        "steps": [
-          "Find an Angel Tree in a participating Walmart or Sam's Club.",
-          "Take a paper tag from the tree. Each tag lists what one child wished for.",
-          "Buy the gifts and leave them unwrapped in the store's collection bin."
-        ]
-      }
-    ]
+    "openLabel": "Dates vary by area"
   },
   {
     "id": "bastas",
@@ -887,16 +906,29 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Pick a gift an older adult in your area asked for, like a warm blanket.",
-    "about": "Local offices of Home Instead, a company that provides care for older adults at home, collect and deliver the gifts.",
+    "about": "Home Instead is a company that provides in-home care for older adults, founded in 1994 in Omaha, Nebraska. Its local offices collect and deliver the gifts.",
     "whoText": "Older adults who may be alone or on a fixed income",
     "cost": "You choose. Requests are often basics like blankets.",
     "costMin": null,
     "deadline": null,
-    "steps": [
-      "Find your local office in the list. Every office on the list takes part this year.",
-      "Check the office's website or Facebook page, or call, to learn where its gift trees are. They are often in stores, banks and libraries.",
-      "Pick an ornament from a tree. Each one lists a gift an older adult asked for. If your office has an Amazon wish list, you can use that.",
-      "Buy the gift and return it the way your office asks."
+    "stepGroups": [
+      {
+        "title": "Drop off a gift",
+        "steps": [
+          "Find your local office in the list. Every office on the list takes part this year.",
+          "Check the office's website or Facebook page, or call, to learn where its gift trees are. They are often in stores, banks, and libraries.",
+          "Pick an ornament from a tree. Each one lists a gift an older adult asked for.",
+          "Buy the gift and return it the way your office asks."
+        ]
+      },
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Find your local office in the list. A few offices show an Amazon link.",
+          "Open that office's wish list.",
+          "Choose a gift and check out."
+        ]
+      }
     ],
     "note": "Dates are different at each office. No New York City or Long Island office is on the 2026 list.",
     "action": {
@@ -934,16 +966,22 @@ const PROGRAMS = [
     "status": "open",
     "yearRound": true,
     "summary": "Chip in toward an older adult's wish, from hearing aids to a trip somewhere they've always wanted to visit.",
+    "about": "Twilight Wish Foundation is a nonprofit, founded in 2003 in Bucks County, Pennsylvania. It grants wishes for adults 65 and older who have low incomes or live in long-term care.",
     "whoText": "Low-income older adults",
     "cost": "You choose the amount.",
     "costMin": null,
     "deadline": null,
-    "steps": [
-      "Read the open wishes.",
-      "Open a wish and use its donation link.",
-      "Enter the amount you want to give."
+    "stepGroups": [
+      {
+        "title": "Give money",
+        "steps": [
+          "Read the open wishes.",
+          "Open a wish and use its donation link.",
+          "Enter the amount you want to give."
+        ]
+      }
     ],
-    "note": "Twilight Wish tries to use your gift for the wish you chose. If it cannot, the money goes to a similar urgent wish. Questions: call 877-893-9474 (toll-free).",
+    "note": "Twilight Wish tries to use your gift for the wish you chose. If it can't, the money goes to a similar urgent wish. Questions: 877-893-9474 (toll-free).",
     "action": {
       "type": "link",
       "label": "Browse Twilight Wishes",
@@ -976,6 +1014,7 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Fulfill a holiday wish for someone S:US supports, including adults with disabilities, veterans, and children living in shelters.",
+    "about": "Services for the UnderServed (S:US) is a New York City nonprofit, founded in 1978. It provides housing, job training, and treatment services to about 35,000 people and their families each year.",
     "whoText": "Adults with intellectual or developmental disabilities, seniors with disabilities, children living in shelters, and veterans",
     "cost": "About $15 to $30 for each gift.",
     "costMin": 40,
@@ -1030,26 +1069,33 @@ const PROGRAMS = [
     ],
     "stepGroups": [
       {
-        "title": "To give one person's wish",
+        "title": "Mail or drop off a gift",
         "steps": [
-          "Email Siona and say how many people you want to buy for.",
-          "She sends you each person's wish.",
-          "Mail or drop off the gifts at 463 Seventh Avenue, 17th Floor, New York, NY 10018, Attention: Siona Schmid.",
-          "To drop off, email Siona or call 646-588-9774 first to set a time. Drop-off ends December 4."
+          "Email Siona Schmid at sschmid@sus.org. Say how many people you want to buy for.",
+          "Siona sends you each person's wish.",
+          "Buy the gifts.",
+          {
+            "text": "Send them one of these ways:",
+            "choices": [
+              "Mail them to S:US, 463 Seventh Avenue, 17th Floor, New York, NY 10018, Attention: Siona Schmid.",
+              "Drop them off at the same address by December 4. Email Siona or call 646-588-9774 first to set a time."
+            ]
+          }
         ]
       },
       {
-        "title": "To buy from the wish list",
+        "title": "Buy from their wish list",
         "steps": [
-          "Open the S:US wish list on Amazon.",
-          "Choose a gift and check out. It ships to S:US."
+          "Open the Amazon wish list.",
+          "Choose a gift.",
+          "Check out. It ships to S:US for you."
         ]
       },
       {
-        "title": "To give money",
+        "title": "Give money",
         "steps": [
           "Open the S:US donation form.",
-          "Choose an amount. S:US shops for the gifts."
+          "Choose an amount. S:US buys the gifts."
         ]
       }
     ]
@@ -1063,17 +1109,22 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Give a book, game, toy, or gift card to a survivor of gender-based violence or one of their children.",
-    "about": "Sanctuary for Families is a New York City nonprofit, founded in 1984. It helps people who have lived through domestic violence or sex trafficking with shelter, counseling, legal help, and job training.",
+    "about": "Sanctuary for Families is a New York City nonprofit, founded in 1984. It helps survivors of domestic violence, sex trafficking, and other gender-based violence with shelter, counseling, legal help, and job training.",
     "whoText": "Adults and children who are survivors of abuse",
     "cost": "Gifts range from under $10 to about $100.",
     "costMin": 8,
     "deadline": "2026-12-01",
-    "steps": [
-      "Open the Amazon wish list.",
-      "Choose a gift or gift card.",
-      "At checkout, select Sanctuary's shipping address. Order so the gift arrives by December 1."
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open the Amazon wish list.",
+          "Choose a gift or gift card.",
+          "Check out with Sanctuary's shipping address. Order so it arrives by December 1."
+        ]
+      }
     ],
-    "note": "You can also deliver new gifts yourself by December 1. You must arrange it first with Emily Lo Bue, elobue@sffny.org. She also answers questions.",
+    "note": "You can also deliver new gifts yourself by December 1, but you must arrange it first with Emily Lo Bue. Questions: elobue@sffny.org.",
     "action": {
       "type": "link",
       "label": "Shop the wish list",
@@ -1103,14 +1154,21 @@ const PROGRAMS = [
     "status": "waitlist",
     "statusNote": "Sign-up is closed for 2026. You can ask to be told if a wish opens up.",
     "summary": "If a wish opens up, get matched with a letter from a NYC child or teen, then send them the gift they asked for.",
+    "about": "New York Cares is New York City's largest volunteer organization, founded in 1987. It runs volunteer projects in education, hunger and homelessness relief, health for older adults, and parks.",
     "whoText": "New York City children and teens",
     "cost": "Up to $40 per letter, plus postage.",
     "costMin": 40,
     "deadline": "2026-12-04",
-    "steps": [
-      "Email to ask to be notified.",
-      "If a wish opens up, you receive a child's letter.",
-      "Buy the gift, wrap it, and mail or deliver it to the partner agency on the letter by December 4."
+    "stepGroups": [
+      {
+        "title": "Mail a gift yourself",
+        "steps": [
+          "Email winter.wishes@newyorkcares.org to ask to be told if a wish opens up.",
+          "If one opens, you get a child's letter.",
+          "Buy the gift and wrap it.",
+          "Mail or deliver it to the partner agency on the letter by December 4."
+        ]
+      }
     ],
     "action": {
       "type": "email",
@@ -1126,7 +1184,7 @@ const PROGRAMS = [
     "ways": [
       "mail"
     ],
-    "note": "Asking to be notified does not guarantee that you get a wish.",
+    "note": "Asking to be told does not mean you will get a wish.",
     "signup": {
       "needed": true,
       "text": "Email to be told if a wish opens up.",
@@ -1147,17 +1205,36 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Give a holiday gift to a child in foster care, an adult with a developmental disability, or a family facing financial or housing hardship.",
+    "about": "The New York Foundling is a New York City nonprofit, founded in 1869. It runs child welfare, education, health, and disability programs for children, adults, and families.",
     "whoText": "Children in foster care, adults with developmental disabilities, and families facing money or housing trouble",
     "cost": "About $7 to $27 per gift on YouGiveGoods. Bundles go up to $250.",
     "costMin": null,
     "deadline": "2026-12-08",
-    "steps": [
-      "Open the Amazon wish list.",
-      "Choose a gift and check out by December 8. It ships to The Foundling for you.",
-      "Or bring a new gift to 590 Avenue of the Americas, New York.",
-      "Or give money on The Foundling's gift drive page."
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open the Amazon wish list.",
+          "Choose a gift.",
+          "Check out by December 8. It ships to The Foundling for you."
+        ]
+      },
+      {
+        "title": "Drop off a gift",
+        "steps": [
+          "Buy a new gift.",
+          "Bring it to 590 Avenue of the Americas, New York, by December 8."
+        ]
+      },
+      {
+        "title": "Give money",
+        "steps": [
+          "Open The Foundling's gift drive page.",
+          "Choose an amount."
+        ]
+      }
     ],
-    "note": "Groups and questions: Partners@NYFoundling.org or 212-886-4122.",
+    "note": "Questions, including gifts from groups: Partners@NYFoundling.org or 212-886-4122.",
     "action": {
       "type": "link",
       "label": "Shop the wish list",
@@ -1200,15 +1277,20 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Give a holiday gift from Henry Street's registry to someone in its programs, from kids in afterschool to older adults and families staying in shelters.",
-    "about": "Henry Street Settlement is a nonprofit on Manhattan's Lower East Side. It serves the people who get these gifts.",
+    "about": "Henry Street Settlement is a nonprofit on Manhattan's Lower East Side, founded in 1893. It offers social services, health care, and arts programs to New Yorkers of all ages.",
     "whoText": "More than 4,000 people of all ages in Henry Street programs, including children in afterschool programs and families living in shelter",
     "cost": "You choose from the wish list.",
     "costMin": null,
     "deadline": "2026-12-15",
-    "steps": [
-      "Open the Holiday Drive registry from the Henry Street page.",
-      "Choose gifts and add them to your cart.",
-      "At checkout, pick \"Henry Street Settlement – Holiday Drive\" as the shipping address."
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open the Holiday Drive registry from the Henry Street page.",
+          "Choose gifts and add them to your cart.",
+          "Check out with \"Henry Street Settlement – Holiday Drive\" as the shipping address."
+        ]
+      }
     ],
     "note": "Groups can adopt a whole program by giving 30 to 300 gifts. The Henry Street page says who to contact.",
     "action": {
@@ -1239,16 +1321,28 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Choose a shelter, supportive housing site, or afterschool program and send a gift from its wish list.",
-    "about": "CAMBA is a Brooklyn nonprofit. It runs these shelters, housing sites, and afterschool programs.",
+    "about": "CAMBA is a Brooklyn nonprofit, founded in 1977. It runs shelters, family support, and youth programs across New York City.",
     "whoText": "Children and families at CAMBA shelters, supportive housing, and afterschool programs",
     "cost": "You choose from the wish list.",
     "costMin": null,
     "deadline": "2026-12-18",
-    "steps": [
-      "Pick a site's Amazon wish list on the CAMBA page.",
-      "Choose a gift and check out. Amazon ships it to that site.",
-      "Fill out CAMBA's short donor form so staff know the gift is coming and can send you a tax receipt.",
-      "Or give money with the \"Make a Cash Donation\" link on the CAMBA page."
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "On the CAMBA page, pick a site's Amazon wish list.",
+          "Choose a gift.",
+          "Check out. It ships to that site for you.",
+          "Fill out CAMBA's short donor form so staff know the gift is coming and can send you a tax receipt."
+        ]
+      },
+      {
+        "title": "Give money",
+        "steps": [
+          "Open the CAMBA page.",
+          "Use the \"Make a Cash Donation\" link."
+        ]
+      }
     ],
     "note": "Two more CAMBA sites say their wish list is coming soon. Questions: development@CAMBA.org.",
     "action": {
@@ -1288,17 +1382,29 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Pick a toy from the wish list, and the Coalition will get it to a child living in a New York City shelter.",
+    "about": "Coalition for the Homeless is a New York City nonprofit, founded in 1981. It gives food, housing help, and job training to people who are homeless, and it advocates for their rights.",
     "whoText": "Children living in New York City homeless shelters",
     "cost": "You choose the toy or the amount.",
     "costMin": null,
     "deadline": null,
-    "steps": [
-      "Open the Amazon wish list.",
-      "Choose a toy and check out.",
-      "The toy is sent straight to the Coalition's office.",
-      "Or give money on the Coalition's giving page."
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open the Amazon wish list.",
+          "Choose a toy.",
+          "Check out by December 11. It ships to the Coalition's office for you."
+        ]
+      },
+      {
+        "title": "Give money",
+        "steps": [
+          "Open the Coalition's giving page.",
+          "Choose an amount."
+        ]
+      }
     ],
-    "note": "The Coalition's flyer asks you to order from the wish list by December 11. Questions: call 212-776-2059.",
+    "note": "The December 11 date comes from the Coalition's flyer. Questions: 212-776-2059.",
     "action": {
       "type": "link",
       "label": "Shop the wish list",
@@ -1338,14 +1444,20 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Pick a holiday gift from the BronxWorks wish list for a child in one of its Bronx programs.",
+    "about": "BronxWorks is a Bronx nonprofit and settlement house, founded in 1972. It helps Bronx residents of all ages, from toddlers to older adults, including people experiencing homelessness.",
     "whoText": "Children in BronxWorks programs in the Bronx",
     "cost": "You choose from the wish list.",
     "costMin": null,
     "deadline": null,
-    "steps": [
-      "Open the Amazon wishlist.",
-      "Choose a gift.",
-      "At checkout, use the wishlist's shipping address. The gift goes to BronxWorks."
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open the Amazon wish list.",
+          "Choose a gift.",
+          "Check out with the wish list's shipping address. It ships to BronxWorks for you."
+        ]
+      }
     ],
     "action": {
       "type": "link",
@@ -1375,15 +1487,21 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Choose a child's Angel Tag and buy a gift they asked for on their Christmas wish list.",
-    "about": "This is the New York branch of The Salvation Army's Angel Tree program.",
+    "about": "The Salvation Army is a Christian church that also runs social services, active in the US since 1880. It started Angel Tree in 1979 to give Christmas gifts to children in need. Its Greater New York branch runs this one.",
     "whoText": "Children in the Greater New York area",
     "cost": "$25 minimum per child. $25 to $50 is suggested.",
     "costMin": 25,
     "deadline": "2026-12-14",
-    "steps": [
-      "Adopt an Angel. You choose one child on the online Angel Tree.",
-      "Buy at least one unwrapped toy from the child's list, worth $25 or more.",
-      "Ship or deliver it with the child's Angel ID to Star Lake Camp Toy Shop, 268 Macopin Rd, Bloomingdale, NJ 07403. Put the Angel ID on the gift note or on the second address line."
+    "stepGroups": [
+      {
+        "title": "Mail or drop off a gift",
+        "steps": [
+          "Adopt an Angel by choosing one child on the online Angel Tree.",
+          "Buy at least one unwrapped toy from the child's list, worth $25 or more.",
+          "Write the child's Angel ID on the gift note or on the second address line.",
+          "Ship or deliver it to Star Lake Camp Toy Shop, 268 Macopin Rd, Bloomingdale, NJ 07403."
+        ]
+      }
     ],
     "action": {
       "type": "link",
@@ -1398,7 +1516,7 @@ const PROGRAMS = [
       "mail",
       "drop"
     ],
-    "note": "December 11 is the preferred arrival date. December 14 is the final day. The guide also lists toy pickup by appointment through December 11.",
+    "note": "Aim for your gift to arrive by December 11. December 14 is the final day. The guide also lists toy pickup by appointment through December 11.",
     "signup": {
       "needed": true,
       "text": "Adopt an Angel online to get the child's wish list."
@@ -1420,15 +1538,20 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Help buy a holiday gift for an LGBTQ+ teen or young adult experiencing homelessness or at risk of losing housing.",
-    "about": "New Alternatives is a New York City resource center. It buys the gifts and gives them to its clients at a holiday party.",
+    "about": "New Alternatives is a New York City nonprofit, founded in 2008. It helps LGBTQ+ young people experiencing homelessness with housing, health, school, and jobs.",
     "whoText": "LGBTQ+ youth and young adults in need",
     "cost": "Any amount.",
     "costMin": null,
     "deadline": null,
-    "steps": [
-      "Open the Santa Project page.",
-      "Follow the donate link.",
-      "Give any amount. New Alternatives buys the gifts."
+    "stepGroups": [
+      {
+        "title": "Give money",
+        "steps": [
+          "Open the Santa Project page.",
+          "Follow the donate link.",
+          "Choose an amount. New Alternatives buys the gifts."
+        ]
+      }
     ],
     "action": {
       "type": "link",
@@ -1447,7 +1570,7 @@ const PROGRAMS = [
     "options": [
       {}
     ],
-    "note": "No giving deadline is listed. Gifts are handed out on December 18, so give before then."
+    "note": "Gifts are handed out at a holiday party on December 18. No giving deadline is listed, so give before then."
   },
   {
     "id": "unionsettlement",
@@ -1458,14 +1581,34 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Give a toy to a child in East Harlem or help Union Settlement buy gifts for local families.",
+    "about": "Union Settlement is an East Harlem nonprofit, founded in 1895. It offers early childhood education, youth programs, services for older adults, and mental health care to East Harlem residents.",
     "whoText": "Children and families in East Harlem",
     "cost": "You choose the toy or the amount.",
     "costMin": null,
     "deadline": "2026-12-08",
-    "steps": [
-      "Open the Amazon wish list.",
-      "Choose a toy and check out by December 8. It ships to Union Settlement for you.",
-      "Or bring a new, unwrapped toy to 237 East 104th Street, New York, NY 10029, Monday to Friday, 11 am to 6 pm."
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open the Amazon wish list.",
+          "Choose a toy.",
+          "Check out by December 8. It ships to Union Settlement for you."
+        ]
+      },
+      {
+        "title": "Drop off a gift",
+        "steps": [
+          "Buy a new toy and leave it unwrapped.",
+          "Bring it to 237 East 104th Street, New York, NY 10029, Monday to Friday, 11 am to 6 pm."
+        ]
+      },
+      {
+        "title": "Give money",
+        "steps": [
+          "Open Union Settlement's holiday gift drive page.",
+          "Choose an amount."
+        ]
+      }
     ],
     "note": "Questions: FundDevelopment@unionsettlement.org.",
     "action": {
@@ -1509,14 +1652,27 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Pick a toy from the wish list for children staying in Brooklyn shelters.",
-    "about": "A local nonprofit of residents and shop owners on Atlantic Avenue runs the drive.",
+    "about": "The Atlantic Avenue Local Development Corporation is a Brooklyn nonprofit started by local merchants and community activists. It became a nonprofit in 1986 and supports businesses, events, and historic buildings on Atlantic Avenue. Its toy drive gives toys to children and families in local homeless shelters.",
     "whoText": "Children and families at local homeless shelters",
     "cost": "You choose the toy or the amount.",
     "costMin": null,
     "deadline": "2026-12-10",
-    "steps": [
-      "Open the Amazon wish list.",
-      "Choose a toy and check out. It ships to the toy drive for you."
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open the Amazon wish list.",
+          "Choose a toy.",
+          "Check out. It ships to the toy drive for you."
+        ]
+      },
+      {
+        "title": "Give money",
+        "steps": [
+          "Open the PayPal donation page.",
+          "Choose an amount."
+        ]
+      }
     ],
     "action": {
       "type": "link",
@@ -1555,15 +1711,19 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Drop off a new toy in Park Slope for a Brooklyn kid or teen ages 3 to 16.",
+    "about": "CHiPS (Community Help in Park Slope) is a Brooklyn nonprofit, founded in 1971. It runs a soup kitchen, a food pantry, and a home for new mothers and their babies.",
     "whoText": "Children ages 3 to 16",
     "cost": "You choose the toy.",
     "costMin": null,
     "deadline": "2026-12-11",
-    "steps": [
-      "Buy a new toy for a child aged 3 to 16.",
-      "Bring it to 200 4th Avenue, Brooklyn.",
-      "Drop-off hours are Monday to Friday, 9 am to 4 pm.",
-      "CHiPS lists December 13, a Sunday, so Friday, December 11 is the last day to drop off."
+    "stepGroups": [
+      {
+        "title": "Drop off a gift",
+        "steps": [
+          "Buy a new toy for a child aged 3 to 16.",
+          "Bring it to 200 4th Avenue, Brooklyn, by Friday, December 11. Drop-off hours are Monday to Friday, 9 am to 4 pm. CHiPS lists December 13, but that is a Sunday."
+        ]
+      }
     ],
     "action": {
       "type": "link",
@@ -1596,14 +1756,19 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Bring a new toy, game, book, or art supply for families in NYC shelters or temporary housing. Multilingual gifts are welcome.",
+    "about": "The Whitney Museum of American Art is an art museum in Manhattan, founded in 1930. It runs this drive with the NYC Department of Homeless Services, which gives the gifts to families in shelters or temporary housing.",
     "whoText": "Families in New York City shelters or temporary housing",
     "cost": "You choose the gift.",
     "costMin": null,
     "deadline": "2026-12-17",
-    "steps": [
-      "Buy a new toy, game, art supply, or book and leave it unwrapped.",
-      "Bring it to the drop-off spot on the museum's ground floor.",
-      "You do not need a ticket to drop off a gift."
+    "stepGroups": [
+      {
+        "title": "Drop off a gift",
+        "steps": [
+          "Buy a new toy, game, art supply, or book. Leave it unwrapped.",
+          "Bring it to the drop-off spot on the museum's ground floor. You don't need a ticket."
+        ]
+      }
     ],
     "action": {
       "type": "link",
@@ -1637,16 +1802,34 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Give a book or a new or gently used toy to a young child in New York City.",
-    "about": "Little Essentials is a Brooklyn nonprofit that gives supplies for children aged 5 and under to families living in poverty.",
+    "about": "Little Essentials is a Brooklyn nonprofit, founded in 2011. It gives clothing, gear, and supplies to New York City families living in poverty who have children aged 5 and under.",
     "whoText": "Young children in need in New York City",
     "cost": "You choose from the wish list.",
     "costMin": null,
     "deadline": "2026-12-18",
-    "steps": [
-      "Open the Amazon wish list.",
-      "Choose a toy or book and check out. It ships to Little Essentials for you.",
-      "If you ship an item yourself, send it to 1 Brooklyn Navy Yard, Building 240, Suite 205, Brooklyn, NY 11205.",
-      "Or bring toys or books to the warehouse in the Brooklyn Navy Yard. Book a time first."
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open the Amazon wish list.",
+          "Choose a toy or book.",
+          "Check out. It ships to Little Essentials for you."
+        ]
+      },
+      {
+        "title": "Mail a gift yourself",
+        "steps": [
+          "Buy a toy or book.",
+          "Mail it to Little Essentials, 1 Brooklyn Navy Yard, Building 240, Suite 205, Brooklyn, NY 11205."
+        ]
+      },
+      {
+        "title": "Drop off a gift",
+        "steps": [
+          "Book a drop-off time.",
+          "Bring toys or books to the warehouse in the Brooklyn Navy Yard."
+        ]
+      }
     ],
     "action": {
       "type": "link",
@@ -1690,15 +1873,26 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Give an unwrapped toy to a Staten Island child whose parent or caregiver requested a holiday gift.",
-    "about": "Where to Turn, a local crisis relief nonprofit, gives the toys to those families.",
+    "about": "Where to Turn is a Staten Island crisis relief nonprofit, started in 2001 to help families who lost loved ones on September 11. Chelsea Financial Services, a financial services firm, runs this drive with Where to Turn. The toys go to Staten Island children and families in need.",
     "whoText": "Staten Island children and families in need",
     "cost": "You choose the toy.",
     "costMin": null,
     "deadline": "2026-12-18",
-    "steps": [
-      "Buy a toy and leave it unwrapped.",
-      "Drop it off at 242 Main Street, Staten Island, NY 10307, Monday to Friday, 9 am to 5 pm.",
-      "Or mail it to the same address so it arrives by December 18."
+    "stepGroups": [
+      {
+        "title": "Drop off a gift",
+        "steps": [
+          "Buy a toy and leave it unwrapped.",
+          "Bring it to 242 Main Street, Staten Island, NY 10307, Monday to Friday, 9 am to 5 pm."
+        ]
+      },
+      {
+        "title": "Mail a gift yourself",
+        "steps": [
+          "Buy a toy and leave it unwrapped.",
+          "Mail it to 242 Main Street, Staten Island, NY 10307, so it arrives by December 18."
+        ]
+      }
     ],
     "action": {
       "type": "link",
@@ -1736,14 +1930,27 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Send a holiday gift to a family staying at one of the six NYC shelters run by Homes for the Homeless.",
+    "about": "Homes for the Homeless is a New York City nonprofit, founded in 1986. It runs six shelters for families with children in the Bronx, Manhattan, Queens, and Staten Island.",
     "whoText": "Children and families in Homes for the Homeless family residences",
     "cost": "You choose from the wish list.",
     "costMin": null,
     "deadline": null,
-    "steps": [
-      "Open the Amazon holiday wish list.",
-      "Choose a gift and check out. It ships to Homes for the Homeless for you.",
-      "If you ship a gift yourself, send it to Homes for the Homeless, Attn: Tierra Gunther, 36 Cooper Square, 3rd Floor, New York, NY 10003."
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open the Amazon wish list.",
+          "Choose a gift.",
+          "Check out. It ships to Homes for the Homeless for you."
+        ]
+      },
+      {
+        "title": "Mail a gift yourself",
+        "steps": [
+          "Buy a gift.",
+          "Mail it to Homes for the Homeless, Attn: Tierra Gunther, 36 Cooper Square, 3rd Floor, New York, NY 10003."
+        ]
+      }
     ],
     "action": {
       "type": "link",
@@ -1778,16 +1985,22 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Choose a toy or gift card for children living in Win's family shelters or supportive housing in New York City.",
+    "about": "Win is a New York City nonprofit, founded in 1983 as Women in Need. It is the city's largest provider of shelter and supportive housing for families experiencing homelessness.",
     "whoText": "Families with children in Win shelters and supportive housing",
     "cost": "About $4 to $34 per gift.",
     "costMin": null,
     "deadline": "2026-12-04",
-    "steps": [
-      "Open Win's 2026 holiday drive.",
-      "Choose toys or gift cards.",
-      "Check out by December 4. It ships to Win for you."
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open Win's 2026 holiday drive.",
+          "Choose toys or gift cards.",
+          "Check out by December 4. It ships to Win for you."
+        ]
+      }
     ],
-    "note": "Groups that want to take part: Volunteerservices@winnyc.org.",
+    "note": "Questions, including gifts from groups: Volunteerservices@winnyc.org.",
     "action": {
       "type": "link",
       "label": "Shop Win’s gift drive",
@@ -1815,15 +2028,33 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Give a new, unwrapped toy for a child up to age 16 through the New York City teachers' union.",
+    "about": "The United Federation of Teachers is the union for most New York City public school teachers, founded in 1960. It runs this toy drive each year for children in need.",
     "whoText": "Children from newborn to age 16",
     "cost": "You choose the toy or the amount.",
     "costMin": null,
     "deadline": "2026-12-17",
-    "steps": [
-      "Buy a new, unwrapped toy for a child from newborn to age 16.",
-      "Ship it so it arrives by December 17 to UFT Elementary Schools Division, 52 Broadway, 14th Floor, New York, NY 10004.",
-      "Or bring it to a UFT borough office. The UFT page lists them. In Manhattan, drop-off is on the 10th floor.",
-      "Or give money with PayPal on the UFT page. UFT buys the toys."
+    "stepGroups": [
+      {
+        "title": "Mail a gift yourself",
+        "steps": [
+          "Buy a new toy for a child from newborn to age 16. Leave it unwrapped.",
+          "Ship it to UFT Elementary Schools Division, 52 Broadway, 14th Floor, New York, NY 10004, so it arrives by December 17."
+        ]
+      },
+      {
+        "title": "Drop off a gift",
+        "steps": [
+          "Buy a new toy for a child from newborn to age 16. Leave it unwrapped.",
+          "Bring it to a UFT borough office. The UFT page lists them. In Manhattan, drop-off is on the 10th floor."
+        ]
+      },
+      {
+        "title": "Give money",
+        "steps": [
+          "Open the UFT toy drive page.",
+          "Pay with PayPal. UFT buys the toys."
+        ]
+      }
     ],
     "action": {
       "type": "link",
@@ -1868,15 +2099,20 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Choose a gift like a bracelet-making kit, basketball, or beginner guitar for a child served by Children's Aid in NYC.",
-    "about": "Children's Aid is a nonprofit, founded in 1853, that supports tens of thousands of children, young people, and families. The morning show on radio station NEW 102.7 runs the drive.",
+    "about": "Children's Aid is a New York City nonprofit, founded in 1853. It supports about 50,000 children and families in under-resourced neighborhoods with education, health care, and family support. The morning show on radio station NEW 102.7 runs this drive.",
     "whoText": "Children and families in under-resourced New York City neighborhoods",
     "cost": "About $5 to $26 per gift.",
     "costMin": 5,
     "deadline": "2026-12-11",
-    "steps": [
-      "Open the toy list.",
-      "Add one or more toys to your cart.",
-      "Check out. The toys ship to Children's Aid."
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open the toy list.",
+          "Choose one or more toys.",
+          "Check out. The toys ship to Children's Aid for you."
+        ]
+      }
     ],
     "action": {
       "type": "link",
@@ -1907,15 +2143,20 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Read a letter from a trans young person and send a gift they picked out, without exchanging personal information.",
-    "about": "Transanta sends the gifts without sharing anyone's personal details.",
+    "about": "Transanta is a gift-giving project for trans young people, started in 2020. Allies in Arts, a nonprofit, is its fiscal sponsor.",
     "whoText": "Trans young people in need",
     "cost": "You choose from their registry.",
     "costMin": null,
     "deadline": null,
-    "steps": [
-      "Open the Transanta homepage and scroll down. The letters are far down the page, below the newsletter sign-up.",
-      "Pick a letter, open that young person's gift registry, and choose a gift.",
-      "Check out. The gift ships to the young person, and their address stays private."
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open the Transanta homepage and scroll down. The letters are below the newsletter sign-up.",
+          "Pick a letter and open that young person's gift registry.",
+          "Choose a gift and check out. It ships to them, and their address stays private."
+        ]
+      }
     ],
     "action": {
       "type": "link",
@@ -1947,14 +2188,20 @@ const PROGRAMS = [
     ],
     "status": "open",
     "summary": "Pick a toy online, and Toys for Tots will distribute it to a child who could use a Christmas gift.",
+    "about": "Marine Toys for Tots is a US Marine Corps Reserve program, started in 1947. It collects toys for children in need across the US. This virtual toy box is run with Amazon.",
     "whoText": "Children and families in need across the US",
     "cost": "About $3 to $180 per toy. Many options are under $30.",
     "costMin": null,
     "deadline": null,
-    "steps": [
-      "Open the toy catalog.",
-      "Add one or more toys to your toy box. It works like a shopping cart.",
-      "Check out. Toys for Tots delivers the toys to children across the country."
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open the toy catalog.",
+          "Add one or more toys to your toy box. It works like a shopping cart.",
+          "Check out. Toys for Tots delivers the toys to children across the country."
+        ]
+      }
     ],
     "action": {
       "type": "link",
@@ -2247,6 +2494,13 @@ function refreshDates() {
     "Check each organization's website for this year's dates.";
 }
 
+// One numbered step. A step with choices shows its words, then the choices as bullets inside the same step:
+// the giver picks one of them, so they are not numbered.
+function stepHTML(st) {
+  if (typeof st === "string") return "<li>" + esc(st) + "</li>";
+  return "<li>" + esc(st.text) + '<ul class="choices">' + st.choices.map((c) => "<li>" + esc(c) + "</li>").join("") + "</ul></li>";
+}
+
 function cardEl(p) {
   const li = document.createElement("li");
   li.className = "card";
@@ -2270,9 +2524,9 @@ function cardEl(p) {
       '<details class="more"><summary><span class="more-label">Steps and details</span>' +
         '<span class="sr-only"> for ' + esc(p.name) + ", " + esc(p.org) + "</span></summary>" +
         '<div class="more-body">' +
-          // A card with more than one way to give can list separate steps for each way
-          (p.stepGroups || [{ title: "Steps", steps: p.steps }]).map((g) =>
-            "<h4>" + esc(g.title) + '</h4><ol class="steps">' + g.steps.map((st) => "<li>" + esc(st) + "</li>").join("") + "</ol>").join("") +
+          // Steps, in one group for each way to give
+          (p.stepGroups || []).map((g) =>
+            "<h4>" + esc(g.title) + '</h4><ol class="steps">' + g.steps.map(stepHTML).join("") + "</ol>").join("") +
           (p.about ? '<p class="goodtoknow"><strong>About the organization.</strong> ' + esc(p.about) + "</p>" : "") +
           (p.note ? '<p class="goodtoknow"><strong>Good to know.</strong> ' + esc(p.note) + "</p>" : "") +
           '<p class="source">' + siteLink("", hostOf(p.source) ? "Full details on " + hostOf(p.source) : "See where this information came from", p.source, "for " + p.name + ", " + p.org) + "</p>" +
