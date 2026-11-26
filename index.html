@@ -256,12 +256,12 @@
   .sort:focus-within .sort-face { outline: 3px solid var(--brand); outline-offset: 3px; }
 
   /* Cards */
-  #list { display: grid; gap: 12px; }
+  #list { display: grid; gap: 18px; }
   .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
   .card article {
-    display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 18px 20px;
+    display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 22px 22px;
   }
-  .card-main { display: grid; gap: 9px; align-content: start; }
+  .card-main { display: grid; gap: 13px; align-content: start; }
   .card h3 { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.25; text-wrap: balance; }
   .org { color: var(--ink-soft); font-weight: 400; margin-top: -7px; font-size: 0.9375rem; text-wrap: balance; }
   .badges { display: flex; flex-wrap: wrap; gap: 8px; }
@@ -307,7 +307,7 @@
      Narrow card (phones): each way is a button with one line of help under it. No lines between ways.
      Wide card (480px of room or more): words on the left, button on the right, a pale line between ways. */
   /* Extra space above "How to give" (24px in all) so it reads as a new section. The gap below the heading stays small. */
-  .card-action { display: grid; gap: 0; container-type: inline-size; margin-top: 12px; }
+  .card-action { display: grid; gap: 0; container-type: inline-size; margin-top: 18px; }
   .card .give-title { font-size: 1rem; font-weight: 700; padding-bottom: 8px; }
   .give-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
   .give { display: grid; gap: 6px; }
@@ -335,6 +335,12 @@
     .give-act { grid-column: 2; grid-row: 1; order: 0; }
     .give-act .btn { min-height: 44px; min-width: 200px; padding: 9px 12px; }
     .give > details.msg { grid-column: 1 / -1; }
+    /* A way with a button and no words: the heading sits beside the first button, and buttons in a row stack with no line between them */
+    .give-wrap.first-bare { display: grid; grid-template-columns: minmax(0, 1fr); }
+    .give-wrap.first-bare > .give-title { grid-row: 1; grid-column: 1; align-self: start; justify-self: start; margin-top: 18px; z-index: 1; }
+    .give-wrap.first-bare > .give-list { grid-row: 1; grid-column: 1; }
+    .give.no-text + .give.no-text { border-top: 0; padding-top: 0; }
+    .give.no-text:has(+ .give.no-text) { padding-bottom: 8px; }
   }
   .action-row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-self: stretch; }
   .card-action .hint { max-width: 52ch; }
@@ -446,7 +452,7 @@
     .filters > summary { width: calc(50% - 5px); padding: 0 10px; }
     .sort { justify-self: stretch; }
     .sort-face { padding: 0 10px; min-width: 0; }
-    .card article { padding: 16px 14px; }
+    .card article { padding: 18px 16px; }
     .glance { grid-template-columns: minmax(0, 1fr); }
     .action-row .btn { width: 100%; }
     .goes-to, .second { justify-self: start; text-align: left; }
@@ -604,6 +610,8 @@
         ends:    on one row or option, "YYYY-MM-DD", when only that way to give has a deadline. The card stays open
                  while any other way is still open.
         openLabel: words for the label when there is no deadline, such as "Dates vary by area". Leave it out to show "Open now".
+        summary: one or two short sentences: what the gift is and who gets it.
+        about:   background on the organization. Shown inside "Steps and details", not on the card.
         stepGroups: only when two ways need their own steps. A list of { title, steps } shown in place of "steps".
         Buttons: the first button on a card is solid, the rest are outlined. A button gets a small picture only when the
                  picture shows what the button does. To choose it by hand, add "icon" to "action" or to a "link"
@@ -728,9 +736,7 @@ const PROGRAMS = [
       "text": "None needed."
     },
     "options": [
-      {
-        "text": "One Simple Wish buys the gift and delivers it."
-      }
+      {}
     ]
   },
   {
@@ -804,7 +810,8 @@ const PROGRAMS = [
       "us"
     ],
     "status": "open",
-    "summary": "Buy a gift an older adult in need asked for. Local offices of Home Instead, a company that provides care for older adults at home, collect and deliver the gifts.",
+    "summary": "Buy a gift an older adult in need asked for.",
+    "about": "Local offices of Home Instead, a company that provides care for older adults at home, collect and deliver the gifts.",
     "whoText": "Older adults who may be alone or on a fixed income",
     "cost": "You choose. Requests are often basics like blankets.",
     "costMin": null,
@@ -881,9 +888,7 @@ const PROGRAMS = [
       "text": "None needed."
     },
     "options": [
-      {
-        "text": "You give toward a wish you choose."
-      }
+      {}
     ]
   },
   {
@@ -925,7 +930,6 @@ const PROGRAMS = [
       {
         "icon": "ship",
         "name": "Buy from their wish list",
-        "text": "No sign-up. It ships to S:US for you.",
         "link": {
           "label": "Shop the S:US wish list",
           "url": "https://amzn.to/4e7onb6"
@@ -934,7 +938,6 @@ const PROGRAMS = [
       {
         "icon": "money",
         "name": "Give money",
-        "text": "S:US shops for you.",
         "link": {
           "label": "Give money to S:US",
           "url": "https://sus.org/holiday-gift-project-donate/"
@@ -983,7 +986,8 @@ const PROGRAMS = [
       "nyc"
     ],
     "status": "open",
-    "summary": "Gifts for survivors of abuse and their children. Sanctuary for Families is a New York City nonprofit, founded in 1984. It helps people who have lived through domestic violence or sex trafficking with shelter, counseling, legal help, and job training.",
+    "summary": "Gifts for survivors of abuse and their children.",
+    "about": "Sanctuary for Families is a New York City nonprofit, founded in 1984. It helps people who have lived through domestic violence or sex trafficking with shelter, counseling, legal help, and job training.",
     "whoText": "Adults and children who are survivors of abuse",
     "cost": "About $25 to $30 for each gift or gift card.",
     "costMin": 8,
@@ -1010,9 +1014,7 @@ const PROGRAMS = [
       "text": "None needed."
     },
     "options": [
-      {
-        "text": "It ships to Sanctuary for you."
-      }
+      {}
     ]
   },
   {
@@ -1075,7 +1077,7 @@ const PROGRAMS = [
     "deadline": "2026-12-08",
     "steps": [
       "Open the Amazon wish list.",
-      "Choose a gift and check out by December 8.",
+      "Choose a gift and check out by December 8. It ships to The Foundling for you.",
       "Or bring a new gift to 590 Avenue of the Americas, New York."
     ],
     "note": "Groups and questions: Partners@NYFoundling.org or 212-886-4122.",
@@ -1093,9 +1095,7 @@ const PROGRAMS = [
       "money"
     ],
     "options": [
-      {
-        "text": "It ships to The Foundling for you."
-      },
+      {},
       {
         "text": "Bring a new gift to 590 Avenue of the Americas, New York, by December 8.",
         "map": "590 Avenue of the Americas, New York, NY"
@@ -1122,7 +1122,8 @@ const PROGRAMS = [
       "nyc"
     ],
     "status": "open",
-    "summary": "Gifts for more than 4,000 people, from afterschool children to families in shelter. Henry Street Settlement, a nonprofit on Manhattan's Lower East Side, serves them.",
+    "summary": "Gifts for more than 4,000 people, from afterschool children to families in shelter.",
+    "about": "Henry Street Settlement is a nonprofit on Manhattan's Lower East Side. It serves the people who get these gifts.",
     "whoText": "More than 4,000 people of all ages in Henry Street programs, including children in afterschool programs and families living in shelter",
     "cost": "You choose from the wish list.",
     "costMin": null,
@@ -1149,9 +1150,7 @@ const PROGRAMS = [
       "text": "None needed."
     },
     "options": [
-      {
-        "text": "It ships to Henry Street for you."
-      }
+      {}
     ]
   },
   {
@@ -1162,7 +1161,8 @@ const PROGRAMS = [
       "nyc"
     ],
     "status": "open",
-    "summary": "Gifts for children and families at 30 shelters, housing sites, and afterschool programs. CAMBA, a Brooklyn nonprofit, runs them.",
+    "summary": "Gifts for children and families at 30 shelters, housing sites, and afterschool programs.",
+    "about": "CAMBA is a Brooklyn nonprofit. It runs these shelters, housing sites, and afterschool programs.",
     "whoText": "Children and families at CAMBA shelters, supportive housing, and afterschool programs",
     "cost": "You choose from the wish list.",
     "costMin": null,
@@ -1234,7 +1234,7 @@ const PROGRAMS = [
     ],
     "options": [
       {
-        "text": "It ships to the Coalition for you. Order by December 11 so the toy arrives in time.",
+        "text": "Order by December 11 so the toy arrives in time.",
         "ends": "2026-12-11"
       },
       {
@@ -1242,8 +1242,7 @@ const PROGRAMS = [
           "label": "Give to the Coalition’s drive",
           "url": "https://coalitionforthehomeless.givingpage.org/holiday-toy-drive",
           "srExtra": "Coalition for the Homeless"
-        },
-        "text": "You give on the Coalition's donation page."
+        }
       }
     ],
     "signup": {
@@ -1284,9 +1283,7 @@ const PROGRAMS = [
       "text": "None needed."
     },
     "options": [
-      {
-        "text": "It ships to BronxWorks for you."
-      }
+      {}
     ],
     "note": "No deadline is listed. Order early so the gift arrives before the holidays."
   },
@@ -1298,7 +1295,8 @@ const PROGRAMS = [
       "nyc"
     ],
     "status": "open",
-    "summary": "The New York branch of The Salvation Army's Angel Tree program. The Salvation Army calls each child an Angel. When you adopt an Angel, you choose one child and buy toys from their wish list.",
+    "summary": "Choose one child, called an Angel, and buy toys from their wish list. The Salvation Army calls this adopting an Angel.",
+    "about": "This is the New York branch of The Salvation Army's Angel Tree program.",
     "whoText": "Children in the Greater New York area",
     "cost": "$25 minimum per child. $25 to $50 is suggested.",
     "costMin": 25,
@@ -1342,7 +1340,8 @@ const PROGRAMS = [
       "nyc"
     ],
     "status": "open",
-    "summary": "Money toward holiday gifts for LGBTQ+ people aged 16 to 30 who are homeless or at risk. New Alternatives, a New York City resource center, buys the gifts and gives them to its clients at a holiday party.",
+    "summary": "Money toward holiday gifts for LGBTQ+ people aged 16 to 30 who are homeless or at risk.",
+    "about": "New Alternatives is a New York City resource center. It buys the gifts and gives them to its clients at a holiday party.",
     "whoText": "LGBTQ+ youth and young adults in need",
     "cost": "Any amount.",
     "costMin": null,
@@ -1367,9 +1366,7 @@ const PROGRAMS = [
       "text": "None needed."
     },
     "options": [
-      {
-        "text": "New Alternatives buys the gifts."
-      }
+      {}
     ],
     "note": "No giving deadline is listed. Gifts are handed out on December 18, so give before then."
   },
@@ -1388,7 +1385,7 @@ const PROGRAMS = [
     "deadline": "2026-12-08",
     "steps": [
       "Open the Amazon wish list.",
-      "Choose a toy and check out by December 8.",
+      "Choose a toy and check out by December 8. It ships to Union Settlement for you.",
       "Or bring a new, unwrapped toy to 237 East 104th Street, New York, NY 10029, Monday to Friday, 11 am to 6 pm."
     ],
     "note": "Questions: FundDevelopment@unionsettlement.org.",
@@ -1402,24 +1399,21 @@ const PROGRAMS = [
     "checked": "2026-11-25",
     "ways": [
       "ship",
-      "drop",
-      "money"
+      "money",
+      "drop"
     ],
     "options": [
-      {
-        "text": "It ships to Union Settlement for you."
-      },
-      {
-        "text": "Bring a new, unwrapped toy to 237 East 104th Street, New York. Monday to Friday, 11 am to 6 pm.",
-        "map": "237 East 104th Street, New York, NY 10029"
-      },
+      {},
       {
         "link": {
           "label": "Give to Union Settlement",
           "url": "https://4agc.com/event/fy27holidaygiftdrive",
           "srExtra": "Union Settlement"
-        },
-        "text": "You give on Union Settlement's donation page."
+        }
+      },
+      {
+        "text": "Bring a new, unwrapped toy to 237 East 104th Street, New York. Monday to Friday, 11 am to 6 pm.",
+        "map": "237 East 104th Street, New York, NY 10029"
       }
     ],
     "signup": {
@@ -1435,14 +1429,15 @@ const PROGRAMS = [
       "nyc"
     ],
     "status": "open",
-    "summary": "Toys for children and families at homeless shelters in Brooklyn. A local nonprofit of residents and shop owners on Atlantic Avenue runs the drive.",
+    "summary": "Toys for children and families at homeless shelters in Brooklyn.",
+    "about": "A local nonprofit of residents and shop owners on Atlantic Avenue runs the drive.",
     "whoText": "Children and families at local homeless shelters",
     "cost": "You choose the toy or the amount.",
     "costMin": null,
     "deadline": "2026-12-10",
     "steps": [
       "Open the Amazon wish list.",
-      "Choose a toy and check out."
+      "Choose a toy and check out. It ships to the toy drive for you."
     ],
     "action": {
       "type": "link",
@@ -1457,16 +1452,13 @@ const PROGRAMS = [
       "money"
     ],
     "options": [
-      {
-        "text": "It ships to the toy drive for you."
-      },
+      {},
       {
         "link": {
           "label": "Give with PayPal",
           "url": "https://www.paypal.com/donate/?hosted_button_id=3EP65N4A4YRWG",
           "srExtra": "Atlantic Avenue Local Development Corporation"
-        },
-        "text": "You give on the organizer's PayPal page."
+        }
       }
     ],
     "signup": {
@@ -1564,14 +1556,15 @@ const PROGRAMS = [
       "nyc"
     ],
     "status": "open",
-    "summary": "Toys and books for young children in need in New York City. Little Essentials is a Brooklyn nonprofit that gives supplies for children aged 5 and under to families living in poverty.",
+    "summary": "Toys and books for young children in need in New York City.",
+    "about": "Little Essentials is a Brooklyn nonprofit that gives supplies for children aged 5 and under to families living in poverty.",
     "whoText": "Young children in need in New York City",
     "cost": "You choose from the wish list.",
     "costMin": null,
     "deadline": "2026-12-18",
     "steps": [
       "Open the Amazon wish list.",
-      "Choose a toy or book and check out.",
+      "Choose a toy or book and check out. It ships to Little Essentials for you.",
       "If you ship an item yourself, send it to 1 Brooklyn Navy Yard, Building 240, Suite 205, Brooklyn, NY 11205."
     ],
     "action": {
@@ -1588,9 +1581,7 @@ const PROGRAMS = [
       "drop"
     ],
     "options": [
-      {
-        "text": "It ships to Little Essentials for you."
-      },
+      {},
       {
         "text": "Mail a gift to 1 Brooklyn Navy Yard, Building 240, Suite 205, Brooklyn, NY 11205."
       },
@@ -1617,7 +1608,8 @@ const PROGRAMS = [
       "nyc"
     ],
     "status": "open",
-    "summary": "An unwrapped toy for a Staten Island child whose parent or guardian asked for help. Where to Turn, a local crisis relief nonprofit, gives the toys to those families.",
+    "summary": "An unwrapped toy for a Staten Island child whose parent or guardian asked for help.",
+    "about": "Where to Turn, a local crisis relief nonprofit, gives the toys to those families.",
     "whoText": "Staten Island children and families in need",
     "cost": "You choose the toy.",
     "costMin": null,
@@ -1669,7 +1661,7 @@ const PROGRAMS = [
     "deadline": null,
     "steps": [
       "Open the Amazon holiday wish list.",
-      "Choose a gift and check out.",
+      "Choose a gift and check out. It ships to Homes for the Homeless for you.",
       "If you ship a gift yourself, send it to Homes for the Homeless, Attn: Tierra Gunther, 36 Cooper Square, 3rd Floor, New York, NY 10003."
     ],
     "action": {
@@ -1685,9 +1677,7 @@ const PROGRAMS = [
       "mail"
     ],
     "options": [
-      {
-        "text": "It ships to Homes for the Homeless for you."
-      },
+      {},
       {
         "text": "Mail a gift to Homes for the Homeless, Attn: Tierra Gunther, 36 Cooper Square, 3rd Floor, New York, NY 10003."
       }
@@ -1714,7 +1704,7 @@ const PROGRAMS = [
     "steps": [
       "Open Win's 2026 holiday drive.",
       "Choose toys or gift cards.",
-      "Check out by December 4."
+      "Check out by December 4. It ships to Win for you."
     ],
     "note": "Groups that want to take part: Volunteerservices@winnyc.org.",
     "action": {
@@ -1732,9 +1722,7 @@ const PROGRAMS = [
       "text": "None needed."
     },
     "options": [
-      {
-        "text": "It ships to Win for you."
-      }
+      {}
     ]
   },
   {
@@ -1797,7 +1785,8 @@ const PROGRAMS = [
       "nyc"
     ],
     "status": "open",
-    "summary": "Toys for children in New York City neighborhoods with few resources. Children's Aid is a nonprofit, founded in 1853, that supports tens of thousands of children, young people, and families. The morning show on radio station NEW 102.7 runs the drive.",
+    "summary": "Toys for children in New York City neighborhoods with few resources.",
+    "about": "Children's Aid is a nonprofit, founded in 1853, that supports tens of thousands of children, young people, and families. The morning show on radio station NEW 102.7 runs the drive.",
     "whoText": "Children and families in under-resourced New York City neighborhoods",
     "cost": "Most toys cost $5 to $25.",
     "costMin": 5,
@@ -1823,9 +1812,7 @@ const PROGRAMS = [
       "text": "None needed."
     },
     "options": [
-      {
-        "text": "It ships to Children's Aid for you."
-      }
+      {}
     ],
     "note": "NEW 102.7 aims to collect 10,000 toys by December 11. No other deadline is listed, so order early."
   },
@@ -1837,7 +1824,8 @@ const PROGRAMS = [
       "us"
     ],
     "status": "open",
-    "summary": "A gift for a trans young person who wrote a letter. These young people are without a home, in foster care, or without the support they need. Gifts are sent without sharing anyone's personal details.",
+    "summary": "A gift for a trans young person who wrote a letter. These young people are without a home, in foster care, or without the support they need.",
+    "about": "Transanta sends the gifts without sharing anyone's personal details.",
     "whoText": "Trans young people in need",
     "cost": "You choose from their registry.",
     "costMin": null,
@@ -1902,9 +1890,7 @@ const PROGRAMS = [
       "text": "None needed."
     },
     "options": [
-      {
-        "text": "Toys for Tots delivers it to a child in need."
-      }
+      {}
     ],
     "note": "No deadline is listed. The page also has a link for giving cash."
   }
@@ -1984,7 +1970,7 @@ function badgeFor(p) {
     const base = "Deadline: " + shortDate(next);
     if (n === 0) return { text: base, cls: "urgent", soon: "Today" };
     if (n === 1) return { text: base, cls: "urgent", soon: "Tomorrow" };
-    if (n <= 7) return { text: base, cls: "urgent", soon: "In " + n + " days" };
+    if (n <= 7) return { text: base, cls: "urgent" };   // red in the last week, with no extra words
     return { text: base, cls: "" };
   }
   return { text: p.openLabel || (p.yearRound ? "Open all year" : "Open now"), cls: "" };
@@ -2083,7 +2069,9 @@ function giveHTML(p) {
   const mainAt = Math.max(0, rows.findIndex((r) => r.main));
   let filled = false;
   // One heading for every card, whether it has one way to give or several
-  let html = '<h4 class="give-title">How to give</h4><ul class="give-list">';
+  // When the first way has a button and no words, a wide card puts the heading beside that button
+  const firstBare = !rows[0].text && !(cardOpen && rowEnded(p, rows[0]));
+  let html = '<div class="give-wrap' + (firstBare ? " first-bare" : "") + '"><h4 class="give-title">How to give</h4><ul class="give-list">';
   rows.forEach((o, i) => {
     if (cardOpen && rowEnded(p, o)) {
       html += '<li class="give"><div class="give-text"><p class="give-name">' + esc(o.name) + "</p>" +
@@ -2118,7 +2106,7 @@ function giveHTML(p) {
       (act ? '<div class="give-act">' + act + "</div>" : "") +
       (email ? emailHelpHTML(email) : "") + "</li>";
   });
-  return html + "</ul>";
+  return html + "</ul></div>";
 }
 
 // Two facts at a glance. Every card says whether you must sign up first.
@@ -2199,6 +2187,7 @@ function cardEl(p) {
           // A card with more than one way to give can list separate steps for each way
           (p.stepGroups || [{ title: "Steps", steps: p.steps }]).map((g) =>
             "<h4>" + esc(g.title) + '</h4><ol class="steps">' + g.steps.map((st) => "<li>" + esc(st) + "</li>").join("") + "</ol>").join("") +
+          (p.about ? '<p class="goodtoknow"><strong>About the organization.</strong> ' + esc(p.about) + "</p>" : "") +
           (p.note ? '<p class="goodtoknow"><strong>Good to know.</strong> ' + esc(p.note) + "</p>" : "") +
           '<p class="source">' + siteLink("", "See where this information came from", p.source, "for " + p.name + ", " + p.org) + "</p>" +
         "</div></details>" +
