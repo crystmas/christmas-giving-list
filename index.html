@@ -38,6 +38,9 @@
     --calm-bg: #e3f0ea;
     --notice-bg: #e3f1ea;
     --notice-line: #cfe6da;
+    --place-bg: #eef3f0;
+    --place-ink: #0b4535;
+    --place-line: #d4e1da;
     /* Holiday header: evergreen band, candy-cane stripe, snow edge */
     --head-bg: #0f5c45;
     --head-ink: #ffffff;
@@ -66,6 +69,9 @@
       --calm-bg: #1c342a;
       --notice-bg: #1c342a;
       --notice-line: #2f4a3e;
+      --place-bg: var(--calm-bg);
+      --place-ink: var(--ink);
+      --place-line: var(--line);
       --head-bg: #0b3527;
       --head-ink: #f1f8f4;
       --head-soft: #b9d6ca;
@@ -91,6 +97,9 @@
     --calm-bg: #1c342a;
     --notice-bg: #1c342a;
     --notice-line: #2f4a3e;
+    --place-bg: var(--calm-bg);
+    --place-ink: var(--ink);
+    --place-line: var(--line);
     --head-bg: #0b3527;
     --head-ink: #f1f8f4;
     --head-soft: #b9d6ca;
@@ -163,7 +172,7 @@
   .story-body { display: grid; gap: 8px; line-height: 1.55; padding-bottom: 8px; }
   /* A short note before the list, in a light card */
   .notice {
-    margin-top: 6px; padding: 12px 16px; background: var(--notice-bg); border: 1px solid var(--notice-line);
+    max-width: 60ch; margin-top: 6px; padding: 12px 16px; background: var(--notice-bg); border: 1px solid var(--notice-line);
     border-radius: 12px; font-size: 0.9375rem; color: var(--ink);
   }
   /* Small print under the card. The grid gap adds 4px, so it sits 8px below the card. */
@@ -285,13 +294,12 @@
   .card h3 { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.25; text-wrap: balance; }
   .org { color: var(--ink-soft); font-weight: 400; margin-top: -7px; font-size: 0.9375rem; text-wrap: balance; }
   .badges { display: flex; flex-wrap: wrap; gap: 8px; }
-  /* Card header: name, then organization and place, then the deadline chip on its own row */
+  /* Card header: name, then organization, then the deadline and who it helps on their own row */
   .card-head { display: flex; flex-direction: column; gap: 6px; }
   .card-title { display: grid; gap: 2px; }
   .card-head .org { margin-top: 0; }
   .card-head .badges { align-items: center; }
   .card-head .badge { overflow-wrap: anywhere; }
-  .place-text { white-space: nowrap; }
   .soon { color: var(--urgent); font-weight: 700; font-size: 0.875rem; }
   .badge {
     display: inline-block; font-size: 0.875rem; font-weight: 700; line-height: 1.3;
@@ -299,7 +307,12 @@
   }
   .badge.urgent { background: var(--urgent-bg); color: var(--urgent); border-color: var(--urgent); }
   .badge.note { background: var(--note-bg); color: var(--note-ink); border-color: var(--note-ink); }
-  .badge.place { background: transparent; border: 1px solid var(--line); font-weight: 400; font-size: 0.8125rem; color: var(--ink-soft); }
+  /* Who a program helps: a quieter pill after the deadline. It is a label, not a control. */
+  .badge.place {
+    display: inline-flex; align-items: center; gap: 5px; font-size: 0.8125rem; font-weight: 600;
+    background: var(--place-bg); color: var(--place-ink); border-color: var(--place-line);
+  }
+  .badge.place svg { flex: none; }
   .summary { max-width: 52ch; }
   .flag {
     background: var(--note-bg); color: var(--note-ink);
@@ -326,12 +339,16 @@
   .more-body { display: grid; gap: 10px; padding-top: 4px; font-size: 0.9375rem; }
 
   /* Ways to give. The card decides the layout by its own width, not the screen's.
-     Narrow card (phones): each way is a button with one line of help under it. No lines between ways.
-     Wide card (480px of room or more): words on the left, button on the right, a pale line between ways. */
+     A way with a button shows just the button; its details are in "Steps and details".
+     A way with no button shows its name and a line of help.
+     Narrow card (phones): full-width buttons, one under another.
+     Wide card (480px of room or more): one column of buttons on the left, as wide as the card's widest button. */
   /* The "How to give" heading is there for screen readers only, so the ways to give follow the facts with the card's normal gap */
   .card-action { display: grid; gap: 0; container-type: inline-size; }
-  .give-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+  .give-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
   .give { display: grid; gap: 6px; }
+  /* A way with no button gets a little more room above and below it, so it reads as its own item */
+  .give:not(.has-act):not(:first-child), .give:not(.has-act) + .give { padding-top: 8px; }
   .give-text { min-width: 0; padding: 0 2px; }
   .give-act { order: -1; display: grid; gap: 8px; }
   .give-act .btn { width: 100%; min-height: 48px; }
@@ -340,23 +357,15 @@
   .give-detail { color: var(--ink-soft); font-size: 0.875rem; line-height: 1.45; overflow-wrap: anywhere; }
   .give-name + .give-detail { margin-top: 2px; }
   .give-detail .signup-first { color: var(--note-ink); }
-  /* The button says what the way is, so the way's name is shown only on a row that has no button. Same on every screen size. */
-  .give.has-act .give-name { display: none; }
-  .give.has-act .give-name + .give-detail { margin-top: 0; }
-  .give.has-act.no-text .give-text { display: none; }
   .copy-row { justify-content: flex-start; }
   @container (min-width: 480px) {
-    /* All the buttons on one card share the right-hand column, so they are the same width */
-    .give-list { grid-template-columns: minmax(0, 1fr) fit-content(292px); gap: 0; }
-    .give { grid-column: 1 / -1; grid-template-columns: subgrid; gap: 0 16px; align-items: center; padding: 12px 0; border-top: 1px solid var(--line-soft); }
-    .give:first-child { border-top: 0; padding-top: 0; }
-    .give-text { grid-column: 1; grid-row: 1; padding: 0; }
-    .give-act { grid-column: 2; grid-row: 1; order: 0; }
-    .give-act .btn { min-height: 44px; min-width: 200px; padding: 9px 12px; }
-    .give > details.msg { grid-column: 1 / -1; }
-    /* Ways with a button and no words: their buttons stack with no line between them */
-    .give.no-text + .give.no-text { border-top: 0; padding-top: 0; }
-    .give.no-text:has(+ .give.no-text) { padding-bottom: 8px; }
+    /* All the buttons on one card share the left-hand column. It is as wide as the widest button, so they all match.
+       Words and the email help use the whole width. */
+    .give-list { grid-template-columns: fit-content(100%) minmax(0, 1fr); }
+    .give { grid-column: 1 / -1; grid-template-columns: subgrid; }
+    .give-text, .give > details.msg { grid-column: 1 / -1; padding: 0; }
+    .give-act { grid-column: 1; }
+    .give-act .btn { min-height: 44px; padding: 9px 12px; }
   }
   .action-row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-self: stretch; }
   .card-action .hint { max-width: 52ch; }
@@ -566,7 +575,7 @@
         <p>With love,<br>Crystal</p>
       </div>
     </details>
-    <p class="notice"><strong>Before you give:</strong> Some deadlines are the day your gift must arrive, so make sure to order early.</p>
+    <p class="notice"><strong>Before you give:</strong> Some deadlines are the day your gift must arrive, so make sure to order early. You can give to most New York City programs from anywhere by shipping, mailing or giving money.</p>
     <!-- The date is filled in by the script, the same as in "About this list". The date written here only shows if JavaScript is off. -->
     <div class="fineprint">
       <p>This website is not affiliated with any listed organization.</p>
@@ -586,7 +595,7 @@
       </div>
 
       <fieldset id="f-area">
-        <legend>Where the gift goes</legend>
+        <legend>Where it helps</legend>
       </fieldset>
 
       <fieldset id="f-way">
@@ -707,7 +716,8 @@ const SITE = {
 };
 
 const LABELS = {
-  areas:  { us: "Anywhere in the US", nyc: "New York City" },
+  areas:  { us: "Across the US", nyc: "New York City" },
+  helps:  { us: "Helps people across the US", nyc: "Helps people in New York City" },
   ways:   { ship: "Buy from their wish list", drop: "Drop off a gift", mail: "Mail a gift yourself", money: "Give money" }
 };
 
@@ -728,7 +738,8 @@ const PROGRAMS = [
     "steps": [
       "Create a free account and verify your identity.",
       "Read the letters and adopt one or more.",
-      "Buy the gifts. Ship them from a participating Post Office, or order from Santa's Gift Shoppe and USPS delivers them."
+      "Buy the gifts. Ship them from a participating Post Office, or order from Santa's Gift Shoppe and USPS delivers them.",
+      "The site closes at 8 pm Eastern on December 12."
     ],
     "note": "Open to people in the continental US, Hawaii, and Puerto Rico. Letters go quickly and the ID check takes time, so start early.",
     "action": {
@@ -1143,7 +1154,8 @@ const PROGRAMS = [
     "steps": [
       "Open the Amazon wish list.",
       "Choose a gift and check out by December 8. It ships to The Foundling for you.",
-      "Or bring a new gift to 590 Avenue of the Americas, New York."
+      "Or bring a new gift to 590 Avenue of the Americas, New York.",
+      "Or give money on The Foundling's gift drive page."
     ],
     "note": "Groups and questions: Partners@NYFoundling.org or 212-886-4122.",
     "action": {
@@ -1235,7 +1247,8 @@ const PROGRAMS = [
     "steps": [
       "Pick a site's Amazon wish list on the CAMBA page.",
       "Choose a gift and check out. Amazon ships it to that site.",
-      "Fill out CAMBA's short donor form so staff know the gift is coming and can send you a tax receipt."
+      "Fill out CAMBA's short donor form so staff know the gift is coming and can send you a tax receipt.",
+      "Or give money with the \"Make a Cash Donation\" link on the CAMBA page."
     ],
     "note": "Two more CAMBA sites say their wish list is coming soon. Questions: development@CAMBA.org.",
     "action": {
@@ -1282,7 +1295,8 @@ const PROGRAMS = [
     "steps": [
       "Open the Amazon wish list.",
       "Choose a toy and check out.",
-      "The toy is sent straight to the Coalition's office."
+      "The toy is sent straight to the Coalition's office.",
+      "Or give money on the Coalition's giving page."
     ],
     "note": "The Coalition's flyer asks you to order from the wish list by December 11. Questions: call 212-776-2059.",
     "action": {
@@ -1544,11 +1558,12 @@ const PROGRAMS = [
     "whoText": "Children ages 3 to 16",
     "cost": "You choose the toy.",
     "costMin": null,
-    "deadline": "2026-12-13",
+    "deadline": "2026-12-11",
     "steps": [
       "Buy a new toy for a child aged 3 to 16.",
       "Bring it to 200 4th Avenue, Brooklyn.",
-      "Drop-off hours are Monday to Friday, 9 am to 4 pm."
+      "Drop-off hours are Monday to Friday, 9 am to 4 pm.",
+      "CHiPS lists December 13, a Sunday, so Friday, December 11 is the last day to drop off."
     ],
     "action": {
       "type": "link",
@@ -1630,7 +1645,8 @@ const PROGRAMS = [
     "steps": [
       "Open the Amazon wish list.",
       "Choose a toy or book and check out. It ships to Little Essentials for you.",
-      "If you ship an item yourself, send it to 1 Brooklyn Navy Yard, Building 240, Suite 205, Brooklyn, NY 11205."
+      "If you ship an item yourself, send it to 1 Brooklyn Navy Yard, Building 240, Suite 205, Brooklyn, NY 11205.",
+      "Or bring toys or books to the warehouse in the Brooklyn Navy Yard. Book a time first."
     ],
     "action": {
       "type": "link",
@@ -1806,7 +1822,8 @@ const PROGRAMS = [
     "steps": [
       "Buy a new, unwrapped toy for a child from newborn to age 16.",
       "Ship it so it arrives by December 17 to UFT Elementary Schools Division, 52 Broadway, 14th Floor, New York, NY 10004.",
-      "Or bring it to a UFT borough office. The UFT page lists them. In Manhattan, drop-off is on the 10th floor."
+      "Or bring it to a UFT borough office. The UFT page lists them. In Manhattan, drop-off is on the 10th floor.",
+      "Or give money with PayPal on the UFT page. UFT buys the toys."
     ],
     "action": {
       "type": "link",
@@ -2040,10 +2057,15 @@ function badgeFor(p) {
   }
   return { text: p.openLabel || (p.yearRound ? "Open all year" : "Open now"), cls: "" };
 }
-function badgeHTML(b) {
+// The deadline, then who the program helps. The hidden full stop makes a screen reader say them as two separate items.
+// Everything that draws the badges row uses this, so the "who it helps" chip is never lost when the row is redrawn.
+function badgeHTML(b, p) {
   return '<span class="badge ' + b.cls + '">' + esc(b.text) + "</span>" +
-    (b.soon ? '<span class="soon">' + esc(b.soon) + "</span>" : "");
+    (b.soon ? '<span class="soon">' + esc(b.soon) + "</span>" : "") +
+    p.areas.map((a) => '<span class="sr-only">. </span><span class="badge place">' + HEART + esc(LABELS.helps[a]) + "</span>").join("");
 }
+// A small heart for the "who it helps" chip. It is decoration only.
+const HEART = '<svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 16.4s-6.3-3.8-6.3-8A3.5 3.5 0 0 1 10 6.2a3.5 3.5 0 0 1 6.3 2.2c0 4.2-6.3 8-6.3 8z"/></svg>';
 
 function mailto(a) {
   const body = a.body.replace(/\n/g, "\r\n");
@@ -2160,13 +2182,13 @@ function giveHTML(p) {
       return '<a class="btn ' + cls + '" data-program="' + esc(p.id) + '" href="' + esc(x.type === "email" ? mailto(x) : x.url) + '">' + (ic ? ICON[ic] : "") +
         '<span class="btn-label">' + esc(x.label) + srName(x) + "</span></a>";
     }).join("");
+    // A way with a button shows only the button. A way with no button shows its name and its text.
     const detail = o.text
       ? '<p class="give-detail">' + (o.signup ? '<strong class="signup-first">Sign up first.</strong> ' : "") +
           boldDates(boldAddress(esc(o.text), email ? email.email : "")) + "</p>"
       : "";
-    html += '<li class="give' + (act ? " has-act" : "") + (o.text ? "" : " no-text") + '">' +
-      '<div class="give-text"><p class="give-name">' + esc(o.name) + "</p>" + detail + "</div>" +
-      (act ? '<div class="give-act">' + act + "</div>" : "") +
+    html += '<li class="give' + (act ? " has-act" : "") + '">' +
+      (act ? '<div class="give-act">' + act + "</div>" : '<div class="give-text"><p class="give-name">' + esc(o.name) + "</p>" + detail + "</div>") +
       (email ? emailHelpHTML(email, p.id) : "") + "</li>";
   });
   return html + "</ul></div>";
@@ -2198,7 +2220,7 @@ function refreshDates() {
     const li = cards.get(p.id);
     const b = badgeFor(p);
     if (li.dataset.badge !== badgeSig(b)) {
-      li.querySelector(".badges").innerHTML = badgeHTML(b);
+      li.querySelector(".badges").innerHTML = badgeHTML(b, p);
       li.querySelector(".card-head").classList.toggle("has-soon", !!b.soon);
       li.dataset.badge = badgeSig(b);
     }
@@ -2231,14 +2253,13 @@ function cardEl(p) {
   // The page header shows the newest check date. A card shows its own date only if it is older.
   const newestCheck = PROGRAMS.map((x) => x.checked).sort().pop();
   const b = badgeFor(p);
-  const places = p.areas.map((a) => LABELS.areas[a]).join(", ");
   li.innerHTML =
     '<article aria-labelledby="t-' + p.id + '">' +
       '<div class="card-main">' +
         '<div class="card-head' + (b.soon ? " has-soon" : "") + '">' +
           '<div class="card-title"><h3 id="t-' + p.id + '" tabindex="-1">' + esc(p.name) + "</h3>" +
-            '<p class="org">' + esc(p.org) + '\u00a0<span aria-hidden="true">·</span> <span class="place-text">' + esc(places) + "</span></p></div>" +
-          '<p class="badges">' + badgeHTML(b) + "</p>" +
+            '<p class="org">' + esc(p.org) + "</p></div>" +
+          '<p class="badges">' + badgeHTML(b, p) + "</p>" +
         "</div>" +
         '<p class="summary">' + esc(p.summary) + "</p>" +
         (p.statusNote ? '<p class="flag"><strong>Check first.</strong> ' + esc(p.statusNote) + "</p>" : "") +
