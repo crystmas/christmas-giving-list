@@ -265,7 +265,7 @@
   /* Results bar */
   .results-head h2 { font-size: 1rem; line-height: 1.3; }
   #count { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
-  /* Sort control. What you see is the "face": a box that reads "Sort: Soonest deadline" with an arrow.
+  /* Sort control. What you see is the "face": a box that reads "Sort: Deadline, soonest first" with an arrow.
      The real menu sits on top of it and is see-through, so the control looks the same in every
      browser and still opens the phone's or computer's own menu. */
   .sort { position: relative; display: inline-flex; min-width: 0; }
@@ -354,6 +354,11 @@
   .give-text { min-width: 0; padding: 0 2px; }
   .give-act { order: -1; display: grid; gap: 8px; }
   .give-act .btn { width: 100%; min-height: 48px; }
+  /* Very narrow cards (phones about 350px wide or less): a little less padding and slightly smaller text,
+     so longer labels such as "Get directions to drop-off" stay on one line */
+  @container (max-width: 279px) {
+    .give-act .btn { padding-left: 10px; padding-right: 10px; gap: 6px; font-size: 0.9375rem; }
+  }
   .btn-label { text-wrap: balance; }
   .give-name { font-size: 0.9375rem; font-weight: 600; }
   .give-detail { color: var(--ink-soft); font-size: 0.875rem; line-height: 1.45; overflow-wrap: anywhere; }
@@ -622,9 +627,9 @@
   </div>
   <div class="sort">
     <label for="sort" class="sr-only">Sort by</label>
-    <span class="sort-face" aria-hidden="true"><span id="sortText">Sort: Soonest deadline</span><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></span>
+    <span class="sort-face" aria-hidden="true"><span id="sortText">Sort: Deadline, soonest first</span><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></span>
     <select id="sort">
-      <option value="deadline">Soonest deadline</option>
+      <option value="deadline">Deadline, soonest first</option>
       <option value="name">Name, A to Z</option>
     </select>
   </div>
@@ -699,7 +704,7 @@
                  and "signup": true (the row's text starts with "Sign up first.").
         rows:    only for a card whose ways all start in the same place. One or more { icon, name, text } shown in place of
                  the usual one row for each way. "ways" still decides which filters find the card.
-        (an option can also have map: "street address", which adds a "Get directions" link)
+        (an option can also have map: "street address", which adds a "Get directions to drop-off" link)
         options: one entry for each way to give, in the same order as "ways". Each can have text (a short detail such as an
                  address) and, for the second and third way, a link { label, url }.
         action:  { type: "link", label, url }
@@ -2417,7 +2422,7 @@ function giveHTML(p) {
     } else if (o.link) {
       btns.push(Object.assign({ type: "link" }, o.link));
     }
-    if (o.map) btns.push({ type: "link", icon: "drop", label: "Get directions", url: mapLink(o.map), srExtra: "to " + o.map });
+    if (o.map) btns.push({ type: "link", icon: "drop", label: "Get directions to drop-off", url: mapLink(o.map), srExtra: "at " + o.map });
     const email = btns.find((x) => x.type === "email");
     const used = [];
     const act = btns.map((x) => {
@@ -2607,7 +2612,7 @@ function sorter(mode) {
 
 // The sort control shows short names on phones so it fits beside the Filters button
 const SORT_NAMES = {
-  full:  { deadline: "Soonest deadline", name: "Name, A to Z" },
+  full:  { deadline: "Deadline, soonest first", name: "Name, A to Z" },
   short: { deadline: "Deadline", name: "Name" }
 };
 const phone = window.matchMedia("(max-width: 519px)");
