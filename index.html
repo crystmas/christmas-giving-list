@@ -373,6 +373,23 @@
   .sheet-close { display: none; }
   .sheet-foot { display: block; }
 
+  /* Wide screens: the filters are a quiet side rail, not a white box like the program cards.
+     Smaller, softer text keeps the list as the main thing on the page. Rows stay 44px tall. */
+  @media (min-width: 700px) {
+    .page { grid-template-columns: 200px minmax(0, 1fr) auto; }
+    .filters { background: transparent; border: 0; border-radius: 0; }
+    .filters-body > * { padding: 10px 0; }
+    .filters-body > * + * { border-top: 1px solid var(--line-soft); }
+    .filters-body > .sheet-head { padding-top: 0; }
+    .filters h2 { font-size: 0.875rem; color: var(--ink-soft); }
+    /* Beside the list you can see it update, so this line is kept for screen readers only */
+    .filters .sheet-head .hint { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+    .filters fieldset > legend { font-size: 0.8125rem; color: var(--ink-soft); }
+    .filters .check { font-size: 0.9375rem; }
+    .filters .check input { width: 18px; height: 18px; }
+    .filters-body > label.check { padding: 8px 0; }
+  }
+
   /* Small and medium screens (under 700px): the filters fold away behind a "Filters" button that sits
      beside "Sort by". The panel opens below both and is styled like a phone filter sheet:
      a title with Close, large rows, and a bar at the bottom that stays in view. */
