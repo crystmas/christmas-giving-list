@@ -1,0 +1,508 @@
+/* The Christmas Giving List: styles shared by every page (index.html and about.html).
+   Both pages link this one file, so they always look the same. */
+/* Layout idea: filters in a left rail, programs as one sortable column of rows.
+   Each row puts the facts on the left and the one action on the right. */
+:root {
+  --bg: #f3f6f4;
+  --surface: #ffffff;
+  --ink: #14231d;
+  --ink-soft: #40524a;
+  --line: #cfd9d3;
+  --line-soft: #dde5e0;
+  --line-strong: #64786e;
+  --brand: #0f5c45;
+  --on-brand: #ffffff;
+  --urgent: #9c1f2c;
+  --urgent-bg: #fbe8ea;
+  --note-ink: #574000;
+  --note-bg: #fdf1cf;
+  --calm-bg: #e3f0ea;
+  --notice-bg: #e3f1ea;
+  --notice-line: #cfe6da;
+  --place-bg: #eef3f0;
+  --place-ink: #0b4535;
+  --place-line: #d4e1da;
+  /* Holiday header: evergreen band, candy-cane stripe, snow edge */
+  --head-bg: #0f5c45;
+  --head-ink: #ffffff;
+  --head-soft: #d6eee4;
+  --stripe-red: #b3261e;
+  --stripe-white: #ffffff;
+  --font-display: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f1814;
+    --surface: #17231e;
+    --ink: #e8f0ec;
+    --ink-soft: #b1c2b9;
+    --line: #2e4138;
+    --line-soft: #25372f;
+    --line-strong: #8aa096;
+    --brand: #84d8b8;
+    --on-brand: #06231a;
+    --urgent: #ffa3ad;
+    --urgent-bg: #3b1a20;
+    --note-ink: #f4dd9c;
+    --note-bg: #3a3013;
+    --calm-bg: #1c342a;
+    --notice-bg: #1c342a;
+    --notice-line: #2f4a3e;
+    --place-bg: var(--calm-bg);
+    --place-ink: var(--ink);
+    --place-line: var(--line);
+    --head-bg: #0b3527;
+    --head-ink: #f1f8f4;
+    --head-soft: #b9d6ca;
+    --stripe-red: #a3241d;
+    --stripe-white: #e9efec;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f1814;
+  --surface: #17231e;
+  --ink: #e8f0ec;
+  --ink-soft: #b1c2b9;
+  --line: #2e4138;
+  --line-soft: #25372f;
+  --line-strong: #8aa096;
+  --brand: #84d8b8;
+  --on-brand: #06231a;
+  --urgent: #ffa3ad;
+  --urgent-bg: #3b1a20;
+  --note-ink: #f4dd9c;
+  --note-bg: #3a3013;
+  --calm-bg: #1c342a;
+  --notice-bg: #1c342a;
+  --notice-line: #2f4a3e;
+  --place-bg: var(--calm-bg);
+  --place-ink: var(--ink);
+  --place-line: var(--line);
+  --head-bg: #0b3527;
+  --head-ink: #f1f8f4;
+  --head-soft: #b9d6ca;
+  --stripe-red: #a3241d;
+  --stripe-white: #e9efec;
+  color-scheme: dark;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+h1, h2, h3, h4, p, ul, ol, dl, dd, fieldset, legend { margin: 0; padding: 0; }
+ul, ol { list-style: none; }
+fieldset { border: 0; min-width: 0; }
+a { color: var(--brand); text-underline-offset: 0.15em; }
+:focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; border-radius: 4px; }
+[hidden] { display: none !important; }
+
+.sr-only {
+  position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+  overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+}
+.skip {
+  position: absolute; left: 16px; top: -100px; z-index: 10;
+  background: var(--brand); color: var(--on-brand);
+  padding: 12px 16px; border-radius: 6px; font-weight: 600;
+}
+.skip:focus { top: 12px; }
+
+.wrap { max-width: 840px; margin: 0 auto; padding: 0 20px; }
+
+/* Header: an evergreen band with a candy-cane stripe on top and a snowy edge below.
+   All of it is still decoration. Nothing moves, and the words sit on plain green. */
+.site-head { position: relative; background: var(--head-bg); color: var(--head-ink); }
+.site-head::before {
+  content: ""; display: block; height: 8px;
+  background: repeating-linear-gradient(135deg, var(--stripe-red) 0 12px, var(--stripe-white) 12px 24px);
+}
+.site-head::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 12px;
+  background: radial-gradient(circle at 12px 14px, var(--bg) 12px, transparent 13px) 0 0 / 24px 12px repeat-x;
+}
+.site-head .wrap { position: relative; display: grid; gap: 6px; padding-top: 20px; padding-bottom: 30px; }
+.site-name { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--head-soft); font-size: 0.875rem; }
+.site-name svg { flex: none; }
+h1 {
+  font-family: var(--font-display); font-size: clamp(1.5rem, 3.4vw, 2rem);
+  line-height: 1.15; font-weight: 700; text-wrap: balance; max-width: 26ch;
+}
+/* The opening paragraph sits just below the green band, in dark text on the light page, so it is easy to read.
+   The story and the notice under it share one column, as wide as the paragraph. */
+.intro { padding-top: 18px; padding-bottom: 22px; display: grid; grid-template-columns: minmax(0, 60ch); gap: 4px; font-size: 1.0625rem; }
+.lead { max-width: 60ch; font-size: 1.0625rem; line-height: 1.55; color: var(--ink); }
+/* "How this all started" is folded away until someone opens it. It opens in place. */
+.story > summary {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 44px; cursor: pointer;
+  color: var(--brand); font-weight: 600; font-size: 1rem; list-style: none;
+}
+.story > summary::-webkit-details-marker { display: none; }
+.story > summary svg { flex: none; transition: transform 0.15s ease; }
+.story[open] > summary svg { transform: rotate(180deg); }
+@media (prefers-reduced-motion: reduce) { .story > summary svg { transition: none; } }
+.story-body { display: grid; gap: 8px; line-height: 1.55; padding-bottom: 8px; }
+/* A short note before the list, in a light card */
+.notice {
+  max-width: 60ch; margin-top: 6px; padding: 12px 16px; background: var(--notice-bg); border: 1px solid var(--notice-line);
+  border-radius: 12px; font-size: 0.9375rem; color: var(--ink);
+}
+/* Small print under the card. The grid gap adds 4px, so it sits 8px below the card. */
+.fineprint { margin-top: 4px; font-size: 0.8125rem; color: var(--ink-soft); }
+/* The tree and gifts sit to the right of the words on wider screens */
+.holiday-art { position: absolute; right: 20px; bottom: 14px; width: 168px; height: auto; }
+@media (max-width: 699px) { .holiday-art { width: 96px; top: 14px; bottom: auto; } h1 { max-width: 16ch; } .site-name { max-width: calc(100% - 104px); } }
+@media (max-width: 419px) { .holiday-art { width: 80px; top: 16px; right: 14px; } h1 { max-width: calc(100% - 88px); } }
+@media (max-width: 519px) {
+  .intro { padding-top: 14px; padding-bottom: 14px; font-size: 1rem; }
+  .site-head .wrap { padding-top: 12px; padding-bottom: 22px; gap: 4px; }
+  .lead { font-size: 1rem; }
+  /* "Programs" and the count share one line when there is room */
+  .results-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 10px; }
+}
+
+/* Page grid */
+/* Page grid. Wide screens: filters at the side, list heading and sort menu on one row above the list. */
+.page {
+  display: grid; grid-template-columns: 230px minmax(0, 1fr) auto; grid-template-rows: auto 1fr;
+  grid-template-areas: "filters head sort" "filters results results";
+  column-gap: 24px; row-gap: 12px; align-items: start; padding-bottom: 48px;
+}
+.filters { grid-area: filters; }
+.results-head { grid-area: head; align-self: end; }
+.sort { grid-area: sort; align-self: end; }
+#results { grid-area: results; min-width: 0; }
+
+/* Filters */
+/* The base look of the filter panel: a white box like the program cards, a divider between
+   groups, and the same checkboxes. Wide screens turn it into a quiet side rail further down. */
+.filters {
+  background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+}
+/* The panel follows you down the page only when all of it fits on the screen,
+   so it never needs its own scroll bar. The script below adds this class. */
+.filters.sticky { position: sticky; top: 16px; }
+.filters > summary {
+  display: none; cursor: pointer; font-weight: 700; padding: 11px 14px; min-height: 44px;
+}
+/* Arrow on the folded "Filters" control. It points right when closed and down when open. */
+.filters > summary { list-style: none; }
+.filters > summary::-webkit-details-marker { display: none; }
+.filters > summary::before {
+  content: ""; display: inline-block; margin-right: 10px; vertical-align: 1px;
+  border-left: 7px solid currentColor; border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+}
+.filters[open] > summary::before { transform: rotate(90deg); }
+.filters-body > * { padding: 12px 14px; }
+.filters-body > * + * { border-top: 1px solid var(--line); }
+.filters h2 { font-size: 1rem; }
+/* A legend normally sits on its group's top edge. Floating it puts it inside the padding, below the divider line. */
+.filters fieldset > legend { float: left; width: 100%; padding: 0; margin-bottom: 2px; }
+.filters fieldset > legend + * { clear: both; }
+.filters .check { align-items: center; min-height: 44px; padding: 4px 6px; margin: 0 -6px; }
+.filters .check input { width: 22px; height: 22px; margin: 0; }
+.filters-body > label.check { padding: 8px 14px; margin: 0; border-radius: 0; }
+#clear { border-color: transparent; text-decoration: underline; padding: 6px 0; min-height: 44px; }
+#clear:hover { background: transparent; text-decoration-thickness: 2px; }
+.filters .hint { margin-top: 2px; }
+.field { display: grid; gap: 4px; }
+.field > label, legend { font-weight: 700; }
+legend { margin-bottom: 2px; }
+input[type="search"], select {
+  font: inherit; color: var(--ink); background: var(--surface);
+  border: 1px solid var(--line-strong); border-radius: 6px;
+  padding: 7px 10px; min-height: 40px; width: 100%;
+}
+.check {
+  display: flex; align-items: flex-start; gap: 10px;
+  padding: 5px 6px; border-radius: 6px; cursor: pointer; min-height: 34px;
+}
+.check:hover { background: var(--calm-bg); }
+.check input { width: 19px; height: 19px; margin: 3px 0 0; flex: none; accent-color: var(--brand); }
+.count { color: var(--ink-soft); }
+.hint { color: var(--ink-soft); font-size: 0.875rem; }
+
+/* Buttons */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+  font: inherit; font-weight: 700; line-height: 1.25; text-align: center; text-decoration: none;
+  min-height: 44px; padding: 9px 16px; border-radius: 8px; cursor: pointer;
+  border: 2px solid var(--brand);
+}
+.btn.primary { background: var(--brand); color: var(--on-brand); }
+.btn.secondary { background: transparent; color: var(--brand); }
+.btn:hover { filter: brightness(1.08); }
+.btn.secondary:hover { background: var(--calm-bg); filter: none; }
+
+/* Results bar */
+.results-head h2 { font-size: 1rem; line-height: 1.3; }
+#count { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+/* Sort control. What you see is the "face": a box that reads "Sort: Deadline, soonest first" with an arrow.
+   The real menu sits on top of it and is see-through, so the control looks the same in every
+   browser and still opens the phone's or computer's own menu. */
+.sort { position: relative; display: inline-flex; min-width: 0; }
+.sort-face {
+  display: flex; align-items: center; justify-content: space-between; gap: 8px; box-sizing: border-box;
+  width: 100%; min-width: 13.75rem; min-height: 44px; padding: 0 12px; white-space: nowrap; font-weight: 600;
+  border: 1px solid var(--line-strong); border-radius: 8px; background: var(--surface);
+}
+.sort-face svg { flex: none; }
+/* With large text or wide letter spacing the label wraps onto a second line. It is never cut off. */
+#sortText { min-width: 0; white-space: normal; line-height: 1.25; padding: 4px 0; }
+.sort select {
+  position: absolute; inset: 0; width: 100%; height: 100%; min-height: 0; padding: 0; border: 0; opacity: 0;
+  -webkit-appearance: none; appearance: none; font-size: 1rem; cursor: pointer;
+}
+.sort:hover .sort-face { border-color: var(--brand); }
+.sort:focus-within .sort-face { outline: 3px solid var(--brand); outline-offset: 3px; }
+
+/* Cards */
+#list { display: grid; gap: 18px; }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+.card article {
+  display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 22px 22px;
+}
+.card-main { display: grid; gap: 13px; align-content: start; }
+.card h3 { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.25; text-wrap: balance; }
+.org { color: var(--ink-soft); font-weight: 400; margin-top: -7px; font-size: 0.9375rem; text-wrap: balance; }
+.badges { display: flex; flex-wrap: wrap; gap: 8px; }
+/* Card header: name, then organization, then the deadline and who it helps on their own row */
+.card-head { display: flex; flex-direction: column; gap: 6px; }
+.card-title { display: grid; gap: 2px; }
+.card-head .org { margin-top: 0; }
+.card-head .badges { align-items: center; }
+.card-head .badge { overflow-wrap: anywhere; }
+.soon { color: var(--urgent); font-weight: 700; font-size: 0.875rem; }
+.badge {
+  display: inline-block; font-size: 0.875rem; font-weight: 700; line-height: 1.3;
+  padding: 4px 10px; border: 1px solid var(--brand); border-radius: 999px; background: var(--calm-bg); color: var(--ink);
+}
+.badge.urgent { background: var(--urgent-bg); color: var(--urgent); border-color: var(--urgent); }
+.badge.note { background: var(--note-bg); color: var(--note-ink); border-color: var(--note-ink); }
+/* Who a program helps: a quieter pill after the deadline. It is a label, not a control. */
+.badge.place {
+  display: inline-flex; align-items: center; gap: 5px; font-size: 0.8125rem; font-weight: 600;
+  background: var(--place-bg); color: var(--place-ink); border-color: var(--place-line);
+}
+.badge.place svg { flex: none; }
+.summary { max-width: 52ch; }
+.flag {
+  background: var(--note-bg); color: var(--note-ink);
+  border-left: 5px solid var(--note-ink); padding: 10px 12px; border-radius: 4px; max-width: 52ch;
+}
+/* Facts at a glance, each with a small picture: the cost, and the sign-up only when one is needed */
+.glance { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 20px; margin-top: 2px; font-size: 0.9375rem; }
+/* With no sign-up, the cost has the whole row to itself */
+.glance > .g:only-child { grid-column: 1 / -1; }
+.g { display: grid; grid-template-columns: 20px minmax(0, 1fr); column-gap: 8px; align-content: start; }
+.g .ic { grid-row: 1 / span 2; margin-top: 1px; color: var(--brand); }
+.g dt { font-weight: 700; font-size: 0.8125rem; color: var(--ink-soft); }
+.g.needs .ic, .g.needs strong { color: var(--note-ink); }
+.ic { flex: none; }
+/* Long email addresses and links wrap instead of pushing past the card on narrow phones */
+.more-body, .email-lead, .glance dd, .second { overflow-wrap: anywhere; }
+.card h4 { font-size: 0.9375rem; }
+.steps { list-style: decimal; padding-left: 1.4em; display: grid; gap: 4px; max-width: 54ch; margin-top: -6px; }
+/* Choices inside a step: the giver picks one, so they are bullets, not numbers */
+.steps .choices { list-style: disc; padding-left: 1.2em; display: grid; gap: 4px; margin-top: 4px; font-size: inherit; }
+.goodtoknow { color: var(--ink-soft); max-width: 52ch; }
+
+details.more { border-top: 1px solid var(--line-soft); margin-top: -2px; }
+details.more > summary { cursor: pointer; font-weight: 600; color: var(--brand); padding: 11px 0; margin-bottom: -11px; min-height: 44px; font-size: 0.9375rem; }
+details.more[open] > summary { margin-bottom: 0; }
+.more-body { display: grid; gap: 10px; padding-top: 4px; font-size: 0.9375rem; }
+
+/* Ways to give. The card decides the layout by its own width, not the screen's.
+   A way with a button shows just the button; its details are in "Steps and details".
+   A way with no button shows its name and a line of help.
+   Narrow card (phones): full-width buttons, one under another.
+   Wide card (480px of room or more): one column of buttons on the left, as wide as the card's widest button. */
+/* The "How to give" heading is there for screen readers only, so the ways to give follow the facts with the card's normal gap */
+.card-action { display: grid; gap: 0; container-type: inline-size; }
+.give-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
+.give { display: grid; gap: 6px; }
+/* A way with no button gets a little more room above and below it, so it reads as its own item */
+.give:not(.has-act):not(:first-child), .give:not(.has-act) + .give { padding-top: 8px; }
+.give-text { min-width: 0; padding: 0 2px; }
+.give-act { order: -1; display: grid; gap: 8px; }
+.give-act .btn { width: 100%; min-height: 48px; }
+/* Very narrow cards (phones about 350px wide or less): a little less padding and slightly smaller text,
+   so longer labels such as "Get directions to drop-off" stay on one line */
+@container (max-width: 279px) {
+  .give-act .btn { padding-left: 10px; padding-right: 10px; gap: 6px; font-size: 0.9375rem; }
+}
+.btn-label { text-wrap: balance; }
+.give-name { font-size: 0.9375rem; font-weight: 600; }
+.give-detail { color: var(--ink-soft); font-size: 0.875rem; line-height: 1.45; overflow-wrap: anywhere; }
+.give-name + .give-detail { margin-top: 2px; }
+.give-detail .signup-first { color: var(--note-ink); }
+.copy-row { justify-content: flex-start; }
+@container (min-width: 480px) {
+  /* All the buttons on one card share the left-hand column. It is as wide as the widest button, so they all match.
+     Words and the email help use the whole width. */
+  .give-list { grid-template-columns: fit-content(100%) minmax(0, 1fr); }
+  .give { grid-column: 1 / -1; grid-template-columns: subgrid; }
+  .give-text, .give > details.msg { grid-column: 1 / -1; padding: 0; }
+  .give-act { grid-column: 1; }
+  .give-act .btn { min-height: 44px; padding: 9px 12px; }
+}
+.action-row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-self: stretch; }
+.card-action .hint { max-width: 52ch; }
+.goes-to { margin-top: -4px; }
+/* Buttons sit at the bottom right of the card. Help text stays left so it is easy to read. */
+.action-row { justify-content: flex-end; }
+.goes-to, .second { justify-self: end; text-align: right; }
+.action-row .btn.primary { min-width: min(100%, 240px); }
+.email-lead { background: var(--calm-bg); padding: 7px 10px; border-radius: 6px; font-size: 0.9375rem; }
+.addr, .give-detail strong { font-weight: 700; color: var(--ink); overflow-wrap: anywhere; }
+.copy-status { font-weight: 600; font-size: 0.875rem; }
+details.msg > summary { cursor: pointer; font-weight: 600; color: var(--brand); padding: 10px 0; min-height: 44px; font-size: 0.9375rem; }
+.msg-body { border: 1px solid var(--line); border-radius: 6px; padding: 12px; display: grid; gap: 8px; font-size: 0.9375rem; }
+.msg-body pre { margin: 0; font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
+.card-foot { color: var(--ink-soft); font-size: 0.875rem; }
+.source { font-size: 0.875rem; margin: -6px 0 -10px; }
+.source a { display: inline-block; padding: 12px 0; }
+
+.empty { background: var(--surface); border: 1px dashed var(--line-strong); border-radius: 10px; padding: 24px; display: grid; gap: 12px; justify-items: start; }
+
+/* About */
+.about { border-top: 1px solid var(--line); padding: 24px 0 40px; font-size: 0.9375rem; }
+.about .wrap { display: grid; gap: 12px; }
+.about h2 { font-family: var(--font-display); font-size: 1.25rem; }
+.about ul { list-style: disc; padding-left: 1.3em; display: grid; gap: 6px; max-width: 56ch; }
+/* Feedback form: folded away, and not loaded until it is first opened */
+details.feedback > summary { cursor: pointer; font-weight: 600; color: var(--brand); padding: 11px 0; min-height: 44px; }
+.feedback iframe { display: block; width: 100%; height: 1000px; border: 0; }
+@media (max-width: 699px) { .feedback iframe { height: 1200px; } }
+.form-link { display: inline-block; padding: 12px 0; }
+
+.applied { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-bottom: 16px; }
+.btn.small { min-height: 44px; padding: 5px 12px; font-size: 0.875rem; }
+#showResults { display: none; }
+/* Parts of the filter panel that only show when it is folded away on small screens */
+.sheet-close { display: none; }
+.sheet-foot { display: block; }
+
+/* Wide screens: the filters are a quiet side rail, not a white box like the program cards.
+   Smaller, softer text keeps the list as the main thing on the page. Rows stay 44px tall. */
+@media (min-width: 700px) {
+  .page { grid-template-columns: 200px minmax(0, 1fr) auto; }
+  .filters { background: transparent; border: 0; border-radius: 0; }
+  .filters-body > * { padding: 10px 0; }
+  .filters-body > * + * { border-top: 1px solid var(--line-soft); }
+  .filters-body > .sheet-head { padding-top: 0; }
+  .filters h2 { font-size: 0.875rem; color: var(--ink-soft); }
+  /* Beside the list you can see it update, so this line is kept for screen readers only */
+  .filters .sheet-head .hint { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+  .filters fieldset > legend { font-size: 0.8125rem; color: var(--ink-soft); }
+  .filters .check { font-size: 0.9375rem; }
+  .filters .check input { width: 18px; height: 18px; }
+  .filters-body > label.check { padding: 8px 0; }
+}
+
+/* Small and medium screens (under 700px): the filters fold away behind a "Filters" button that sits
+   beside "Sort by". The panel opens below both and is styled like a phone filter sheet:
+   a title with Close, large rows, and a bar at the bottom that stays in view. */
+@media (max-width: 699px) {
+  html { scroll-padding-bottom: 96px; }
+  .page { grid-template-columns: 8.5rem minmax(0, 1fr); grid-template-rows: none; grid-template-areas: none; column-gap: 10px; }
+  /* The panel spans the full width. The sort menu sits over its empty top right corner. */
+  .filters { grid-area: auto; grid-column: 1 / -1; grid-row: 1; border: 0; border-radius: 0; background: transparent; }
+  .filters.sticky { position: static; }
+  .sort { grid-area: auto; grid-column: 2; grid-row: 1; align-self: start; justify-self: start; position: relative; z-index: 1; }
+  .results-head { grid-area: auto; grid-column: 1 / -1; grid-row: 2; }
+  #results { grid-area: auto; grid-column: 1 / -1; grid-row: 3; }
+
+  /* The Filters button. It matches the sort control beside it: same height, border and corners. */
+  .filters > summary {
+    display: flex; align-items: center; gap: 6px; box-sizing: border-box; width: 8.5rem; min-height: 44px;
+    padding: 0 12px; white-space: nowrap; font-weight: 600;
+    border: 1px solid var(--line-strong); border-radius: 8px; background: var(--surface); color: var(--ink);
+  }
+  .filters > summary:hover, .filters > summary:has(.fs-count) { border-color: var(--brand); }
+  .filters > summary::before { display: none; }
+  .filters > summary svg { flex: none; }
+  .filters[open] > summary { background: var(--calm-bg); border-color: var(--brand); }
+  .fs-count {
+    margin-left: auto; min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px;
+    display: inline-flex; align-items: center; justify-content: center;
+    background: var(--brand); color: var(--on-brand); font-size: 0.8125rem; font-variant-numeric: tabular-nums;
+  }
+
+  /* The open panel: the same box as on wide screens, placed under the two controls */
+  .filters-body {
+    margin-top: 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface);
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.10);
+  }
+  .filters-body > * { padding-left: 16px; padding-right: 16px; }
+  .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .sheet-close {
+    display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; border: 0; background: none;
+    font: inherit; font-weight: 700; color: var(--brand); text-decoration: underline; text-underline-offset: 0.15em; cursor: pointer;
+  }
+  .filters .check { min-height: 48px; }
+  .filters-body > label.check { padding-left: 16px; padding-right: 16px; }
+  /* The bar with "Reset filters" and "Show programs" stays in view while you scroll the options */
+  .sheet-foot {
+    display: flex; align-items: center; gap: 12px; position: sticky; bottom: 0;
+    background: var(--surface); border-radius: 0 0 10px 10px; box-shadow: 0 -6px 14px rgba(0, 0, 0, 0.08);
+  }
+  #showResults { display: inline-flex; flex: 1; min-height: 48px; }
+}
+/* Phones: cards stack and buttons run the full width */
+@media (max-width: 519px) {
+  /* The two controls share the row equally */
+  .page { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .filters > summary { width: calc(50% - 5px); padding: 0 10px; }
+  .sort { justify-self: stretch; }
+  .sort-face { padding: 0 10px; min-width: 0; }
+  .card article { padding: 18px 16px; }
+  .glance { grid-template-columns: minmax(0, 1fr); }
+  .action-row .btn { width: 100%; }
+  .goes-to, .second { justify-self: start; text-align: left; }
+}
+/* Very narrow phones: no room for two controls in a row, so "Sort by" drops below "Filters" */
+@media (max-width: 359px), (max-width: 22.4em) {
+  .page { grid-template-columns: minmax(0, 1fr); }
+  .filters > summary { width: 100%; }
+  .sort { grid-column: 1; grid-row: 2; }
+  .results-head { grid-row: 3; }
+  #results { grid-row: 4; }
+}
+/* Quiet controls: "Filters" and "Sort" are small pills, and the phone filter panel has no box, like the
+   desktop rail. Each pill looks 36px tall. Its tap area is 44px tall. */
+.sort-face { min-width: 0; min-height: 36px; padding: 0 12px 0 14px; font-size: 0.875rem; border-color: var(--line); border-radius: 18px; }
+.sort select { inset: -4px 0; height: calc(100% + 8px); }
+@media (max-width: 699px) {
+  .page { grid-template-columns: 6.25rem minmax(0, 1fr); column-gap: 8px; }
+  .page:has(.fs-count) { grid-template-columns: 7.75rem minmax(0, 1fr); }
+  .filters > summary { position: relative; width: 6.25rem; min-height: 36px; padding: 0 12px; font-size: 0.875rem; border-color: var(--line); border-radius: 18px; }
+  .filters > summary:has(.fs-count) { width: 7.75rem; }
+  .filters > summary::after { content: ""; position: absolute; inset: -4px 0 -5px; }
+  .fs-count { min-width: 20px; height: 20px; }
+  .sort { justify-self: start; }
+  .sort-face { padding: 0 12px 0 14px; }
+  #sortText { overflow-wrap: anywhere; }   /* with very large text the label breaks instead of pushing the page sideways */
+  .filters-body { margin-top: 12px; border: 0; border-top: 1px solid var(--line-soft); border-radius: 0; background: transparent; box-shadow: none; }
+  .filters-body > * { padding: 10px 0; }
+  .filters-body > * + * { border-top: 1px solid var(--line-soft); }
+  .filters h2 { font-size: 0.875rem; color: var(--ink-soft); }
+  .filters fieldset > legend { font-size: 0.8125rem; color: var(--ink-soft); }
+  .filters .check { font-size: 0.9375rem; }
+  .filters .check input { width: 20px; height: 20px; }
+  .filters-body > label.check { padding: 8px 0; }
+  .sheet-foot { background: var(--bg); border-radius: 0; box-shadow: none; }
+  #showResults { min-height: 44px; }
+}
+@media (max-width: 359px), (max-width: 22.4em) {
+  .page, .page:has(.fs-count) { grid-template-columns: minmax(0, 1fr); }
+}
