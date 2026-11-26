@@ -1,5 +1,37 @@
 /* The Christmas Giving List: styles shared by every page (index.html and about.html).
    Both pages link this one file, so they always look the same. */
+/* Fonts. Both are hosted on this site, never on a font service, so loading them sends no visitor data anywhere.
+   Lora (headings, bold only) and DM Sans (everything else), Latin letters only. Licenses: fonts/Lora-OFL.txt and fonts/DMSans-OFL.txt (SIL Open Font License).
+   While a font loads, the "Fallback" faces below stand in for it. They use Times New Roman or Arial (or their Liberation twins on Linux),
+   resized so text takes up about the same space, so nothing jumps when the real font arrives.
+   Line widths are set in em, not ch: a "ch" is the width of the digit 0, which changes when the font changes and would
+   make lines re-wrap as the fonts load. Each em value equals the old ch width in the real font (for example, 60ch = 41.04em). */
+@font-face { font-family: "Lora"; font-style: normal; font-weight: 700; font-display: swap; src: url("fonts/lora-latin-700-normal.woff2") format("woff2"); }
+@font-face { font-family: "DM Sans"; font-style: normal; font-weight: 400; font-display: swap; src: url("fonts/dm-sans-latin-400-normal.woff2") format("woff2"); }
+@font-face { font-family: "DM Sans"; font-style: normal; font-weight: 500; font-display: swap; src: url("fonts/dm-sans-latin-500-normal.woff2") format("woff2"); }
+@font-face { font-family: "DM Sans"; font-style: normal; font-weight: 600; font-display: swap; src: url("fonts/dm-sans-latin-600-normal.woff2") format("woff2"); }
+@font-face { font-family: "DM Sans"; font-style: normal; font-weight: 700; font-display: swap; src: url("fonts/dm-sans-latin-700-normal.woff2") format("woff2"); }
+@font-face {
+  font-family: "Lora Fallback"; font-weight: 700;
+  src: local("Times New Roman Bold"), local("TimesNewRomanPS-BoldMT"), local("Liberation Serif Bold"), local("LiberationSerif-Bold");
+  size-adjust: 110.59%; ascent-override: 90.97%; descent-override: 24.78%; line-gap-override: 0%;
+}
+@font-face {
+  font-family: "DM Sans Fallback"; font-weight: 400;
+  src: local("Arial"), local("ArialMT"), local("Liberation Sans"), local("LiberationSans");
+  size-adjust: 102.78%; ascent-override: 96.51%; descent-override: 30.16%; line-gap-override: 0%;
+}
+@font-face {
+  font-family: "DM Sans Fallback"; font-weight: 600;
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
+  size-adjust: 99.64%; ascent-override: 99.56%; descent-override: 31.11%; line-gap-override: 0%;
+}
+@font-face {
+  font-family: "DM Sans Fallback"; font-weight: 700;
+  src: local("Arial Bold"), local("Arial-BoldMT"), local("Liberation Sans Bold"), local("LiberationSans-Bold");
+  size-adjust: 101.29%; ascent-override: 97.94%; descent-override: 30.61%; line-gap-override: 0%;
+}
+
 /* Layout idea: filters in a left rail, programs as one sortable column of rows.
    Each row puts the facts on the left and the one action on the right. */
 :root {
@@ -20,14 +52,11 @@
   --place-bg: #eef3f0;
   --place-ink: #0b4535;
   --place-line: #d4e1da;
-  /* Holiday header: evergreen band, candy-cane stripe, snow edge */
-  --head-bg: #0f5c45;
+  /* Header: a solid evergreen band, the same in light and dark mode */
+  --head-bg: #0b4535;
   --head-ink: #ffffff;
-  --head-soft: #d6eee4;
-  --stripe-red: #b3261e;
-  --stripe-white: #ffffff;
-  --font-display: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
-  --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-display: "Lora", "Lora Fallback", Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+  --font-body: "DM Sans", "DM Sans Fallback", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
@@ -49,11 +78,7 @@
     --place-bg: var(--calm-bg);
     --place-ink: var(--ink);
     --place-line: var(--line);
-    --head-bg: #0b3527;
     --head-ink: #f1f8f4;
-    --head-soft: #b9d6ca;
-    --stripe-red: #a3241d;
-    --stripe-white: #e9efec;
     color-scheme: dark;
   }
 }
@@ -75,11 +100,7 @@
   --place-bg: var(--calm-bg);
   --place-ink: var(--ink);
   --place-line: var(--line);
-  --head-bg: #0b3527;
   --head-ink: #f1f8f4;
-  --head-soft: #b9d6ca;
-  --stripe-red: #a3241d;
-  --stripe-white: #e9efec;
   color-scheme: dark;
 }
 
@@ -113,45 +134,44 @@ a { color: var(--brand); text-underline-offset: 0.15em; }
 
 .wrap { max-width: 840px; margin: 0 auto; padding: 0 20px; }
 
-/* Header: an evergreen band with a candy-cane stripe on top and a snowy edge below.
-   All of it is still decoration. Nothing moves, and the words sit on plain green. */
+/* Header: a solid evergreen band with the site's name, a short tagline, and the tree. The tree is decoration only. */
 .site-head { position: relative; background: var(--head-bg); color: var(--head-ink); }
-.site-head::before {
-  content: ""; display: block; height: 8px;
-  background: repeating-linear-gradient(135deg, var(--stripe-red) 0 12px, var(--stripe-white) 12px 24px);
-}
-.site-head::after {
-  content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 12px;
-  background: radial-gradient(circle at 12px 14px, var(--bg) 12px, transparent 13px) 0 0 / 24px 12px repeat-x;
-}
-.site-head .wrap { position: relative; display: grid; gap: 6px; padding-top: 20px; padding-bottom: 30px; }
-.site-name { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--head-soft); font-size: 0.875rem; }
-.site-name svg { flex: none; }
+.site-head .wrap { position: relative; display: grid; gap: 14px; padding-top: 44px; padding-bottom: 48px; }
 .site-title {
-  font-family: var(--font-display); font-size: clamp(1.5rem, 3.4vw, 2rem);
-  line-height: 1.15; font-weight: 700; text-wrap: balance; max-width: 26ch;
+  font-family: var(--font-display); font-weight: 700; font-size: 3.5rem; line-height: 1.05; letter-spacing: -0.01em;
+  color: #fbf6ec; max-width: 7.63em; /* 12ch in Lora */
+}
+.site-title .dot { color: #f2c14e; }
+/* On the About page the title links back to the list: no underline until it is hovered or focused */
+.site-title a { color: inherit; text-decoration: none; }
+.site-title a:hover, .site-title a:focus-visible { text-decoration: underline; text-decoration-thickness: 0.06em; }
+.tagline { font-size: 1.375rem; line-height: 1.45; color: #e6f2ec; text-wrap: balance; max-width: 16.42em; /* 24ch in DM Sans */ }
+.site-head :focus-visible { outline-color: var(--head-ink); }
+/* The tree and gifts sit at the bottom right of the band */
+.holiday-art { position: absolute; right: 40px; bottom: 36px; width: 220px; height: auto; }
+@media (max-width: 699px) {
+  .site-head .wrap { gap: 10px; padding-top: 28px; padding-bottom: 30px; }
+  .site-title { font-size: 2.125rem; }
+  /* The tagline stops before the tree, so the two never touch */
+  .tagline { font-size: 1.0625rem; max-width: min(16.42em, calc(100% - 116px)); }
+  .holiday-art { width: 112px; right: 16px; bottom: 18px; }
 }
 /* The opening paragraph sits just below the green band, in dark text on the light page, so it is easy to read.
    The link to the About page and the small print under it share one column, as wide as the paragraph. */
-.intro { padding-top: 18px; padding-bottom: 22px; display: grid; grid-template-columns: minmax(0, 60ch); gap: 4px; font-size: 1.0625rem; }
-.lead { max-width: 60ch; font-size: 1.0625rem; line-height: 1.55; color: var(--ink); }
-/* Small print under the About link. The grid gap adds 4px, so it sits 8px below it. */
-.fineprint { margin-top: 4px; font-size: 0.8125rem; color: var(--ink-soft); }
-/* On the About page the site name links back to the list. It keeps the header's look, and its tap area is 44px tall
-   without making the header taller. */
-.site-name a { display: inline-flex; align-items: center; gap: 8px; color: inherit; text-decoration: none; padding: 12px 0; margin: -12px 0; }
-.site-name a:hover { text-decoration: underline; }
-.site-head :focus-visible { outline-color: var(--head-ink); }
-/* The tree and gifts sit to the right of the words on wider screens */
-.holiday-art { position: absolute; right: 20px; bottom: 14px; width: 168px; height: auto; }
-@media (max-width: 699px) { .holiday-art { width: 96px; top: 14px; bottom: auto; } .site-title { max-width: 16ch; } .site-name { max-width: calc(100% - 104px); } }
-@media (max-width: 419px) { .holiday-art { width: 80px; top: 16px; right: 14px; } .site-title { max-width: calc(100% - 88px); } }
+.intro { padding-top: 18px; padding-bottom: 22px; display: grid; grid-template-columns: minmax(0, 41.04em); gap: 4px; font-size: 1.0625rem; }
+.intro-title { font-family: var(--font-display); font-weight: 700; font-size: 2.25rem; line-height: 1.1; color: var(--ink); margin: 0 0 4px; }
+.lead { max-width: 41.04em; font-size: 1.0625rem; line-height: 1.55; color: var(--ink); }
+/* The About link keeps its 44px tap height but sits close to the words around it */
+.intro .page-link { margin: -6px 0 -10px; }
+/* The small gray text uses weight 500: at 400, DM Sans looks fainter than the old font at this size */
+.fineprint { margin-top: 0; font-size: 0.8125rem; font-weight: 500; color: var(--ink-soft); }
+@media (max-width: 699px) {
+  .intro { padding-top: 22px; }
+  .intro-title { font-size: 1.625rem; }
+}
 @media (max-width: 519px) {
-  .intro { padding-top: 14px; padding-bottom: 14px; font-size: 1rem; }
-  .site-head .wrap { padding-top: 12px; padding-bottom: 22px; gap: 4px; }
+  .intro { padding-bottom: 14px; font-size: 1rem; }
   .lead { font-size: 1rem; }
-  /* "Programs" and the count share one line when there is room */
-  .results-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 10px; }
 }
 
 /* Page grid */
@@ -228,7 +248,6 @@ input[type="search"], select {
 .btn.secondary:hover { background: var(--calm-bg); filter: none; }
 
 /* Results bar */
-.results-head h2 { font-size: 1rem; line-height: 1.3; }
 #count { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
 /* Sort control. What you see is the "face": a box that reads "Sort: Deadline, soonest first" with an arrow.
    The real menu sits on top of it and is see-through, so the control looks the same in every
@@ -278,10 +297,10 @@ input[type="search"], select {
   background: var(--place-bg); color: var(--place-ink); border-color: var(--place-line);
 }
 .badge.place svg { flex: none; }
-.summary { max-width: 52ch; }
+.summary { max-width: 35.57em; }
 .flag {
   background: var(--note-bg); color: var(--note-ink);
-  border-left: 5px solid var(--note-ink); padding: 10px 12px; border-radius: 4px; max-width: 52ch;
+  border-left: 5px solid var(--note-ink); padding: 10px 12px; border-radius: 4px; max-width: 35.57em;
 }
 /* Facts at a glance, each with a small picture: the cost, and the sign-up only when one is needed */
 .glance { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 20px; margin-top: 2px; font-size: 0.9375rem; }
@@ -295,10 +314,10 @@ input[type="search"], select {
 /* Long email addresses and links wrap instead of pushing past the card on narrow phones */
 .more-body, .email-lead, .glance dd, .second { overflow-wrap: anywhere; }
 .card h4 { font-size: 0.9375rem; }
-.steps { list-style: decimal; padding-left: 1.4em; display: grid; gap: 4px; max-width: 54ch; margin-top: -6px; }
+.steps { list-style: decimal; padding-left: 1.4em; display: grid; gap: 4px; max-width: 36.94em; margin-top: -6px; }
 /* Choices inside a step: the giver picks one, so they are bullets, not numbers */
 .steps .choices { list-style: disc; padding-left: 1.2em; display: grid; gap: 4px; margin-top: 4px; font-size: inherit; }
-.goodtoknow { color: var(--ink-soft); max-width: 52ch; }
+.goodtoknow { color: var(--ink-soft); max-width: 35.57em; }
 
 details.more { border-top: 1px solid var(--line-soft); margin-top: -2px; }
 details.more > summary { cursor: pointer; font-weight: 600; color: var(--brand); padding: 11px 0; margin-bottom: -11px; min-height: 44px; font-size: 0.9375rem; }
@@ -340,7 +359,7 @@ details.more[open] > summary { margin-bottom: 0; }
   .give-act .btn { min-height: 44px; padding: 9px 12px; }
 }
 .action-row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-self: stretch; }
-.card-action .hint { max-width: 52ch; }
+.card-action .hint { max-width: 35.57em; }
 .goes-to { margin-top: -4px; }
 /* Buttons sit at the bottom right of the card. Help text stays left so it is easy to read. */
 .action-row { justify-content: flex-end; }
@@ -362,8 +381,8 @@ details.msg > summary { cursor: pointer; font-weight: 600; color: var(--brand); 
 .about { border-top: 1px solid var(--line); padding: 24px 0 40px; font-size: 0.9375rem; }
 .about .wrap { display: grid; gap: 12px; }
 .about h2 { font-family: var(--font-display); font-size: 1.25rem; }
-.about .wrap > p { max-width: 60ch; }
-.about .footnote { font-size: 0.875rem; color: var(--ink-soft); }
+.about .wrap > p { max-width: 41.04em; }
+.about .footnote { font-size: 0.875rem; font-weight: 500; color: var(--ink-soft); }
 .about .form-link { justify-self: start; }
 /* Feedback form: folded away, and not loaded until it is first opened */
 details.feedback > summary { cursor: pointer; font-weight: 600; color: var(--brand); padding: 11px 0; min-height: 44px; }
@@ -500,10 +519,15 @@ details.feedback > summary { cursor: pointer; font-weight: 600; color: var(--bra
   color: var(--brand); font-weight: 600;
 }
 
-/* About page: one column, no wider than 60ch */
-.about-page { display: grid; grid-template-columns: minmax(0, 60ch); gap: 28px; padding-top: 18px; padding-bottom: 48px; }
+/* About page: one column, no wider than 60 characters (41.04em) */
+.about-page { display: grid; grid-template-columns: minmax(0, 41.04em); gap: 28px; padding-top: 18px; padding-bottom: 48px; }
 .about-page h1 { font-family: var(--font-display); font-size: 1.75rem; line-height: 1.2; margin-bottom: 16px; }
 .about-page h2 { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.3; margin-bottom: 16px; }
 .about-page p, .about-page li { line-height: 1.6; }
 .about-story { display: grid; gap: 12px; }
 .about-page ul { list-style: disc; padding-left: 1.3em; display: grid; gap: 8px; }
+/* Small arrows drawn in the link's own color ("About this project →", "← Back to the list") */
+.page-link .arrow { display: inline-block; width: 0.95em; height: 0.95em; vertical-align: -0.14em; }
+/* The gap next to the arrow is a margin, not a space, so the underline stops at the words */
+.page-link .arrow-after { margin-left: 0.3em; }
+.page-link .arrow-before { margin-right: 0.3em; }
