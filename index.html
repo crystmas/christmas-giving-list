@@ -1,0 +1,2407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>The Christmas Giving List</title>
+<meta name="description" content="Everyone deserves a gift this Christmas, at every age. Find a program, see the cost and the deadline, and give.">
+<!-- What a pasted link shows in a text or on social media. Add og:url and og:image once the site has an address. -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="The Christmas Giving List">
+<meta property="og:description" content="Everyone deserves a gift this Christmas. Find a program, see the cost and the deadline, and give.">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 20 20'%3E%3Crect width='20' height='20' rx='4' fill='%230f5c45'/%3E%3Cpath d='M4 9h12v7H4zM3.200 6.500h13.600V9H3.200zM10 6.500v9.500M10 6.500C8.700 3.500 5.800 4 6.800 6.500M10 6.500c1.300-3 4.200-2.500 3.200 0' fill='none' stroke='%23fff' stroke-width='1.500' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+<style>
+  /* Layout idea: filters in a left rail, programs as one sortable column of rows.
+     Each row puts the facts on the left and the one action on the right. */
+  :root {
+    --bg: #f3f6f4;
+    --surface: #ffffff;
+    --ink: #14231d;
+    --ink-soft: #40524a;
+    --line: #cfd9d3;
+    --line-soft: #dde5e0;
+    --line-strong: #64786e;
+    --brand: #0f5c45;
+    --on-brand: #ffffff;
+    --urgent: #9c1f2c;
+    --urgent-bg: #fbe8ea;
+    --note-ink: #574000;
+    --note-bg: #fdf1cf;
+    --calm-bg: #e3f0ea;
+    /* Holiday header: evergreen band, candy-cane stripe, snow edge */
+    --head-bg: #0f5c45;
+    --head-ink: #ffffff;
+    --head-soft: #d6eee4;
+    --stripe-red: #b3261e;
+    --stripe-white: #ffffff;
+    --font-display: Charter, "Bitstream Charter", "Sitka Text", Cambria, Georgia, serif;
+    --font-body: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #0f1814;
+      --surface: #17231e;
+      --ink: #e8f0ec;
+      --ink-soft: #b1c2b9;
+      --line: #2e4138;
+      --line-soft: #25372f;
+      --line-strong: #8aa096;
+      --brand: #84d8b8;
+      --on-brand: #06231a;
+      --urgent: #ffa3ad;
+      --urgent-bg: #3b1a20;
+      --note-ink: #f4dd9c;
+      --note-bg: #3a3013;
+      --calm-bg: #1c342a;
+      --head-bg: #0b3527;
+      --head-ink: #f1f8f4;
+      --head-soft: #b9d6ca;
+      --stripe-red: #a3241d;
+      --stripe-white: #e9efec;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --bg: #0f1814;
+    --surface: #17231e;
+    --ink: #e8f0ec;
+    --ink-soft: #b1c2b9;
+    --line: #2e4138;
+    --line-soft: #25372f;
+    --line-strong: #8aa096;
+    --brand: #84d8b8;
+    --on-brand: #06231a;
+    --urgent: #ffa3ad;
+    --urgent-bg: #3b1a20;
+    --note-ink: #f4dd9c;
+    --note-bg: #3a3013;
+    --calm-bg: #1c342a;
+    --head-bg: #0b3527;
+    --head-ink: #f1f8f4;
+    --head-soft: #b9d6ca;
+    --stripe-red: #a3241d;
+    --stripe-white: #e9efec;
+    color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 1rem;
+    line-height: 1.5;
+  }
+  h1, h2, h3, h4, p, ul, ol, dl, dd, fieldset, legend { margin: 0; padding: 0; }
+  ul, ol { list-style: none; }
+  fieldset { border: 0; min-width: 0; }
+  a { color: var(--brand); text-underline-offset: 0.15em; }
+  :focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; border-radius: 4px; }
+  [hidden] { display: none !important; }
+
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+  .skip {
+    position: absolute; left: 16px; top: -100px; z-index: 10;
+    background: var(--brand); color: var(--on-brand);
+    padding: 12px 16px; border-radius: 6px; font-weight: 600;
+  }
+  .skip:focus { top: 12px; }
+
+  .wrap { max-width: 840px; margin: 0 auto; padding: 0 20px; }
+
+  /* Header: an evergreen band with a candy-cane stripe on top and a snowy edge below.
+     All of it is still decoration. Nothing moves, and the words sit on plain green. */
+  .site-head { position: relative; background: var(--head-bg); color: var(--head-ink); margin-bottom: 22px; }
+  .site-head::before {
+    content: ""; display: block; height: 8px;
+    background: repeating-linear-gradient(135deg, var(--stripe-red) 0 12px, var(--stripe-white) 12px 24px);
+  }
+  .site-head::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: -1px; height: 12px;
+    background: radial-gradient(circle at 12px 14px, var(--bg) 12px, transparent 13px) 0 0 / 24px 12px repeat-x;
+  }
+  .site-head .wrap { position: relative; display: grid; gap: 6px; padding-top: 20px; padding-bottom: 30px; }
+  .site-name { display: flex; align-items: center; gap: 8px; font-weight: 700; color: var(--head-soft); font-size: 0.875rem; }
+  .site-name svg { flex: none; }
+  h1 {
+    font-family: var(--font-display); font-size: clamp(1.5rem, 3.4vw, 2rem);
+    line-height: 1.15; font-weight: 700; text-wrap: balance; max-width: 26ch;
+  }
+  .lead { max-width: 46ch; font-size: 1rem; color: var(--head-ink); }
+  .meta { color: var(--head-soft); font-size: 0.875rem; max-width: 70ch; }
+  .site-head a { color: var(--head-ink); }
+  .site-head :focus-visible { outline-color: var(--head-ink); }
+  /* The tree and gifts sit to the right of the words on wider screens */
+  .holiday-art { position: absolute; right: 20px; bottom: 14px; width: 168px; height: auto; }
+  @media (max-width: 699px) { .holiday-art { width: 96px; top: 14px; bottom: auto; } h1 { max-width: 16ch; } .lead { max-width: none; } .site-name { max-width: calc(100% - 104px); } }
+  @media (max-width: 419px) { .holiday-art { width: 80px; top: 16px; right: 14px; } h1 { max-width: calc(100% - 88px); } }
+  @media (max-width: 519px) {
+    .site-head { margin-bottom: 14px; }
+    .site-head .wrap { padding-top: 12px; padding-bottom: 22px; gap: 4px; }
+    .lead { font-size: 0.9375rem; line-height: 1.45; }
+    .meta { font-size: 0.8125rem; }
+    /* "Programs" and the count share one line when there is room */
+    .results-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 0 10px; }
+  }
+
+  /* Page grid */
+  /* Page grid. Wide screens: filters at the side, list heading and sort menu on one row above the list. */
+  .page {
+    display: grid; grid-template-columns: 230px minmax(0, 1fr) auto; grid-template-rows: auto 1fr;
+    grid-template-areas: "filters head sort" "filters results results";
+    column-gap: 24px; row-gap: 12px; align-items: start; padding-bottom: 48px;
+  }
+  .filters { grid-area: filters; }
+  .results-head { grid-area: head; align-self: end; }
+  .sort { grid-area: sort; align-self: end; }
+  #results { grid-area: results; min-width: 0; }
+
+  /* Filters */
+  /* One look for the filter panel at every width: a white box like the program cards, a divider
+     between groups, and the same checkboxes. Small screens only change where the box sits. */
+  .filters {
+    background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
+  }
+  /* The panel follows you down the page only when all of it fits on the screen,
+     so it never needs its own scroll bar. The script below adds this class. */
+  .filters.sticky { position: sticky; top: 16px; }
+  .filters > summary {
+    display: none; cursor: pointer; font-weight: 700; padding: 11px 14px; min-height: 44px;
+  }
+  /* Arrow on the folded "Filters" control. It points right when closed and down when open. */
+  .filters > summary { list-style: none; }
+  .filters > summary::-webkit-details-marker { display: none; }
+  .filters > summary::before {
+    content: ""; display: inline-block; margin-right: 10px; vertical-align: 1px;
+    border-left: 7px solid currentColor; border-top: 5px solid transparent; border-bottom: 5px solid transparent;
+  }
+  .filters[open] > summary::before { transform: rotate(90deg); }
+  .filters-body > * { padding: 12px 14px; }
+  .filters-body > * + * { border-top: 1px solid var(--line); }
+  .filters h2 { font-size: 1rem; }
+  /* A legend normally sits on its group's top edge. Floating it puts it inside the padding, below the divider line. */
+  .filters fieldset > legend { float: left; width: 100%; padding: 0; margin-bottom: 2px; }
+  .filters fieldset > legend + * { clear: both; }
+  .filters .check { align-items: center; min-height: 44px; padding: 4px 6px; margin: 0 -6px; }
+  .filters .check input { width: 22px; height: 22px; margin: 0; }
+  .filters-body > label.check { padding: 8px 14px; margin: 0; border-radius: 0; }
+  #clear { border-color: transparent; text-decoration: underline; padding: 6px 0; min-height: 44px; }
+  #clear:hover { background: transparent; text-decoration-thickness: 2px; }
+  .filters .hint { margin-top: 2px; }
+  .field { display: grid; gap: 4px; }
+  .field > label, legend { font-weight: 700; }
+  legend { margin-bottom: 2px; }
+  input[type="search"], select {
+    font: inherit; color: var(--ink); background: var(--surface);
+    border: 1px solid var(--line-strong); border-radius: 6px;
+    padding: 7px 10px; min-height: 40px; width: 100%;
+  }
+  .check {
+    display: flex; align-items: flex-start; gap: 10px;
+    padding: 5px 6px; border-radius: 6px; cursor: pointer; min-height: 34px;
+  }
+  .check:hover { background: var(--calm-bg); }
+  .check input { width: 19px; height: 19px; margin: 3px 0 0; flex: none; accent-color: var(--brand); }
+  .count { color: var(--ink-soft); }
+  .hint { color: var(--ink-soft); font-size: 0.875rem; }
+
+  /* Buttons */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+    font: inherit; font-weight: 700; line-height: 1.25; text-align: center; text-decoration: none;
+    min-height: 44px; padding: 9px 16px; border-radius: 8px; cursor: pointer;
+    border: 2px solid var(--brand);
+  }
+  .btn.primary { background: var(--brand); color: var(--on-brand); }
+  .btn.secondary { background: transparent; color: var(--brand); }
+  .btn:hover { filter: brightness(1.08); }
+  .btn.secondary:hover { background: var(--calm-bg); filter: none; }
+
+  /* Results bar */
+  .results-head h2 { font-size: 1rem; line-height: 1.3; }
+  #count { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+  /* Sort control. What you see is the "face": a box that reads "Sort: Soonest deadline" with an arrow.
+     The real menu sits on top of it and is see-through, so the control looks the same in every
+     browser and still opens the phone's or computer's own menu. */
+  .sort { position: relative; display: inline-flex; min-width: 0; }
+  .sort-face {
+    display: flex; align-items: center; justify-content: space-between; gap: 8px; box-sizing: border-box;
+    width: 100%; min-width: 13.75rem; min-height: 44px; padding: 0 12px; white-space: nowrap; font-weight: 600;
+    border: 1px solid var(--line-strong); border-radius: 8px; background: var(--surface);
+  }
+  .sort-face svg { flex: none; }
+  /* With large text or wide letter spacing the label wraps onto a second line. It is never cut off. */
+  #sortText { min-width: 0; white-space: normal; line-height: 1.25; padding: 4px 0; }
+  .sort select {
+    position: absolute; inset: 0; width: 100%; height: 100%; min-height: 0; padding: 0; border: 0; opacity: 0;
+    -webkit-appearance: none; appearance: none; font-size: 1rem; cursor: pointer;
+  }
+  .sort:hover .sort-face { border-color: var(--brand); }
+  .sort:focus-within .sort-face { outline: 3px solid var(--brand); outline-offset: 3px; }
+
+  /* Cards */
+  #list { display: grid; gap: 12px; }
+  .card { background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
+  .card article {
+    display: grid; grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 18px 20px;
+  }
+  .card-main { display: grid; gap: 9px; align-content: start; }
+  .card h3 { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.25; text-wrap: balance; }
+  .org { color: var(--ink-soft); font-weight: 400; margin-top: -7px; font-size: 0.9375rem; text-wrap: balance; }
+  .badges { display: flex; flex-wrap: wrap; gap: 8px; }
+  /* Card header: name, then organization and place, then the deadline chip on its own row */
+  .card-head { display: flex; flex-direction: column; gap: 6px; }
+  .card-title { display: grid; gap: 2px; }
+  .card-head .org { margin-top: 0; }
+  .card-head .badges { align-items: center; }
+  .card-head .badge { overflow-wrap: anywhere; }
+  .place-text { white-space: nowrap; }
+  .soon { color: var(--urgent); font-weight: 700; font-size: 0.875rem; }
+  .badge {
+    display: inline-block; font-size: 0.875rem; font-weight: 700; line-height: 1.3;
+    padding: 4px 10px; border: 1px solid var(--brand); border-radius: 999px; background: var(--calm-bg); color: var(--ink);
+  }
+  .badge.urgent { background: var(--urgent-bg); color: var(--urgent); border-color: var(--urgent); }
+  .badge.note { background: var(--note-bg); color: var(--note-ink); border-color: var(--note-ink); }
+  .badge.place { background: transparent; border: 1px solid var(--line); font-weight: 400; font-size: 0.8125rem; color: var(--ink-soft); }
+  .summary { max-width: 52ch; }
+  .flag {
+    background: var(--note-bg); color: var(--note-ink);
+    border-left: 5px solid var(--note-ink); padding: 10px 12px; border-radius: 4px; max-width: 52ch;
+  }
+  /* Two facts at a glance, each with a small picture: cost and sign-up */
+  .glance { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 20px; margin-top: 2px; font-size: 0.9375rem; }
+  .g { display: grid; grid-template-columns: 20px minmax(0, 1fr); column-gap: 8px; align-content: start; }
+  .g .ic { grid-row: 1 / span 2; margin-top: 1px; color: var(--brand); }
+  .g dt { font-weight: 700; font-size: 0.8125rem; color: var(--ink-soft); }
+  .g.needs .ic, .g.needs strong { color: var(--note-ink); }
+  .ic { flex: none; }
+  /* Long email addresses and links wrap instead of pushing past the card on narrow phones */
+  .more-body, .email-lead, .glance dd, .second { overflow-wrap: anywhere; }
+  .card h4 { font-size: 0.9375rem; }
+  .steps { list-style: decimal; padding-left: 1.4em; display: grid; gap: 4px; max-width: 54ch; margin-top: -6px; }
+  .goodtoknow { color: var(--ink-soft); max-width: 52ch; }
+
+  details.more { border-top: 1px solid var(--line-soft); margin-top: -2px; }
+  details.more > summary { cursor: pointer; font-weight: 600; color: var(--brand); padding: 11px 0; margin-bottom: -11px; min-height: 44px; font-size: 0.9375rem; }
+  details.more[open] > summary { margin-bottom: 0; }
+  .more-body { display: grid; gap: 10px; padding-top: 4px; font-size: 0.9375rem; }
+
+  /* Ways to give. The card decides the layout by its own width, not the screen's.
+     Narrow card (phones): each way is a button with one line of help under it. No lines between ways.
+     Wide card (480px of room or more): words on the left, button on the right, a pale line between ways. */
+  /* Extra space above "How to give" (24px in all) so it reads as a new section. The gap below the heading stays small. */
+  .card-action { display: grid; gap: 0; container-type: inline-size; margin-top: 12px; }
+  .card .give-title { font-size: 1rem; font-weight: 700; padding-bottom: 8px; }
+  .give-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
+  .give { display: grid; gap: 6px; }
+  .give-text { min-width: 0; padding: 0 2px; }
+  .give-act { order: -1; display: grid; gap: 8px; }
+  .give-act .btn { width: 100%; min-height: 48px; }
+  .btn-label { text-wrap: balance; }
+  .give-name { font-size: 0.9375rem; font-weight: 600; }
+  .give-detail { color: var(--ink-soft); font-size: 0.875rem; line-height: 1.45; overflow-wrap: anywhere; }
+  .give-name + .give-detail { margin-top: 2px; }
+  .give-detail .signup-first { color: var(--note-ink); }
+  /* The button says what the way is, so the way's name is shown only on a row that has no button. Same on every screen size. */
+  .give.has-act .give-name { display: none; }
+  .give.has-act .give-name + .give-detail { margin-top: 0; }
+  .give.has-act.no-text .give-text { display: none; }
+  .copy-row { justify-content: flex-start; }
+  @container (min-width: 480px) {
+    /* The heading stays larger and bolder than the names of the ways under it */
+    .card .give-title { padding-bottom: 0; }
+    /* All the buttons on one card share the right-hand column, so they are the same width */
+    .give-list { grid-template-columns: minmax(0, 1fr) fit-content(292px); gap: 0; }
+    .give { grid-column: 1 / -1; grid-template-columns: subgrid; gap: 0 16px; align-items: center; padding: 12px 0; border-top: 1px solid var(--line-soft); }
+    .give:first-child { border-top: 0; padding-top: 8px; }
+    .give-text { grid-column: 1; grid-row: 1; padding: 0; }
+    .give-act { grid-column: 2; grid-row: 1; order: 0; }
+    .give-act .btn { min-height: 44px; min-width: 200px; padding: 9px 12px; }
+    .give > details.msg { grid-column: 1 / -1; }
+  }
+  .action-row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-self: stretch; }
+  .card-action .hint { max-width: 52ch; }
+  .goes-to { margin-top: -4px; }
+  /* Buttons sit at the bottom right of the card. Help text stays left so it is easy to read. */
+  .action-row { justify-content: flex-end; }
+  .goes-to, .second { justify-self: end; text-align: right; }
+  .action-row .btn.primary { min-width: min(100%, 240px); }
+  .email-lead { background: var(--calm-bg); padding: 7px 10px; border-radius: 6px; font-size: 0.9375rem; }
+  .addr, .give-detail strong { font-weight: 700; color: var(--ink); overflow-wrap: anywhere; }
+  .copy-status { font-weight: 600; font-size: 0.875rem; }
+  details.msg > summary { cursor: pointer; font-weight: 600; color: var(--brand); padding: 10px 0; min-height: 44px; font-size: 0.9375rem; }
+  .msg-body { border: 1px solid var(--line); border-radius: 6px; padding: 12px; display: grid; gap: 8px; font-size: 0.9375rem; }
+  .msg-body pre { margin: 0; font: inherit; white-space: pre-wrap; overflow-wrap: anywhere; }
+  .card-foot { color: var(--ink-soft); font-size: 0.875rem; }
+  .source { font-size: 0.875rem; margin: -6px 0 -10px; }
+  .source a { display: inline-block; padding: 12px 0; }
+
+  .empty { background: var(--surface); border: 1px dashed var(--line-strong); border-radius: 10px; padding: 24px; display: grid; gap: 12px; justify-items: start; }
+
+  /* About */
+  .about { border-top: 1px solid var(--line); padding: 24px 0 40px; font-size: 0.9375rem; }
+  .about .wrap { display: grid; gap: 12px; }
+  .about h2 { font-family: var(--font-display); font-size: 1.25rem; }
+  .about ul { list-style: disc; padding-left: 1.3em; display: grid; gap: 6px; max-width: 56ch; }
+
+  .applied { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; margin-bottom: 16px; }
+  .btn.small { min-height: 44px; padding: 5px 12px; font-size: 0.875rem; }
+  #showResults { display: none; }
+  /* Parts of the filter panel that only show when it is folded away on small screens */
+  .sheet-close { display: none; }
+  .sheet-foot { display: block; }
+
+  /* Small and medium screens (under 700px): the filters fold away behind a "Filters" button that sits
+     beside "Sort by". The panel opens below both and is styled like a phone filter sheet:
+     a title with Close, large rows, and a bar at the bottom that stays in view. */
+  @media (max-width: 699px) {
+    html { scroll-padding-bottom: 96px; }
+    .page { grid-template-columns: 8.5rem minmax(0, 1fr); grid-template-rows: none; grid-template-areas: none; column-gap: 10px; }
+    /* The panel spans the full width. The sort menu sits over its empty top right corner. */
+    .filters { grid-area: auto; grid-column: 1 / -1; grid-row: 1; border: 0; border-radius: 0; background: transparent; }
+    .filters.sticky { position: static; }
+    .sort { grid-area: auto; grid-column: 2; grid-row: 1; align-self: start; justify-self: start; position: relative; z-index: 1; }
+    .results-head { grid-area: auto; grid-column: 1 / -1; grid-row: 2; }
+    #results { grid-area: auto; grid-column: 1 / -1; grid-row: 3; }
+
+    /* The Filters button. It matches the sort control beside it: same height, border and corners. */
+    .filters > summary {
+      display: flex; align-items: center; gap: 6px; box-sizing: border-box; width: 8.5rem; min-height: 44px;
+      padding: 0 12px; white-space: nowrap; font-weight: 600;
+      border: 1px solid var(--line-strong); border-radius: 8px; background: var(--surface); color: var(--ink);
+    }
+    .filters > summary:hover, .filters > summary:has(.fs-count) { border-color: var(--brand); }
+    .filters > summary::before { display: none; }
+    .filters > summary svg { flex: none; }
+    .filters[open] > summary { background: var(--calm-bg); border-color: var(--brand); }
+    .fs-count {
+      margin-left: auto; min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px;
+      display: inline-flex; align-items: center; justify-content: center;
+      background: var(--brand); color: var(--on-brand); font-size: 0.8125rem; font-variant-numeric: tabular-nums;
+    }
+
+    /* The open panel: the same box as on wide screens, placed under the two controls */
+    .filters-body {
+      margin-top: 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface);
+      box-shadow: 0 6px 18px rgba(0, 0, 0, 0.10);
+    }
+    .filters-body > * { padding-left: 16px; padding-right: 16px; }
+    .sheet-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .sheet-close {
+      display: inline-flex; align-items: center; min-height: 44px; padding: 0 4px; border: 0; background: none;
+      font: inherit; font-weight: 700; color: var(--brand); text-decoration: underline; text-underline-offset: 0.15em; cursor: pointer;
+    }
+    .filters .check { min-height: 48px; }
+    .filters-body > label.check { padding-left: 16px; padding-right: 16px; }
+    /* The bar with "Reset filters" and "Show programs" stays in view while you scroll the options */
+    .sheet-foot {
+      display: flex; align-items: center; gap: 12px; position: sticky; bottom: 0;
+      background: var(--surface); border-radius: 0 0 10px 10px; box-shadow: 0 -6px 14px rgba(0, 0, 0, 0.08);
+    }
+    #showResults { display: inline-flex; flex: 1; min-height: 48px; }
+  }
+  /* Phones: cards stack and buttons run the full width */
+  @media (max-width: 519px) {
+    /* The two controls share the row equally */
+    .page { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+    .filters > summary { width: calc(50% - 5px); padding: 0 10px; }
+    .sort { justify-self: stretch; }
+    .sort-face { padding: 0 10px; min-width: 0; }
+    .card article { padding: 16px 14px; }
+    .glance { grid-template-columns: minmax(0, 1fr); }
+    .action-row .btn { width: 100%; }
+    .goes-to, .second { justify-self: start; text-align: left; }
+  }
+  /* Very narrow phones: no room for two controls in a row, so "Sort by" drops below "Filters" */
+  @media (max-width: 359px), (max-width: 22.4em) {
+    .page { grid-template-columns: minmax(0, 1fr); }
+    .filters > summary { width: 100%; }
+    .sort { grid-column: 1; grid-row: 2; }
+    .results-head { grid-row: 3; }
+    #results { grid-row: 4; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#results">Skip to the list of programs</a>
+
+<header class="site-head">
+  <div class="wrap">
+    <p class="site-name"><svg aria-hidden="true" focusable="false" width="18" height="18" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9h14v8H3zM2 6h16v3H2zM10 6v11M10 6C8.5 2.5 5 3 6.2 6M10 6c1.500-3.5 5-3 3.800 0"/></svg>The Christmas Giving List</p>
+    <h1>Everyone deserves a gift this Christmas</h1>
+    <p class="lead">Whether you're giving to a child, a teen, an adult, or an older adult, there are so many ways to make someone feel thought of this Christmas. Find an opportunity that speaks to you and works within your budget.</p>
+    <p class="meta" id="meta"></p>
+    <svg class="holiday-art" aria-hidden="true" focusable="false" viewBox="0 0 168 132" fill="none">
+      <!-- snowflakes -->
+      <g stroke="#ffffff" stroke-opacity="0.75" stroke-width="1.6" stroke-linecap="round">
+        <path d="M18 22v12M12 28h12M13.8 23.8l8.4 8.4M22.2 23.8l-8.4 8.4"/>
+        <path d="M150 12v10M145 17h10M146.5 13.5l7 7M153.5 13.5l-7 7"/>
+        <path d="M40 64v8M36 68h8"/><path d="M132 54v8M128 58h8"/>
+      </g>
+      <!-- tree -->
+      <path d="M84 14l22 30H94l20 28h-14l22 30H46l22-30H54l20-28H62z" fill="#2f8f6c"/>
+      <path d="M84 14l22 30H94l20 28h-14l22 30H84z" fill="#27795b"/>
+      <rect x="78" y="102" width="12" height="14" rx="1" fill="#7a4a21"/>
+      <path d="M84 2l3 7.2 7.8.6-6 5 1.9 7.6L84 18.3l-6.7 4.1 1.9-7.6-6-5 7.8-.6z" fill="#f2c14e"/>
+      <circle cx="76" cy="50" r="3.4" fill="#f2c14e"/><circle cx="96" cy="62" r="3.4" fill="#d9483b"/>
+      <circle cx="70" cy="82" r="3.4" fill="#d9483b"/><circle cx="92" cy="88" r="3.4" fill="#f2c14e"/><circle cx="106" cy="92" r="3.4" fill="#ffffff"/>
+      <!-- gifts -->
+      <rect x="22" y="92" width="34" height="26" rx="2" fill="#d9483b"/><rect x="36" y="92" width="6" height="26" fill="#ffffff"/>
+      <rect x="20" y="86" width="38" height="8" rx="2" fill="#c13a2e"/><rect x="36" y="86" width="6" height="8" fill="#ffffff"/>
+      <path d="M39 86c-4-8-12-6-9 0zM39 86c4-8 12-6 9 0z" fill="#ffffff"/>
+      <rect x="116" y="98" width="30" height="20" rx="2" fill="#ffffff"/><rect x="128" y="98" width="6" height="20" fill="#d9483b"/>
+      <rect x="114" y="93" width="34" height="7" rx="2" fill="#e6efe9"/><rect x="128" y="93" width="6" height="7" fill="#d9483b"/>
+      <path d="M131 93c-3.5-7-10-5-8 0zM131 93c3.5-7 10-5 8 0z" fill="#d9483b"/>
+      <!-- snow on the ground -->
+      <path d="M6 120c20-8 44-6 62-2s46 4 64-2 24-2 30 2v8H6z" fill="#ffffff" fill-opacity="0.9"/>
+    </svg>
+  </div>
+</header>
+
+<noscript>
+  <div class="wrap"><p class="flag">This page needs JavaScript turned on to show the list of programs.</p></div>
+</noscript>
+
+<main class="wrap page" id="app" hidden>
+  <details class="filters" id="filterPanel" open>
+    <summary id="filterSummary"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 5h7M15 5h1M2 13h1M9 13h7"/><circle cx="12" cy="5" r="2.2"/><circle cx="6" cy="13" r="2.2"/></svg><span class="fs-label">Filters</span></summary>
+    <form class="filters-body" id="filters" aria-label="Filter the list of programs">
+      <div class="sheet-head">
+        <div>
+          <h2>Filter the list</h2>
+          <p class="hint">The list updates as you choose.</p>
+        </div>
+        <button type="button" class="sheet-close" id="closeFilters">Close</button>
+      </div>
+
+      <fieldset id="f-area">
+        <legend>Where the gift goes</legend>
+      </fieldset>
+
+      <fieldset id="f-way">
+        <legend>How to give</legend>
+      </fieldset>
+
+      <label class="check" for="hideClosed">
+        <input type="checkbox" id="hideClosed" checked>
+        <span>Hide programs that are full or past their deadline</span>
+      </label>
+
+      <div class="sheet-foot">
+        <button type="button" class="btn secondary" id="clear">Reset filters</button>
+        <button type="button" class="btn primary" id="showResults">Show programs</button>
+      </div>
+    </form>
+  </details>
+
+  <div class="results-head">
+    <h2 id="results-title" tabindex="-1">Programs</h2>
+    <p id="count" role="status" aria-live="polite"></p>
+  </div>
+  <div class="sort">
+    <label for="sort" class="sr-only">Sort by</label>
+    <span class="sort-face" aria-hidden="true"><span id="sortText">Sort: Soonest deadline</span><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></span>
+    <select id="sort">
+      <option value="deadline">Soonest deadline</option>
+      <option value="name">Name, A to Z</option>
+    </select>
+  </div>
+  <section id="results" aria-labelledby="results-title" tabindex="-1">
+
+    <p class="flag" id="seasonOver" hidden></p>
+
+    <div class="applied" id="applied" hidden>
+      <p id="appliedText"></p>
+      <button type="button" class="btn secondary small" id="clear3">Reset filters</button>
+    </div>
+
+    <ul id="list"></ul>
+
+    <div class="empty" id="empty" hidden>
+      <p><strong>No programs match your filters.</strong> Remove a filter or reset the filters to see more.</p>
+      <button type="button" class="btn secondary" id="clear2">Reset filters</button>
+    </div>
+  </section>
+</main>
+
+<footer class="about">
+  <div class="wrap">
+    <h2>About this list</h2>
+    <ul>
+      <li>This site is independent. It is not part of any organization listed here.</li>
+      <li>Each listing was checked on the date at the top of this page. A listing that was checked earlier shows its own date. Most details come from the organization's own website. A few could not be confirmed there. Dates and openings change, so confirm with the organization before you buy gifts.</li>
+      <li>The deadline on a card is the next day that one of its ways to give ends. For some programs it is the last day to order. For others it is the last day a gift can arrive. Order early.</li>
+      <li>Deadline labels update on their own each day. This list is for the 2026 holiday season.</li>
+    </ul>
+    <p id="maker" hidden></p>
+    <p id="contact" hidden></p>
+  </div>
+</footer>
+
+<script>
+/* =====================================================================
+   HOW TO EDIT THIS SITE
+   ---------------------------------------------------------------------
+   1. Everything visitors see in the list comes from PROGRAMS below.
+   2. To add a program, copy one block from { to }, paste it, and change
+      the text. Keep the commas between blocks.
+   3. Values you can use:
+        areas:   "us" (anywhere in the US), "nyc"
+        ways:    how you give. Use one or more of "ship" (buy from the organization's wish list and the store ships it for you),
+                 "drop" (drop off a gift), "mail" (get a gift yourself and mail it), "money" (give money).
+                 The first one is the way the main button uses.
+        status:  "open", "confirm" (something is unconfirmed), "waitlist" (full)
+        deadline: "YYYY-MM-DD" or null. Past deadlines are marked on their own.
+        closesAt: only when a program closes at a set time, such as "2026-12-12T20:00:00-05:00" (8 pm Eastern).
+        ends:    on one row or option, "YYYY-MM-DD", when only that way to give has a deadline. The card stays open
+                 while any other way is still open.
+        openLabel: words for the label when there is no deadline, such as "Dates vary by area". Leave it out to show "Open now".
+        stepGroups: only when two ways need their own steps. A list of { title, steps } shown in place of "steps".
+        Buttons: the first button on a card is solid, the rest are outlined. A button gets a small picture only when the
+                 picture shows what the button does. To choose it by hand, add "icon" to "action" or to a "link"
+                 (ship, money, mail, drop, signup, info, or "" for none).
+        rows:    a row can also have "main": true (the card's main button sits on this row, not the first one)
+                 and "signup": true (the row's text starts with "Sign up first.").
+        rows:    only for a card whose ways all start in the same place. One or more { icon, name, text } shown in place of
+                 the usual one row for each way. "ways" still decides which filters find the card.
+        (an option can also have map: "street address", which adds a "Get directions" link)
+        options: one entry for each way to give, in the same order as "ways". Each can have text (a short detail such as an
+                 address) and, for the second and third way, a link { label, url }.
+        action:  { type: "link", label, url }
+                 { type: "email", label, email, contactName, subject, body }
+                 Add srExtra: "Organization name" when another card has a button with the same words.
+        signup:  { needed: true or false, text }. Shown on every card in the "Sign-up" row.
+                 Use needed: true only when people must do something before they can give.
+        second:  { label, url }. A second, outlined button next to the main one.
+   4. Set SITE.contactEmail if you want a "report a problem" line.
+   5. Each year, set SITE.season and SITE.seasonEnds. After that day, every program that is not open all year
+      shows as ended.
+   ===================================================================== */
+
+const SITE = {
+  makerName: "Crystal Marte",   // shown at the bottom of the page. Leave empty to hide it.
+  contactEmail: "",  // example: "hello@yoursite.org". Leave empty to hide the contact line.
+  season: "2026",            // the holiday season this list is for
+  seasonEnds: "2027-01-15"   // after this day, every program that is not open all year shows as ended
+};
+
+const LABELS = {
+  areas:  { us: "Anywhere in the US", nyc: "New York City" },
+  ways:   { ship: "Buy from their wish list", drop: "Drop off a gift", mail: "Mail a gift yourself", money: "Give money" }
+};
+
+const PROGRAMS = [
+  {
+    "id": "usps",
+    "name": "Answer a letter to Santa",
+    "org": "USPS Operation Santa",
+    "areas": [
+      "us"
+    ],
+    "status": "open",
+    "summary": "Adopt a real letter to Santa from a child or family and send the gifts they asked for.",
+    "whoText": "Children and families who wrote to Santa",
+    "cost": "You choose. You also pay for shipping.",
+    "costMin": null,
+    "deadline": "2026-12-12",
+    "steps": [
+      "Create a free account and verify your identity.",
+      "Read the letters and adopt one or more.",
+      "Buy the gifts. Ship them from a participating Post Office, or order from Santa's Gift Shoppe and USPS delivers them."
+    ],
+    "note": "Open to people in the continental US, Hawaii, and Puerto Rico. Letters go quickly and the ID check takes time, so start early.",
+    "action": {
+      "type": "link",
+      "label": "Sign up with USPS",
+      "url": "https://www.uspsoperationsanta.com/account/new"
+    },
+    "source": "https://www.uspsoperationsanta.com/how-to-adopt",
+    "checked": "2026-11-25",
+    "ways": [
+      "mail",
+      "ship"
+    ],
+    "options": [
+      {
+        "text": "Buy the gifts and ship them from a Post Office."
+      },
+      {
+        "text": "After you adopt a letter, you can order from Santa's Gift Shoppe and USPS delivers."
+      }
+    ],
+    "signup": {
+      "needed": true,
+      "text": "Create a free account and verify your ID."
+    },
+    "second": {
+      "label": "Read letters first",
+      "url": "https://www.uspsoperationsanta.com/letters"
+    },
+    "rows": [
+      {
+        "icon": "mail",
+        "name": "Adopt a letter, then send the gifts",
+        "text": "Adopt a letter and ship the gifts by December 12. The site closes at 8 pm Eastern that day. Ship from a Post Office, or order from Santa's Gift Shoppe and USPS delivers them."
+      }
+    ],
+    "closesAt": "2026-12-12T20:00:00-05:00"
+  },
+  {
+    "id": "onesimplewish",
+    "name": "Grant a wish for a child in foster care",
+    "org": "One Simple Wish",
+    "areas": [
+      "us"
+    ],
+    "status": "open",
+    "yearRound": true,
+    "summary": "Pay for a wish from a child or young adult affected by foster care or crisis.",
+    "whoText": "Children and young adults affected by foster care or crisis",
+    "cost": "Any amount toward a wish. Whole wishes run from under $25 to over $200.",
+    "costMin": null,
+    "deadline": null,
+    "steps": [
+      "Browse the wishes. Choose “Holiday Wishes” to see the seasonal list.",
+      "Pay for a wish, or pay part of a wish that allows it.",
+      "One Simple Wish buys the gift and gets it to the child."
+    ],
+    "action": {
+      "type": "link",
+      "label": "Browse One Simple Wish",
+      "url": "https://www.onesimplewish.org/wish/wish-grant/"
+    },
+    "source": "https://www.onesimplewish.org/giving/holiday",
+    "checked": "2026-11-25",
+    "ways": [
+      "money"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {
+        "text": "One Simple Wish buys the gift and delivers it."
+      }
+    ]
+  },
+  {
+    "id": "angeltree",
+    "name": "Buy a gift for a local child (Angel Tree)",
+    "org": "The Salvation Army",
+    "areas": [
+      "us"
+    ],
+    "status": "open",
+    "summary": "Angel Tree is The Salvation Army's Christmas gift program. You buy gifts for a child in your own community, called an Angel.",
+    "whoText": "Children in your own community",
+    "cost": "You choose from the wish list.",
+    "costMin": null,
+    "deadline": null,
+    "steps": [
+      "Enter your ZIP code to find your local Salvation Army.",
+      "Add gifts from the wish list to your Walmart cart.",
+      "Choose delivery. Walmart ships the gifts to the Salvation Army for you."
+    ],
+    "note": "Dates are different in each area. Check with your local Salvation Army.",
+    "action": {
+      "type": "link",
+      "label": "Find your local Angel Tree",
+      "url": "https://www.salvationarmyusa.org/walmart-angel-tree/",
+      "srExtra": "The Salvation Army"
+    },
+    "source": "https://www.salvationarmyusa.org/walmart-angel-tree/",
+    "checked": "2026-11-25",
+    "ways": [
+      "ship",
+      "drop"
+    ],
+    "options": [
+      {
+        "text": "Shop the Walmart registry. It ships to your local Salvation Army."
+      },
+      {
+        "text": "Pick a child's tag from an Angel Tree in a participating Walmart or Sam's Club, and leave the gifts in the store."
+      }
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None. You enter your ZIP code."
+    },
+    "openLabel": "Dates vary by area",
+    "stepGroups": [
+      {
+        "title": "To buy from the wish list",
+        "steps": [
+          "Enter your ZIP code to find your local Salvation Army.",
+          "Add gifts from the wish list to your Walmart cart.",
+          "Choose delivery. Walmart ships the gifts to the Salvation Army for you."
+        ]
+      },
+      {
+        "title": "To drop off a gift in a store",
+        "steps": [
+          "Find an Angel Tree in a participating Walmart or Sam's Club.",
+          "Take a paper tag from the tree. Each tag lists what one child wished for.",
+          "Buy the gifts and leave them unwrapped in the store's collection bin."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bastas",
+    "name": "Be a Santa to a Senior",
+    "org": "Home Instead",
+    "areas": [
+      "us"
+    ],
+    "status": "open",
+    "summary": "Buy a gift an older adult in need asked for. Local offices of Home Instead, a company that provides care for older adults at home, collect and deliver the gifts.",
+    "whoText": "Older adults who may be alone or on a fixed income",
+    "cost": "You choose. Requests are often basics like blankets.",
+    "costMin": null,
+    "deadline": null,
+    "steps": [
+      "Find your local office in the list. Every office on the list takes part this year.",
+      "Check the office's website or Facebook page, or call, to learn where its gift trees are. They are often in stores, banks and libraries.",
+      "Pick an ornament from a tree. Each one lists a gift an older adult asked for. If your office has an Amazon wish list, you can use that.",
+      "Buy the gift and return it the way your office asks."
+    ],
+    "note": "Dates are different at each office. No New York City or Long Island office is on the 2026 list.",
+    "action": {
+      "type": "link",
+      "label": "Find a Home Instead office",
+      "url": "https://www.homeinstead.com/news-and-media/bastas-2026/"
+    },
+    "source": "https://www.homeinstead.com/news-and-media/bastas-2026/",
+    "checked": "2026-11-25",
+    "ways": [
+      "drop",
+      "ship"
+    ],
+    "options": [
+      {
+        "text": "Pick a gift request from one of your office's gift trees, buy the gift, and bring it back to the same place."
+      },
+      {
+        "text": "A few offices also have an Amazon wish list. The office list shows an Amazon link beside those."
+      }
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "openLabel": "Dates vary by office"
+  },
+  {
+    "id": "twilight",
+    "name": "Grant a wish for an older adult",
+    "org": "Twilight Wish Foundation",
+    "areas": [
+      "us"
+    ],
+    "status": "open",
+    "yearRound": true,
+    "summary": "Give money toward a wish from a low-income older adult. Many wishes are for simple needs.",
+    "whoText": "Low-income older adults",
+    "cost": "You choose the amount.",
+    "costMin": null,
+    "deadline": null,
+    "steps": [
+      "Read the open wishes.",
+      "Open a wish and use its donation link.",
+      "Enter the amount you want to give."
+    ],
+    "note": "Twilight Wish tries to use your gift for the wish you chose. If it cannot, the money goes to a similar urgent wish. Questions: call 877-893-9474 (toll-free).",
+    "action": {
+      "type": "link",
+      "label": "Browse Twilight Wishes",
+      "url": "https://twilightwish.org/open-twilight-wishes/",
+      "srExtra": "Twilight Wish Foundation"
+    },
+    "source": "https://www.twilightwish.org",
+    "checked": "2026-11-25",
+    "ways": [
+      "money"
+    ],
+    "second": {
+      "label": "Donate to Twilight Wish",
+      "url": "https://twilightwish.org/donate/"
+    },
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {
+        "text": "You give toward a wish you choose."
+      }
+    ]
+  },
+  {
+    "id": "sus",
+    "name": "S:US Holiday Gift Project",
+    "org": "Services for the UnderServed (S:US)",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "Holiday gifts for more than 1,400 New Yorkers. They include adults and seniors with disabilities, children in shelters, and veterans.",
+    "whoText": "Adults with intellectual or developmental disabilities, seniors with disabilities, children living in shelters, and veterans",
+    "cost": "A person's wish costs under $40. On the wish list or with money, you choose.",
+    "costMin": 40,
+    "deadline": null,
+    "action": {
+      "type": "email",
+      "label": "Email Siona for a wish",
+      "email": "sschmid@sus.org",
+      "contactName": "Siona Schmid",
+      "subject": "Holiday Gift Project 2026 wish request",
+      "body": "Hello Siona,\n\nI would like to take part in the S:US Holiday Gift Project.\n\nI can buy gifts for [number] people. Please send me their wishes and tell me how to deliver the gifts.\n\nThank you,\n[Your name]\n[Your phone number]",
+      "srExtra": "Services for the UnderServed (S:US)"
+    },
+    "source": "https://sus.org/help-bring-holiday-joy/",
+    "checked": "2026-11-25",
+    "ways": [
+      "drop",
+      "mail",
+      "ship",
+      "money"
+    ],
+    "signup": {
+      "needed": true,
+      "lead": "Only for one person's wish.",
+      "text": "Email Siona first. The other ways don't need a sign-up."
+    },
+    "rows": [
+      {
+        "icon": "ship",
+        "name": "Buy from their wish list",
+        "text": "No sign-up. It ships to S:US for you.",
+        "link": {
+          "label": "Shop the S:US wish list",
+          "url": "https://amzn.to/4e7onb6"
+        }
+      },
+      {
+        "icon": "money",
+        "name": "Give money",
+        "text": "S:US shops for you.",
+        "link": {
+          "label": "Give money to S:US",
+          "url": "https://sus.org/holiday-gift-project-donate/"
+        }
+      },
+      {
+        "icon": "mail",
+        "name": "Give one person's wish",
+        "text": "Email Siona Schmid at sschmid@sus.org for one person's wish. Buy the gift, then mail it or drop it off. Drop-off ends December 4.",
+        "main": true,
+        "signup": true,
+        "ends": "2026-12-04"
+      }
+    ],
+    "stepGroups": [
+      {
+        "title": "To give one person's wish",
+        "steps": [
+          "Email Siona and say how many people you want to buy for.",
+          "She sends you each person's wish.",
+          "Mail or drop off the gifts at 463 Seventh Avenue, 17th Floor, New York, NY 10018, Attention: Siona Schmid.",
+          "To drop off, email Siona or call 646-588-9774 first to set a time. Drop-off ends December 4."
+        ]
+      },
+      {
+        "title": "To buy from the wish list",
+        "steps": [
+          "Open the S:US wish list on Amazon.",
+          "Choose a gift and check out. It ships to S:US."
+        ]
+      },
+      {
+        "title": "To give money",
+        "steps": [
+          "Open the S:US donation form.",
+          "Choose an amount. S:US shops for the gifts."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "sanctuary",
+    "name": "Sanctuary's Winter Wishes gift drive",
+    "org": "Sanctuary for Families",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "Gifts for survivors of abuse and their children. Sanctuary for Families is a New York City nonprofit, founded in 1984. It helps people who have lived through domestic violence or sex trafficking with shelter, counseling, legal help, and job training.",
+    "whoText": "Adults and children who are survivors of abuse",
+    "cost": "About $25 to $30 for each gift or gift card.",
+    "costMin": 8,
+    "deadline": "2026-12-01",
+    "steps": [
+      "Open the Amazon wish list.",
+      "Choose a gift or gift card.",
+      "At checkout, select Sanctuary's shipping address. Order so the gift arrives by December 1."
+    ],
+    "note": "You can also deliver new gifts yourself by December 1. You must arrange it first with Emily Lo Bue, elobue@sffny.org. She also answers questions.",
+    "action": {
+      "type": "link",
+      "label": "Shop the wish list",
+      "url": "https://www.amazon.com/hz/wishlist/ls/3KCYIY6SDYPIO/ref=hz_ls_biz_ex",
+      "srExtra": "Sanctuary for Families"
+    },
+    "source": "https://sanctuaryforfamilies.org/support-us/holiday-opportunities/",
+    "checked": "2026-11-25",
+    "ways": [
+      "ship"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {
+        "text": "It ships to Sanctuary for you."
+      }
+    ]
+  },
+  {
+    "id": "nycares",
+    "name": "New York Cares Winter Wishes",
+    "org": "New York Cares",
+    "areas": [
+      "nyc"
+    ],
+    "status": "waitlist",
+    "statusNote": "Sign-up is closed for 2026. You can ask to be told if a wish opens up.",
+    "summary": "A wrapped gift for a New York City child or teen who wrote a wish letter.",
+    "whoText": "New York City children and teens",
+    "cost": "Up to $40 per letter, plus postage.",
+    "costMin": 40,
+    "deadline": "2026-12-04",
+    "steps": [
+      "Email to ask to be notified.",
+      "If a wish opens up, you receive a child's letter.",
+      "Buy the gift, wrap it, and mail or deliver it to the partner agency on the letter by December 4."
+    ],
+    "action": {
+      "type": "email",
+      "label": "Email for wish updates",
+      "email": "winter.wishes@newyorkcares.org",
+      "contactName": "the Winter Wishes team",
+      "subject": "Winter Wishes 2026 notification",
+      "body": "Hello,\n\nI missed registration for Winter Wishes this year. Please let me know if any wishes become available.\n\nThank you,\n[Your name]",
+      "srExtra": "New York Cares"
+    },
+    "source": "https://www.newyorkcares.org/winter-wishes",
+    "checked": "2026-11-25",
+    "ways": [
+      "mail"
+    ],
+    "note": "Asking to be notified does not guarantee that you get a wish.",
+    "signup": {
+      "needed": true,
+      "text": "Email to be told if a wish opens up.",
+      "lead": "Waitlist only."
+    },
+    "options": [
+      {
+        "text": "Email winter.wishes@newyorkcares.org to be told if a wish opens up. If you get one, you buy the gift, wrap it, and mail or deliver it by December 4."
+      }
+    ]
+  },
+  {
+    "id": "foundling",
+    "name": "The Foundling's Holiday Gift Drive",
+    "org": "The New York Foundling",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "Gifts for children in foster care, adults with developmental disabilities, and families in need.",
+    "whoText": "Children in foster care, adults with developmental disabilities, and families facing money or housing trouble",
+    "cost": "You choose the gift or the amount.",
+    "costMin": null,
+    "deadline": "2026-12-08",
+    "steps": [
+      "Open the Amazon wish list.",
+      "Choose a gift and check out by December 8.",
+      "Or bring a new gift to 590 Avenue of the Americas, New York."
+    ],
+    "note": "Groups and questions: Partners@NYFoundling.org or 212-886-4122.",
+    "action": {
+      "type": "link",
+      "label": "Shop the wish list",
+      "url": "https://a.co/7yFJKwq",
+      "srExtra": "The New York Foundling"
+    },
+    "source": "https://www.nyfoundling.org/holiday-gift-drive/",
+    "checked": "2026-11-25",
+    "ways": [
+      "ship",
+      "drop",
+      "money"
+    ],
+    "options": [
+      {
+        "text": "It ships to The Foundling for you."
+      },
+      {
+        "text": "Bring a new gift to 590 Avenue of the Americas, New York, by December 8.",
+        "map": "590 Avenue of the Americas, New York, NY"
+      },
+      {
+        "link": {
+          "label": "Give to The Foundling",
+          "url": "https://www.nyfoundling.org/holiday-gift-drive/",
+          "srExtra": "The New York Foundling"
+        },
+        "text": "You give on The Foundling's gift drive page."
+      }
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    }
+  },
+  {
+    "id": "henrystreet",
+    "name": "Henry Street Holiday Drive",
+    "org": "Henry Street Settlement",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "Gifts for more than 4,000 people, from afterschool children to families in shelter. Henry Street Settlement, a nonprofit on Manhattan's Lower East Side, serves them.",
+    "whoText": "More than 4,000 people of all ages in Henry Street programs, including children in afterschool programs and families living in shelter",
+    "cost": "You choose from the wish list.",
+    "costMin": null,
+    "deadline": "2026-12-15",
+    "steps": [
+      "Open the Holiday Drive registry from the Henry Street page.",
+      "Choose gifts and add them to your cart.",
+      "At checkout, pick \"Henry Street Settlement – Holiday Drive\" as the shipping address."
+    ],
+    "note": "Groups can adopt a whole program by giving 30 to 300 gifts. The Henry Street page says who to contact.",
+    "action": {
+      "type": "link",
+      "label": "Shop the wish list",
+      "url": "https://www.henrystreet.org/holiday-drive-2026/",
+      "srExtra": "Henry Street Settlement"
+    },
+    "source": "https://www.henrystreet.org/holiday-drive-2026/",
+    "checked": "2026-11-25",
+    "ways": [
+      "ship"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {
+        "text": "It ships to Henry Street for you."
+      }
+    ]
+  },
+  {
+    "id": "camba",
+    "name": "Bring Joy Home toy drive",
+    "org": "CAMBA",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "Gifts for children and families at 30 shelters, housing sites, and afterschool programs. CAMBA, a Brooklyn nonprofit, runs them.",
+    "whoText": "Children and families at CAMBA shelters, supportive housing, and afterschool programs",
+    "cost": "You choose from the wish list.",
+    "costMin": null,
+    "deadline": "2026-12-18",
+    "steps": [
+      "Pick a site's Amazon wish list on the CAMBA page.",
+      "Choose a gift and check out. Amazon ships it to that site.",
+      "Fill out CAMBA's short donor form so staff know the gift is coming and can send you a tax receipt."
+    ],
+    "note": "Two more CAMBA sites say their wish list is coming soon. Questions: development@CAMBA.org.",
+    "action": {
+      "type": "link",
+      "label": "Choose a CAMBA wish list",
+      "url": "https://camba.org/support/toy-drive-supporters/"
+    },
+    "source": "https://camba.org/support/toy-drive-supporters/",
+    "checked": "2026-11-25",
+    "ways": [
+      "ship",
+      "money"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None. After you order, fill out a short form."
+    },
+    "options": [
+      {
+        "text": "Each CAMBA site has its own wish list. Pick a site, and your gift ships straight there."
+      },
+      {
+        "text": "The CAMBA page has a \"Make a Cash Donation\" link.",
+        "link": {
+          "label": "Give money on the CAMBA page",
+          "url": "https://camba.org/support/toy-drive-supporters/"
+        }
+      }
+    ]
+  },
+  {
+    "id": "coalition",
+    "name": "Buy a toy for a child living in a shelter",
+    "org": "Coalition for the Homeless",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "A toy for a child living in a New York City homeless shelter.",
+    "whoText": "Children living in New York City homeless shelters",
+    "cost": "You choose the toy or the amount.",
+    "costMin": null,
+    "deadline": null,
+    "steps": [
+      "Open the Amazon wish list.",
+      "Choose a toy and check out.",
+      "The toy is sent straight to the Coalition's office."
+    ],
+    "note": "The Coalition's flyer asks you to order from the wish list by December 11. Questions: call 212-776-2059.",
+    "action": {
+      "type": "link",
+      "label": "Shop the wish list",
+      "url": "https://www.amazon.com/hz/wishlist/ls/3T9477SHC8IRD?ref_=wl_share",
+      "srExtra": "Coalition for the Homeless"
+    },
+    "source": "https://www.coalitionforthehomeless.org/event/holiday-toy-drive/",
+    "checked": "2026-11-25",
+    "ways": [
+      "ship",
+      "money"
+    ],
+    "options": [
+      {
+        "text": "It ships to the Coalition for you. Order by December 11 so the toy arrives in time.",
+        "ends": "2026-12-11"
+      },
+      {
+        "link": {
+          "label": "Give to the Coalition’s drive",
+          "url": "https://coalitionforthehomeless.givingpage.org/holiday-toy-drive",
+          "srExtra": "Coalition for the Homeless"
+        },
+        "text": "You give on the Coalition's donation page."
+      }
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    }
+  },
+  {
+    "id": "bronxworks",
+    "name": "Holiday gifts for Bronx children",
+    "org": "BronxWorks",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "Holiday gifts for children served by BronxWorks, a Bronx nonprofit that feeds, shelters, teaches, and supports its neighbors.",
+    "whoText": "Children in BronxWorks programs in the Bronx",
+    "cost": "You choose from the wish list.",
+    "costMin": null,
+    "deadline": null,
+    "steps": [
+      "Open the Amazon wishlist.",
+      "Choose a gift.",
+      "At checkout, use the wishlist's shipping address. The gift goes to BronxWorks."
+    ],
+    "action": {
+      "type": "link",
+      "label": "Shop BronxWorks’ wish list",
+      "url": "https://www.amazon.com/hz/wishlist/ls/306320P55GDQ?ref_=wl_share"
+    },
+    "source": "https://bronxworks.org/2026/11/02/donate-essential-goods-directly-to-bronx-residents-in-need-through-our-wishlist/",
+    "checked": "2026-11-25",
+    "ways": [
+      "ship"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {
+        "text": "It ships to BronxWorks for you."
+      }
+    ],
+    "note": "No deadline is listed. Order early so the gift arrives before the holidays."
+  },
+  {
+    "id": "angeltreeny",
+    "name": "Adopt an Angel in Greater New York",
+    "org": "The Salvation Army Greater New York",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "The New York branch of The Salvation Army's Angel Tree program. The Salvation Army calls each child an Angel. When you adopt an Angel, you choose one child and buy toys from their wish list.",
+    "whoText": "Children in the Greater New York area",
+    "cost": "$25 minimum per child. $25 to $50 is suggested.",
+    "costMin": 25,
+    "deadline": "2026-12-14",
+    "steps": [
+      "Adopt an Angel. You choose one child on the online Angel Tree.",
+      "Buy at least one unwrapped toy from the child's list, worth $25 or more.",
+      "Ship or deliver it with the child's Angel ID to Star Lake Camp Toy Shop, 268 Macopin Rd, Bloomingdale, NJ 07403. Put the Angel ID on the gift note or on the second address line."
+    ],
+    "action": {
+      "type": "link",
+      "label": "Adopt an Angel",
+      "url": "https://angeltreeny.org/",
+      "srExtra": "The Salvation Army Greater New York",
+      "icon": "signup"
+    },
+    "source": "https://angeltreeny.org/guide",
+    "checked": "2026-11-25",
+    "ways": [
+      "mail",
+      "drop"
+    ],
+    "note": "December 11 is the preferred arrival date. December 14 is the final day. The guide also lists toy pickup by appointment through December 11.",
+    "signup": {
+      "needed": true,
+      "text": "Adopt an Angel online to get the child's wish list."
+    },
+    "rows": [
+      {
+        "icon": "mail",
+        "name": "Adopt an Angel, then send the toys",
+        "text": "Buy the toys, then ship or deliver them with the child's Angel ID."
+      }
+    ]
+  },
+  {
+    "id": "newalternatives",
+    "name": "Santa Project",
+    "org": "New Alternatives",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "Money toward holiday gifts for LGBTQ+ people aged 16 to 30 who are homeless or at risk. New Alternatives, a New York City resource center, buys the gifts and gives them to its clients at a holiday party.",
+    "whoText": "LGBTQ+ youth and young adults in need",
+    "cost": "Any amount.",
+    "costMin": null,
+    "deadline": null,
+    "steps": [
+      "Open the Santa Project page.",
+      "Follow the donate link.",
+      "Give any amount. New Alternatives buys the gifts."
+    ],
+    "action": {
+      "type": "link",
+      "label": "Give to New Alternatives",
+      "url": "https://www.newalternativesnyc.org/santa"
+    },
+    "source": "https://www.newalternativesnyc.org/santa",
+    "checked": "2026-11-25",
+    "ways": [
+      "money"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {
+        "text": "New Alternatives buys the gifts."
+      }
+    ],
+    "note": "No giving deadline is listed. Gifts are handed out on December 18, so give before then."
+  },
+  {
+    "id": "unionsettlement",
+    "name": "Union Settlement Holiday Toy Drive",
+    "org": "Union Settlement",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "Toys for children and families in East Harlem.",
+    "whoText": "Children and families in East Harlem",
+    "cost": "You choose the toy or the amount.",
+    "costMin": null,
+    "deadline": "2026-12-08",
+    "steps": [
+      "Open the Amazon wish list.",
+      "Choose a toy and check out by December 8.",
+      "Or bring a new, unwrapped toy to 237 East 104th Street, New York, NY 10029, Monday to Friday, 11 am to 6 pm."
+    ],
+    "note": "Questions: FundDevelopment@unionsettlement.org.",
+    "action": {
+      "type": "link",
+      "label": "Shop the toy wish list",
+      "url": "https://a.co/b5F3fNt",
+      "srExtra": "Union Settlement"
+    },
+    "source": "https://www.unionsettlement.org/holiday-toy-drive-2026/",
+    "checked": "2026-11-25",
+    "ways": [
+      "ship",
+      "drop",
+      "money"
+    ],
+    "options": [
+      {
+        "text": "It ships to Union Settlement for you."
+      },
+      {
+        "text": "Bring a new, unwrapped toy to 237 East 104th Street, New York. Monday to Friday, 11 am to 6 pm.",
+        "map": "237 East 104th Street, New York, NY 10029"
+      },
+      {
+        "link": {
+          "label": "Give to Union Settlement",
+          "url": "https://4agc.com/event/fy27holidaygiftdrive",
+          "srExtra": "Union Settlement"
+        },
+        "text": "You give on Union Settlement's donation page."
+      }
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    }
+  },
+  {
+    "id": "atlanticave",
+    "name": "Atlantic Avenue Annual Toy Drive",
+    "org": "Atlantic Avenue Local Development Corporation",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "Toys for children and families at homeless shelters in Brooklyn. A local nonprofit of residents and shop owners on Atlantic Avenue runs the drive.",
+    "whoText": "Children and families at local homeless shelters",
+    "cost": "You choose the toy or the amount.",
+    "costMin": null,
+    "deadline": "2026-12-10",
+    "steps": [
+      "Open the Amazon wish list.",
+      "Choose a toy and check out."
+    ],
+    "action": {
+      "type": "link",
+      "label": "Shop the toy wish list",
+      "url": "https://www.amazon.com/hz/wishlist/ls/1TV7WT96PEAPA",
+      "srExtra": "Atlantic Avenue Local Development Corporation"
+    },
+    "source": "https://www.atlanticave.org/holidays",
+    "checked": "2026-11-25",
+    "ways": [
+      "ship",
+      "money"
+    ],
+    "options": [
+      {
+        "text": "It ships to the toy drive for you."
+      },
+      {
+        "link": {
+          "label": "Give with PayPal",
+          "url": "https://www.paypal.com/donate/?hosted_button_id=3EP65N4A4YRWG",
+          "srExtra": "Atlantic Avenue Local Development Corporation"
+        },
+        "text": "You give on the organizer's PayPal page."
+      }
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "note": "The organizer's page lists no deadline this year. The December 10 date comes from a local news listing on Gensa, so order early."
+  },
+  {
+    "id": "chips",
+    "name": "CHiPS Toy Drive",
+    "org": "CHiPS (Community Help in Park Slope)",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "A new toy for a child aged 3 to 16, collected in Park Slope.",
+    "whoText": "Children ages 3 to 16",
+    "cost": "You choose the toy.",
+    "costMin": null,
+    "deadline": "2026-12-13",
+    "steps": [
+      "Buy a new toy for a child aged 3 to 16.",
+      "Bring it to 200 4th Avenue, Brooklyn.",
+      "Drop-off hours are Monday to Friday, 9 am to 4 pm."
+    ],
+    "action": {
+      "type": "link",
+      "label": "See CHiPS drop-off details",
+      "url": "https://www.chipsonline.org/holidaydrives",
+      "srExtra": "CHiPS (Community Help in Park Slope)"
+    },
+    "source": "https://www.chipsonline.org/holidaydrives",
+    "checked": "2026-11-25",
+    "ways": [
+      "drop"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {
+        "text": "Bring a new toy to 200 4th Avenue, Brooklyn. Monday to Friday, 9 am to 4 pm. December 13 is a Sunday, so December 11 is the last day in those hours.",
+        "map": "200 4th Avenue, Brooklyn, NY"
+      }
+    ]
+  },
+  {
+    "id": "whitney",
+    "name": "Whitney Museum Toy Drive",
+    "org": "Whitney Museum of American Art",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "New toys, games, art supplies, and books for families in New York City shelters.",
+    "whoText": "Families in New York City shelters or temporary housing",
+    "cost": "You choose the gift.",
+    "costMin": null,
+    "deadline": "2026-12-17",
+    "steps": [
+      "Buy a new toy, game, art supply, or book and leave it unwrapped.",
+      "Bring it to the drop-off spot on the museum's ground floor.",
+      "You do not need a ticket to drop off a gift."
+    ],
+    "action": {
+      "type": "link",
+      "label": "See Whitney drop-off details",
+      "url": "https://whitney.org/2026-toy-drive",
+      "srExtra": "Whitney Museum of American Art"
+    },
+    "source": "https://whitney.org/2026-toy-drive",
+    "checked": "2026-11-25",
+    "ways": [
+      "drop"
+    ],
+    "note": "Items in languages other than English are welcome.",
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {
+        "text": "Bring a new, unwrapped item to the drop-off spot on the museum's ground floor. No ticket needed.",
+        "map": "Whitney Museum of American Art, 99 Gansevoort Street, New York, NY 10014"
+      }
+    ]
+  },
+  {
+    "id": "littleessentials",
+    "name": "Little Essentials Toy and Book Drive",
+    "org": "Little Essentials",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "Toys and books for young children in need in New York City. Little Essentials is a Brooklyn nonprofit that gives supplies for children aged 5 and under to families living in poverty.",
+    "whoText": "Young children in need in New York City",
+    "cost": "You choose from the wish list.",
+    "costMin": null,
+    "deadline": "2026-12-18",
+    "steps": [
+      "Open the Amazon wish list.",
+      "Choose a toy or book and check out.",
+      "If you ship an item yourself, send it to 1 Brooklyn Navy Yard, Building 240, Suite 205, Brooklyn, NY 11205."
+    ],
+    "action": {
+      "type": "link",
+      "label": "Shop the wish list",
+      "url": "https://a.co/axxAR7q",
+      "srExtra": "Little Essentials"
+    },
+    "source": "https://www.littleessentials.org/donate-items-now",
+    "checked": "2026-11-25",
+    "ways": [
+      "ship",
+      "mail",
+      "drop"
+    ],
+    "options": [
+      {
+        "text": "It ships to Little Essentials for you."
+      },
+      {
+        "text": "Mail a gift to 1 Brooklyn Navy Yard, Building 240, Suite 205, Brooklyn, NY 11205."
+      },
+      {
+        "text": "Bring toys or books to the Little Essentials warehouse in the Brooklyn Navy Yard. You book a time first.",
+        "link": {
+          "label": "Book a drop-off time",
+          "url": "https://calendly.com/little-essentials-donations/donation-dropoff",
+          "icon": "signup",
+          "srExtra": "Little Essentials"
+        }
+      }
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    }
+  },
+  {
+    "id": "wheretoturn",
+    "name": "Staten Island Holiday Toy Drive",
+    "org": "Chelsea Financial Services with Where to Turn",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "An unwrapped toy for a Staten Island child whose parent or guardian asked for help. Where to Turn, a local crisis relief nonprofit, gives the toys to those families.",
+    "whoText": "Staten Island children and families in need",
+    "cost": "You choose the toy.",
+    "costMin": null,
+    "deadline": "2026-12-18",
+    "steps": [
+      "Buy a toy and leave it unwrapped.",
+      "Drop it off at 242 Main Street, Staten Island, NY 10307, Monday to Friday, 9 am to 5 pm.",
+      "Or mail it to the same address so it arrives by December 18."
+    ],
+    "action": {
+      "type": "link",
+      "label": "See drop-off details",
+      "url": "https://chfs.com/toy-drive/",
+      "srExtra": "Chelsea Financial Services with Where to Turn"
+    },
+    "source": "https://chfs.com/toy-drive/",
+    "checked": "2026-11-25",
+    "ways": [
+      "drop",
+      "mail"
+    ],
+    "note": "The organizer calls December 18 its planned deadline, so check its page before you go.",
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {
+        "text": "Bring an unwrapped toy to 242 Main Street, Staten Island, NY 10307. Monday to Friday, 9 am to 5 pm.",
+        "map": "242 Main Street, Staten Island, NY 10307"
+      },
+      {
+        "text": "Mail a toy to the same address so it arrives by December 18."
+      }
+    ]
+  },
+  {
+    "id": "hfh",
+    "name": "Homes for the Homeless Holiday Wish List",
+    "org": "Homes for the Homeless",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "Holiday gifts for families living in the six shelters run by Homes for the Homeless, a New York City nonprofit.",
+    "whoText": "Children and families in Homes for the Homeless family residences",
+    "cost": "You choose from the wish list.",
+    "costMin": null,
+    "deadline": null,
+    "steps": [
+      "Open the Amazon holiday wish list.",
+      "Choose a gift and check out.",
+      "If you ship a gift yourself, send it to Homes for the Homeless, Attn: Tierra Gunther, 36 Cooper Square, 3rd Floor, New York, NY 10003."
+    ],
+    "action": {
+      "type": "link",
+      "label": "Shop the holiday wish list",
+      "url": "https://amzn.to/48V2nNp",
+      "srExtra": "Homes for the Homeless"
+    },
+    "source": "https://www.hfhnyc.org/get-involved/wishlist/",
+    "checked": "2026-11-25",
+    "ways": [
+      "ship",
+      "mail"
+    ],
+    "options": [
+      {
+        "text": "It ships to Homes for the Homeless for you."
+      },
+      {
+        "text": "Mail a gift to Homes for the Homeless, Attn: Tierra Gunther, 36 Cooper Square, 3rd Floor, New York, NY 10003."
+      }
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "note": "No deadline is listed. Order early so the gift arrives before the holidays."
+  },
+  {
+    "id": "win",
+    "name": "Win Holiday Gift Drive",
+    "org": "Win",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "Toys and gift cards for families staying with Win, New York City's largest provider of shelter for families who are homeless.",
+    "whoText": "Families with children in Win shelters and supportive housing",
+    "cost": "You choose. Some items are under $10.",
+    "costMin": null,
+    "deadline": "2026-12-04",
+    "steps": [
+      "Open Win's 2026 holiday drive.",
+      "Choose toys or gift cards.",
+      "Check out by December 4."
+    ],
+    "note": "Groups that want to take part: Volunteerservices@winnyc.org.",
+    "action": {
+      "type": "link",
+      "label": "Shop Win’s gift drive",
+      "url": "https://roonga.com/collection-drive/details/win2026?refresh=1"
+    },
+    "source": "https://winnyc.org/donation-and-drives/",
+    "checked": "2026-11-25",
+    "ways": [
+      "ship"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {
+        "text": "It ships to Win for you."
+      }
+    ]
+  },
+  {
+    "id": "uft",
+    "name": "Teachers' Union Toy Drive",
+    "org": "United Federation of Teachers",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "A new toy for a child from newborn to age 16, collected by New York City's teachers' union.",
+    "whoText": "Children from newborn to age 16",
+    "cost": "You choose the toy or the amount.",
+    "costMin": null,
+    "deadline": "2026-12-17",
+    "steps": [
+      "Buy a new, unwrapped toy for a child from newborn to age 16.",
+      "Ship it so it arrives by December 17 to UFT Elementary Schools Division, 52 Broadway, 14th Floor, New York, NY 10004.",
+      "Or bring it to a UFT borough office. The UFT page lists them. In Manhattan, drop-off is on the 10th floor."
+    ],
+    "action": {
+      "type": "link",
+      "label": "See UFT drop-off details",
+      "url": "https://www.uft.org/get-involved/uft-campaigns/toy-drive-2026",
+      "srExtra": "United Federation of Teachers"
+    },
+    "source": "https://www.uft.org/get-involved/uft-campaigns/toy-drive-2026",
+    "checked": "2026-11-25",
+    "ways": [
+      "drop",
+      "mail",
+      "money"
+    ],
+    "note": "UFT does not accept books, stuffed animals, or clothing.",
+    "options": [
+      {
+        "text": "Bring a toy to a UFT borough office. The UFT page lists them."
+      },
+      {
+        "text": "Ship a toy to UFT Elementary Schools Division, 52 Broadway, 14th Floor, New York, NY 10004, to arrive by December 17."
+      },
+      {
+        "text": "UFT buys toys with your gift. You pay with PayPal on the UFT page.",
+        "link": {
+          "label": "Donate on the UFT page",
+          "url": "https://www.uft.org/get-involved/uft-campaigns/toy-drive-2026"
+        }
+      }
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    }
+  },
+  {
+    "id": "childrensaid",
+    "name": "10,000 Toys for Girls and Boys",
+    "org": "Children's Aid",
+    "areas": [
+      "nyc"
+    ],
+    "status": "open",
+    "summary": "Toys for children in New York City neighborhoods with few resources. Children's Aid is a nonprofit, founded in 1853, that supports tens of thousands of children, young people, and families. The morning show on radio station NEW 102.7 runs the drive.",
+    "whoText": "Children and families in under-resourced New York City neighborhoods",
+    "cost": "Most toys cost $5 to $25.",
+    "costMin": 5,
+    "deadline": "2026-12-11",
+    "steps": [
+      "Open the toy list.",
+      "Add one or more toys to your cart.",
+      "Check out. The toys ship to Children's Aid."
+    ],
+    "action": {
+      "type": "link",
+      "label": "Shop the wish list",
+      "url": "https://childrensaidnyc.mindfulgiving.org/campaigns/10000-toys-for-girls-and-boys-1/products",
+      "srExtra": "Children's Aid"
+    },
+    "source": "https://www.audacy.com/new1027/latest/10000-toys-for-girls-boys",
+    "checked": "2026-11-25",
+    "ways": [
+      "ship"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {
+        "text": "It ships to Children's Aid for you."
+      }
+    ],
+    "note": "NEW 102.7 aims to collect 10,000 toys by December 11. No other deadline is listed, so order early."
+  },
+  {
+    "id": "transanta",
+    "name": "Answer a letter from a trans young person",
+    "org": "Transanta",
+    "areas": [
+      "us"
+    ],
+    "status": "open",
+    "summary": "A gift for a trans young person who wrote a letter. These young people are without a home, in foster care, or without the support they need. Gifts are sent without sharing anyone's personal details.",
+    "whoText": "Trans young people in need",
+    "cost": "You choose from their registry.",
+    "costMin": null,
+    "deadline": null,
+    "steps": [
+      "Open the Transanta homepage and scroll down. The letters are far down the page, below the newsletter sign-up.",
+      "Pick a letter, open that young person's gift registry, and choose a gift.",
+      "Check out. The gift ships to the young person, and their address stays private."
+    ],
+    "action": {
+      "type": "link",
+      "label": "Read letters on Transanta",
+      "url": "https://www.transanta.com/"
+    },
+    "source": "https://www.transanta.com/donate",
+    "checked": "2026-11-25",
+    "ways": [
+      "ship"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {
+        "text": "Scroll down their homepage to find the letters. Your gift ships to the young person whose letter you pick."
+      }
+    ],
+    "note": "The campaign runs each year from about mid-November to mid-January."
+  },
+  {
+    "id": "toysfortots",
+    "name": "Fill a virtual toy box",
+    "org": "Marine Toys for Tots with Amazon",
+    "areas": [
+      "us"
+    ],
+    "status": "open",
+    "summary": "You pick toys online and pay for them. Toys for Tots delivers them to children in need across the country. The site calls your cart a virtual toy box.",
+    "whoText": "Children and families in need across the US",
+    "cost": "You choose the toy. Prices start at about $3.",
+    "costMin": null,
+    "deadline": null,
+    "steps": [
+      "Open the toy catalog.",
+      "Add one or more toys to your toy box. It works like a shopping cart.",
+      "Check out. Toys for Tots delivers the toys to children across the country."
+    ],
+    "action": {
+      "type": "link",
+      "label": "Shop the virtual toy box",
+      "url": "https://amazon.toysfortotsbox.com/",
+      "srExtra": "Marine Toys for Tots with Amazon"
+    },
+    "source": "https://amazon.toysfortotsbox.com/",
+    "checked": "2026-11-25",
+    "ways": [
+      "ship"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {
+        "text": "Toys for Tots delivers it to a child in need."
+      }
+    ],
+    "note": "No deadline is listed. The page also has a link for giving cash."
+  }
+];
+
+/* ============================ Code below ============================ */
+
+const $ = (id) => document.getElementById(id);
+const esc = (s) => String(s).replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
+
+function parseDate(iso) {
+  const [y, m, d] = iso.split("-").map(Number);
+  return new Date(y, m - 1, d);
+}
+function daysUntil(iso) {
+  const now = new Date();
+  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  return Math.round((parseDate(iso) - today) / 86400000);
+}
+function shortDate(iso) {
+  return parseDate(iso).toLocaleDateString("en-US", { month: "long", day: "numeric" });
+}
+function longDate(iso) {
+  return parseDate(iso).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
+}
+
+// The list is for one holiday season. After the season ends, only programs that are open all year stay open.
+function seasonOver() {
+  return !!SITE.seasonEnds && daysUntil(SITE.seasonEnds) < 0;
+}
+// Most cards show one row for each way to give. A card can set its own rows when its ways share one starting point.
+function rowsOf(p) {
+  return p.rows || p.ways.map((w, i) => {
+    const o = (p.options || [])[i] || {};
+    return { icon: w, name: LABELS.ways[w], text: o.text, link: o.link, map: o.map, ends: o.ends };
+  });
+}
+// The day one way to give ends: its own date, or the card's deadline. Null when no date is known.
+function rowEnd(p, row) { return row.ends || p.deadline || null; }
+function rowEnded(p, row) {
+  const d = rowEnd(p, row);
+  return !!d && daysUntil(d) < 0;
+}
+// The next deadline still ahead on a card, and the last one of all
+function nextDeadline(p) {
+  return rowsOf(p).map((r) => rowEnd(p, r)).filter((d) => d && daysUntil(d) >= 0).sort()[0] || null;
+}
+function lastDeadline(p) {
+  return rowsOf(p).map((r) => rowEnd(p, r)).filter(Boolean).sort().pop() || null;
+}
+
+// A program's state today: "open", "confirm", "waitlist", "closed" (every way to give has ended),
+// or "ended" (the season is over).
+function stateOf(p) {
+  if (seasonOver() && !p.yearRound) return "ended";
+  if (p.closesAt && Date.now() >= Date.parse(p.closesAt)) return "closed";
+  if (rowsOf(p).every((r) => rowEnded(p, r))) return "closed";
+  return p.status || "open";
+}
+function isActionable(p) {
+  const s = stateOf(p);
+  return s === "open" || s === "confirm";
+}
+function badgeFor(p) {
+  const s = stateOf(p);
+  if (s === "ended") return { text: "Ended for " + SITE.season, cls: "note" };
+  if (s === "closed") {
+    const last = lastDeadline(p);
+    return { text: "Deadline passed" + (last ? ": " + shortDate(last) : ""), cls: "note" };
+  }
+  if (s === "waitlist") return { text: "Full for this year", cls: "note" };
+  if (s === "confirm") return { text: "Confirm details first", cls: "note" };
+  const next = nextDeadline(p);
+  if (next) {
+    const n = daysUntil(next);
+    // Every card uses the same word, so dates are easy to compare down the page
+    const base = "Deadline: " + shortDate(next);
+    if (n === 0) return { text: base, cls: "urgent", soon: "Today" };
+    if (n === 1) return { text: base, cls: "urgent", soon: "Tomorrow" };
+    if (n <= 7) return { text: base, cls: "urgent", soon: "In " + n + " days" };
+    return { text: base, cls: "" };
+  }
+  return { text: p.openLabel || (p.yearRound ? "Open all year" : "Open now"), cls: "" };
+}
+function badgeHTML(b) {
+  return '<span class="badge ' + b.cls + '">' + esc(b.text) + "</span>" +
+    (b.soon ? '<span class="soon">' + esc(b.soon) + "</span>" : "");
+}
+
+function mailto(a) {
+  const body = a.body.replace(/\n/g, "\r\n");
+  return "mailto:" + a.email + "?subject=" + encodeURIComponent(a.subject) + "&body=" + encodeURIComponent(body);
+}
+function hostOf(url) {
+  try {
+    const host = new URL(url).hostname.replace(/^www\./, "");
+    // a.co and amzn.to are Amazon's own short links
+    return (host === "a.co" || host === "amzn.to") ? "amazon.com" : host;
+  } catch (e) { return ""; }
+}
+function siteLink(cls, label, url, hiddenExtra) {
+  return '<a' + (cls ? ' class="' + cls + '"' : "") + ' href="' + esc(url) + '">' + esc(label) +
+    (hiddenExtra ? '<span class="sr-only"> ' + esc(hiddenExtra) + "</span>" : "") + "</a>";
+}
+
+// Small pictures that sit beside a label. They are decoration only: the words next to them carry the meaning.
+const svg = (d) => '<svg class="ic" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + d + "</svg>";
+const ICON = {
+  cost:   svg('<path d="M3 3.5h6.2l7.3 7.3-5.7 5.7-7.8-7.8z"/><circle cx="6.8" cy="7.3" r="1.1"/>'),
+  ok:     svg('<circle cx="10" cy="10" r="7.3"/><path d="M6.6 10.3l2.3 2.3 4.5-4.9"/>'),
+  signup: svg('<path d="M4 16l.9-3.7L13.4 3.8l2.8 2.8-8.5 8.5z"/><path d="M11.6 5.6l2.8 2.8"/>'),
+  ship:   svg('<path d="M2.2 3.3h2.3l2 8.9h8.4l1.7-6.4H5.6"/><circle cx="7.6" cy="15.6" r="1.2"/><circle cx="14" cy="15.6" r="1.2"/>'),
+  drop:   svg('<path d="M10 17.6s5.3-5 5.3-9A5.3 5.3 0 0 0 4.7 8.6c0 4 5.3 9 5.3 9z"/><circle cx="10" cy="8.4" r="1.9"/>'),
+  mail:   svg('<rect x="2.6" y="4.6" width="14.8" height="10.8" rx="1.6"/><path d="M3.2 5.8l6.8 5.4 6.800-5.4"/>'),
+  money:  svg('<path d="M10 16.4s-6.3-3.8-6.3-8A3.5 3.5 0 0 1 10 6.2a3.5 3.5 0 0 1 6.3 2.2c0 4.2-6.3 8-6.3 8z"/>'),
+  info:   svg('<circle cx="10" cy="10" r="7.3"/><path d="M10 9.4v4.4"/><path d="M10 6.5v.01"/>')
+};
+
+// Screen readers hear the organization after the button label, so buttons with the same words can be told apart
+function srName(a) {
+  return a.srExtra ? '<span class="sr-only">, ' + esc(a.srExtra) + "</span>" : "";
+}
+
+// What a person needs if the email button does nothing, folded into one line under that button
+function emailHelpHTML(a) {
+  return '<details class="msg"><summary>If your email app does not open</summary><div class="msg-body">' +
+        '<p class="hint">Copy the address and the message, then paste them into any email.</p>' +
+        '<div class="action-row copy-row">' +
+          '<button type="button" class="btn secondary small" data-copy="addr">Copy email address</button>' +
+          '<button type="button" class="btn secondary small" data-copy="msg">Copy message text</button>' +
+        "</div>" +
+        '<p class="copy-status" role="status" aria-live="polite"></p>' +
+        '<p><strong>To:</strong> <span class="addr">' + esc(a.email) + "</span></p>" +
+        "<p><strong>Subject:</strong> " + esc(a.subject) + "</p><pre>" + esc(a.body) + "</pre></div></details>";
+}
+
+// A plain link that opens Google Maps with directions to the address. On a phone it opens the Google Maps
+// app if the person has it, and the browser if not. No map is loaded on this page and no key is needed.
+function mapLink(address) {
+  return "https://www.google.com/maps/dir/?api=1&destination=" + encodeURIComponent(address);
+}
+
+// A date in a row, such as "December 17", is shown in bold so the deadline for that way of giving stands out
+function boldDates(html) {
+  return html.replace(/\b(?:January|February|March|April|May|June|July|August|September|October|November|December) \d{1,2}\b/g, "<strong>$&</strong>");
+}
+
+// On an email card the address in the row text is shown in bold so it is easy to find
+function boldAddress(html, email) {
+  return email ? html.replace(esc(email), '<span class="addr">' + esc(email) + "</span>") : html;
+}
+
+// Which small picture goes inside a button. A picture is used only when it shows what the button does:
+// a cart to shop a list, a heart to give money, an envelope to email or read letters, a pin for a place,
+// a pencil to sign up, and an "i" for a page of details. A button in the data can set "icon" itself ("" for none).
+function iconFor(btn, row) {
+  if (btn.icon !== undefined) return btn.icon;
+  if (btn.type === "email") return "mail";
+  if (/^See /.test(btn.label)) return "info";
+  if (/^Find /.test(btn.label)) return "drop";
+  if (/^Sign up/.test(btn.label)) return "signup";
+  if (/^Read letters/.test(btn.label)) return "mail";
+  return row.icon === "ship" || row.icon === "money" ? row.icon : "";
+}
+
+// Every way to give is one list item: its name, a short detail, and its buttons.
+// The first button on the card is the solid one. Every other button is outlined.
+// The styles decide the layout: button first on a narrow card, words left and button right on a wide card.
+function giveHTML(p) {
+  const a = p.action;
+  const rows = rowsOf(p);
+  // While the card is open, a way that has ended keeps its name and loses its buttons
+  const st = stateOf(p);
+  const cardOpen = st !== "closed" && st !== "ended";
+  // The card's main button sits on the row marked "main", or on the first row
+  const mainAt = Math.max(0, rows.findIndex((r) => r.main));
+  let filled = false;
+  // One heading for every card, whether it has one way to give or several
+  let html = '<h4 class="give-title">How to give</h4><ul class="give-list">';
+  rows.forEach((o, i) => {
+    if (cardOpen && rowEnded(p, o)) {
+      html += '<li class="give"><div class="give-text"><p class="give-name">' + esc(o.name) + "</p>" +
+        '<p class="give-detail">' + boldDates(esc("This way to give ended " + shortDate(rowEnd(p, o)) + ".")) + "</p></div></li>";
+      return;
+    }
+    const btns = [];
+    if (i === mainAt) {
+      btns.push(a);
+      if (p.second) btns.push({ type: "link", label: p.second.label, url: p.second.url, srExtra: p.second.label.includes(p.org.split(" ")[0]) ? "" : p.org });
+    } else if (o.link) {
+      btns.push(Object.assign({ type: "link" }, o.link));
+    }
+    if (o.map) btns.push({ type: "link", icon: "drop", label: "Get directions", url: mapLink(o.map), srExtra: "to " + o.map });
+    const email = btns.find((x) => x.type === "email");
+    const used = [];
+    const act = btns.map((x) => {
+      let ic = iconFor(x, o);
+      if (used.includes(ic)) ic = "";   // never the same picture twice in one row
+      if (ic) used.push(ic);
+      const cls = filled ? "secondary" : "primary";
+      filled = true;
+      return '<a class="btn ' + cls + '" href="' + esc(x.type === "email" ? mailto(x) : x.url) + '">' + (ic ? ICON[ic] : "") +
+        '<span class="btn-label">' + esc(x.label) + srName(x) + "</span></a>";
+    }).join("");
+    const detail = o.text
+      ? '<p class="give-detail">' + (o.signup ? '<strong class="signup-first">Sign up first.</strong> ' : "") +
+          boldDates(boldAddress(esc(o.text), email ? email.email : "")) + "</p>"
+      : "";
+    html += '<li class="give' + (act ? " has-act" : "") + (o.text ? "" : " no-text") + '">' +
+      '<div class="give-text"><p class="give-name">' + esc(o.name) + "</p>" + detail + "</div>" +
+      (act ? '<div class="give-act">' + act + "</div>" : "") +
+      (email ? emailHelpHTML(email) : "") + "</li>";
+  });
+  return html + "</ul>";
+}
+
+// Two facts at a glance. Every card says whether you must sign up first.
+// If the only way that needs a sign-up has ended, the card says no sign-up is needed.
+function glanceHTML(p) {
+  const need = rowsOf(p).filter((r) => r.signup);
+  const st = stateOf(p);
+  const su = (need.length && st !== "closed" && st !== "ended" && need.every((r) => rowEnded(p, r)))
+    ? { needed: false, text: "None needed." } : p.signup;
+  return '<dl class="glance">' +
+    '<div class="g">' + ICON.cost + "<dt>Cost</dt><dd>" + esc(p.cost) + "</dd></div>" +
+    '<div class="g' + (su.needed ? " needs" : "") + '">' + (su.needed ? ICON.signup : ICON.ok) + "<dt>Sign-up</dt><dd>" +
+      (su.needed ? "<strong>" + esc(su.lead || "Sign up first.") + "</strong> " : "") + esc(su.text) + "</dd></div>" +
+    "</dl>";
+}
+
+// Short text that changes when a card's label, or which of its ways have ended, changes
+function badgeSig(b) { return b.text + "|" + (b.soon || "") + "|" + b.cls; }
+function rowsSig(p) { return stateOf(p) + rowsOf(p).map((r) => (rowEnded(p, r) ? 1 : 0)).join(""); }
+
+// Labels depend on today's date. This redraws only what changed, so open sections and keyboard focus stay put.
+function refreshDates() {
+  PROGRAMS.forEach((p) => {
+    const li = cards.get(p.id);
+    const b = badgeFor(p);
+    if (li.dataset.badge !== badgeSig(b)) {
+      li.querySelector(".badges").innerHTML = badgeHTML(b);
+      li.querySelector(".card-head").classList.toggle("has-soon", !!b.soon);
+      li.dataset.badge = badgeSig(b);
+    }
+    if (li.dataset.rows !== rowsSig(p)) {
+      li.querySelector(".glance").outerHTML = glanceHTML(p);
+      const act = li.querySelector(".card-action");
+      const had = act.contains(document.activeElement);
+      const href = had ? document.activeElement.getAttribute("href") : null;
+      const msg = act.querySelector("details.msg");
+      const msgOpen = !!msg && msg.open;
+      act.innerHTML = giveHTML(p);
+      const msg2 = act.querySelector("details.msg");
+      if (msg2 && msgOpen) msg2.open = true;
+      if (had) {
+        const again = href && Array.from(act.querySelectorAll("a")).find((x) => x.getAttribute("href") === href);
+        (again || li.querySelector("h3")).focus();
+      }
+      li.dataset.rows = rowsSig(p);
+    }
+  });
+  const over = $("seasonOver");
+  over.hidden = !seasonOver();
+  over.textContent = "This list is from the " + SITE.season + " holiday season. Most programs have ended. " +
+    "Check each organization's website for this year's dates.";
+}
+
+function cardEl(p) {
+  const li = document.createElement("li");
+  li.className = "card";
+  // The page header shows the newest check date. A card shows its own date only if it is older.
+  const newestCheck = PROGRAMS.map((x) => x.checked).sort().pop();
+  const b = badgeFor(p);
+  const places = p.areas.map((a) => LABELS.areas[a]).join(", ");
+  li.innerHTML =
+    '<article aria-labelledby="t-' + p.id + '">' +
+      '<div class="card-main">' +
+        '<div class="card-head' + (b.soon ? " has-soon" : "") + '">' +
+          '<div class="card-title"><h3 id="t-' + p.id + '" tabindex="-1">' + esc(p.name) + "</h3>" +
+            '<p class="org">' + esc(p.org) + '\u00a0<span aria-hidden="true">·</span> <span class="place-text">' + esc(places) + "</span></p></div>" +
+          '<p class="badges">' + badgeHTML(b) + "</p>" +
+        "</div>" +
+        '<p class="summary">' + esc(p.summary) + "</p>" +
+        (p.statusNote ? '<p class="flag"><strong>Check first.</strong> ' + esc(p.statusNote) + "</p>" : "") +
+        glanceHTML(p) +
+      "</div>" +
+      '<div class="card-action">' + giveHTML(p) + "</div>" +
+      // Steps, extra notes and the source are folded away at the bottom of the card
+      '<details class="more"><summary><span class="more-label">Steps and details</span>' +
+        '<span class="sr-only"> for ' + esc(p.name) + ", " + esc(p.org) + "</span></summary>" +
+        '<div class="more-body">' +
+          // A card with more than one way to give can list separate steps for each way
+          (p.stepGroups || [{ title: "Steps", steps: p.steps }]).map((g) =>
+            "<h4>" + esc(g.title) + '</h4><ol class="steps">' + g.steps.map((st) => "<li>" + esc(st) + "</li>").join("") + "</ol>").join("") +
+          (p.note ? '<p class="goodtoknow"><strong>Good to know.</strong> ' + esc(p.note) + "</p>" : "") +
+          '<p class="source">' + siteLink("", "See where this information came from", p.source, "for " + p.name + ", " + p.org) + "</p>" +
+        "</div></details>" +
+      (p.checked < newestCheck ? '<p class="card-foot">Last checked ' + esc(longDate(p.checked)) + ".</p>" : "") +
+    "</article>";
+
+  // The steps control says "Hide" while it is open
+  const more = li.querySelector("details.more");
+  more.addEventListener("toggle", () => {
+    more.querySelector(".more-label").textContent = more.open ? "Hide steps and details" : "Steps and details";
+  });
+
+  // Copy buttons (email listings only). The card listens, so the buttons still work after the block is redrawn.
+  li.addEventListener("click", async (e) => {
+    const btn = e.target.closest("[data-copy]");
+    if (!btn) return;
+    const status = li.querySelector(".copy-status");
+    const isAddr = btn.dataset.copy === "addr";
+    const text = isAddr ? p.action.email : p.action.body;
+    try {
+      await navigator.clipboard.writeText(text);
+      status.textContent = isAddr ? "Email address copied." : "Message text copied.";
+    } catch (err) {
+      status.textContent = "Copy did not work in this browser. Select the text below and copy it by hand.";
+      li.querySelector("details.msg").open = true;
+    }
+  });
+  li.dataset.badge = badgeSig(b);
+  li.dataset.rows = rowsSig(p);
+  return li;
+}
+
+// Build filter checkboxes with counts
+function buildGroup(fieldsetId, key, labels) {
+  const fs = $(fieldsetId);
+  Object.keys(labels).forEach((value) => {
+    const n = PROGRAMS.filter((p) => p[key].includes(value)).length;
+    const id = "f-" + key + "-" + value;
+    const label = document.createElement("label");
+    label.className = "check";
+    label.htmlFor = id;
+    label.innerHTML =
+      '<input type="checkbox" id="' + id + '" name="' + key + '" value="' + value + '">' +
+      "<span>" + esc(labels[value]) + ' <span class="count" data-key="' + key + '" data-value="' + value + '">(' + n + ")</span></span>";
+    fs.appendChild(label);
+  });
+}
+buildGroup("f-area", "areas", LABELS.areas);
+buildGroup("f-way", "ways", LABELS.ways);
+
+// Build cards once, then show, hide, and reorder them
+const cards = new Map();
+PROGRAMS.forEach((p) => cards.set(p.id, cardEl(p)));
+
+
+function checked(name) {
+  return Array.from(document.querySelectorAll('#filters input[name="' + name + '"]:checked')).map((i) => i.value);
+}
+function matches(p, f) {
+  if (f.hideClosed && !isActionable(p)) return false;
+  if (f.areas.length && !f.areas.some((v) => p.areas.includes(v))) return false;
+  if (f.ways.length && !f.ways.some((v) => p.ways.includes(v))) return false;
+  return true;
+}
+function sorter(mode) {
+  const group = (p) => (isActionable(p) ? 0 : 1);          // full or closed programs always go last
+  const byName = (a, b) => a.name.localeCompare(b.name);
+  return (a, b) => {
+    if (group(a) !== group(b)) return group(a) - group(b);
+    if (mode === "name") return byName(a, b);
+    const na = nextDeadline(a), nb = nextDeadline(b);
+    const da = na ? parseDate(na).getTime() : Infinity;
+    const db = nb ? parseDate(nb).getTime() : Infinity;
+    return da - db || byName(a, b);
+  };
+}
+
+// The sort control shows short names on phones so it fits beside the Filters button
+const SORT_NAMES = {
+  full:  { deadline: "Soonest deadline", name: "Name, A to Z" },
+  short: { deadline: "Deadline", name: "Name" }
+};
+const phone = window.matchMedia("(max-width: 519px)");
+function showSort() {
+  $("sortText").textContent = "Sort: " + SORT_NAMES[phone.matches ? "short" : "full"][$("sort").value];
+}
+phone.addEventListener("change", showSort);
+
+const FILTER_ICON = '<svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 5h7M15 5h1M2 13h1M9 13h7"/><circle cx="12" cy="5" r="2.2"/><circle cx="6" cy="13" r="2.2"/></svg>';
+
+function update() {
+  showSort();
+  refreshDates();
+  const f = {
+    areas: checked("areas"), ways: checked("ways"),
+    hideClosed: $("hideClosed").checked
+  };
+  try {
+    sessionStorage.setItem("wishFinderFilters", JSON.stringify({
+      areas: f.areas, ways: f.ways, hideClosed: f.hideClosed, sort: $("sort").value
+    }));
+  } catch (e) { /* storage is off: filters just start fresh next time */ }
+  const list = $("list");
+  const sorted = PROGRAMS.slice().sort(sorter($("sort").value));
+  // If the keyboard focus is inside a card, keep it there when the list is redrawn
+  const focused = list.contains(document.activeElement) ? document.activeElement : null;
+  let shown = 0;
+  sorted.forEach((p) => {
+    const el = cards.get(p.id);
+    const ok = matches(p, f);
+    el.hidden = !ok;
+    if (ok) shown++;
+  });
+  // Move the cards only when the order changed
+  const want = sorted.map((p) => cards.get(p.id));
+  if (want.some((el, i) => list.children[i] !== el)) want.forEach((el) => list.appendChild(el));
+  if (focused && document.activeElement !== focused) {
+    if (focused.isConnected && !focused.closest("li.card").hidden) focused.focus();
+    else $("results-title").focus();
+  }
+  $("empty").hidden = shown !== 0;
+  // Programs that match the filters but are left out because they are full or past their deadline
+  const closedHidden = f.hideClosed
+    ? PROGRAMS.filter((p) => !isActionable(p) && matches(p, Object.assign({}, f, { hideClosed: false }))).length : 0;
+  $("count").textContent = "Showing " + shown + " of " + PROGRAMS.length + "." +
+    (closedHidden ? " " + closedHidden + (closedHidden === 1 ? " is" : " are") + " full or closed." : "");
+  // Showing full and closed programs is a change from the usual view, so it counts as a filter that is on
+  const showAll = !f.hideClosed;
+  const active = f.areas.length + f.ways.length + (showAll ? 1 : 0);
+  $("filterSummary").innerHTML = FILTER_ICON + '<span class="fs-label">Filters</span>' +
+    (active ? '<span class="fs-count">' + active + '<span class="sr-only"> on</span></span>' : "");
+
+  // Line above the list that names the filters that are on
+  const names = f.areas.map((v) => LABELS.areas[v]).concat(f.ways.map((v) => LABELS.ways[v]));
+  $("applied").hidden = names.length === 0 && !showAll;
+  $("appliedText").textContent = [names.length ? "Filters on: " + names.join(", ") + "." : "",
+    showAll ? "Full and closed programs are showing." : ""].filter(Boolean).join(" ");
+
+  // Button that closes the filter panel on small screens
+  $("showResults").textContent = "Show " + shown + (shown === 1 ? " program" : " programs");
+
+  // Each filter option shows how many programs match it, with the choices in the other group applied
+  document.querySelectorAll("#filters .count").forEach((el) => {
+    const g = Object.assign({}, f);
+    g[el.dataset.key] = [el.dataset.value];
+    el.textContent = "(" + PROGRAMS.filter((p) => matches(p, g)).length + ")";
+  });
+}
+
+// Puts every filter back to how the page starts
+function clearAll(e) {
+  document.querySelectorAll('#filters input[type="checkbox"]').forEach((i) => { i.checked = i.id === "hideClosed"; });
+  update();
+  // The button in the filter panel stays where it is, so focus stays on it.
+  // The other two buttons disappear once the filters are reset, so focus moves to the list heading.
+  if (e.currentTarget.id !== "clear") $("results-title").focus();
+}
+
+$("filters").addEventListener("submit", (e) => e.preventDefault());
+$("filters").addEventListener("change", update);
+$("sort").addEventListener("change", update);
+$("clear").addEventListener("click", clearAll);
+$("clear2").addEventListener("click", clearAll);
+$("clear3").addEventListener("click", clearAll);
+// "Close" in the filter panel on small screens puts you back on the Filters button
+$("closeFilters").addEventListener("click", () => {
+  $("filterPanel").open = false;
+  $("filterSummary").focus();
+});
+$("showResults").addEventListener("click", () => {
+  $("filterPanel").open = false;
+  $("results-title").focus();
+});
+// On small screens the Escape key closes the filter panel, the same as "Close"
+document.addEventListener("keydown", (e) => {
+  if (e.key === "Escape" && narrow.matches && $("filterPanel").open) {
+    $("filterPanel").open = false;
+    $("filterSummary").focus();
+  }
+});
+// If the browser restores the page after Back, make the list match the restored filters
+window.addEventListener("pageshow", update);
+// A page left open stays right: check once a minute, and when the tab is shown again, whether the date
+// or a closing time has changed anything.
+let lastSig = "";
+function dateSig() {
+  const n = new Date();
+  return n.getFullYear() + "-" + n.getMonth() + "-" + n.getDate() + PROGRAMS.map((p) => stateOf(p)[1]).join("");
+}
+function tick() {
+  const k = dateSig();
+  if (k !== lastSig) { lastSig = k; update(); }
+}
+setInterval(tick, 60000);
+document.addEventListener("visibilitychange", () => { if (!document.hidden) tick(); });
+
+// On small screens the filter panel starts closed so the list is visible first
+// On wide screens it is always open, because its open and close control is hidden there
+const narrow = window.matchMedia("(max-width: 699px)");
+function fitPanel() { $("filterPanel").open = !narrow.matches; }
+fitPanel();
+narrow.addEventListener("change", fitPanel);
+
+// Keep the filter panel in view while scrolling, but only if the whole panel fits on the screen
+function fitSticky() {
+  const panel = $("filterPanel");
+  panel.classList.toggle("sticky", !narrow.matches && panel.offsetHeight + 32 <= window.innerHeight);
+}
+fitSticky();
+window.addEventListener("resize", fitSticky);
+if (window.ResizeObserver) new ResizeObserver(fitSticky).observe($("filterPanel"));
+
+const newest = PROGRAMS.map((p) => p.checked).sort().pop();
+$("meta").textContent = "Last checked " + longDate(newest) + ".";
+
+if (SITE.makerName) {
+  $("maker").hidden = false;
+  $("maker").textContent = "This site is made by " + SITE.makerName + ".";
+}
+if (SITE.contactEmail) {
+  const c = $("contact");
+  c.hidden = false;
+  c.innerHTML = "See a mistake or know a program that belongs here? Write to " +
+    '<a href="mailto:' + esc(SITE.contactEmail) + '">' + esc(SITE.contactEmail) + "</a>.";
+}
+
+// Bring back the filters this visitor had on, for example after pressing Back
+try {
+  const st = JSON.parse(sessionStorage.getItem("wishFinderFilters") || "null");
+  if (st) {
+    document.querySelectorAll('#filters input[type="checkbox"][name]').forEach((i) => {
+      i.checked = (st[i.name] || []).includes(i.value);
+    });
+    $("hideClosed").checked = st.hideClosed !== false;
+    if (st.sort === "name" || st.sort === "deadline") $("sort").value = st.sort;
+  }
+} catch (e) { /* nothing saved, or storage is off */ }
+
+// The list and its controls stay hidden until this script has run
+$("app").hidden = false;
+lastSig = dateSig();
+update();
+fitSticky();
+</script>
+</body>
+</html>
