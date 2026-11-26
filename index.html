@@ -36,6 +36,8 @@
     --note-ink: #574000;
     --note-bg: #fdf1cf;
     --calm-bg: #e3f0ea;
+    --notice-bg: #e3f1ea;
+    --notice-line: #cfe6da;
     /* Holiday header: evergreen band, candy-cane stripe, snow edge */
     --head-bg: #0f5c45;
     --head-ink: #ffffff;
@@ -62,6 +64,8 @@
       --note-ink: #f4dd9c;
       --note-bg: #3a3013;
       --calm-bg: #1c342a;
+      --notice-bg: #1c342a;
+      --notice-line: #2f4a3e;
       --head-bg: #0b3527;
       --head-ink: #f1f8f4;
       --head-soft: #b9d6ca;
@@ -85,6 +89,8 @@
     --note-ink: #f4dd9c;
     --note-bg: #3a3013;
     --calm-bg: #1c342a;
+    --notice-bg: #1c342a;
+    --notice-line: #2f4a3e;
     --head-bg: #0b3527;
     --head-ink: #f1f8f4;
     --head-soft: #b9d6ca;
@@ -141,15 +147,32 @@
     font-family: var(--font-display); font-size: clamp(1.5rem, 3.4vw, 2rem);
     line-height: 1.15; font-weight: 700; text-wrap: balance; max-width: 26ch;
   }
-  /* The opening paragraph sits just below the green band, in dark text on the light page, so it is easy to read */
-  .intro { padding-top: 18px; padding-bottom: 22px; }
+  /* The opening paragraph sits just below the green band, in dark text on the light page, so it is easy to read.
+     The story and the notice under it share one column, as wide as the paragraph. */
+  .intro { padding-top: 18px; padding-bottom: 22px; display: grid; grid-template-columns: minmax(0, 60ch); gap: 4px; font-size: 1.0625rem; }
   .lead { max-width: 60ch; font-size: 1.0625rem; line-height: 1.55; color: var(--ink); }
+  /* "How this all started" is folded away until someone opens it. It opens in place. */
+  .story > summary {
+    display: inline-flex; align-items: center; gap: 6px; min-height: 44px; cursor: pointer;
+    color: var(--brand); font-weight: 600; font-size: 1rem; list-style: none;
+  }
+  .story > summary::-webkit-details-marker { display: none; }
+  .story > summary svg { flex: none; transition: transform 0.15s ease; }
+  .story[open] > summary svg { transform: rotate(180deg); }
+  @media (prefers-reduced-motion: reduce) { .story > summary svg { transition: none; } }
+  .story-body { display: grid; gap: 8px; line-height: 1.55; padding-bottom: 8px; }
+  /* A short note before the list, in a light card */
+  .notice {
+    margin-top: 6px; padding: 12px 16px; background: var(--notice-bg); border: 1px solid var(--notice-line);
+    border-radius: 12px; font-size: 0.9375rem; color: var(--ink-soft);
+  }
+  .notice strong { color: var(--ink); }
   /* The tree and gifts sit to the right of the words on wider screens */
   .holiday-art { position: absolute; right: 20px; bottom: 14px; width: 168px; height: auto; }
   @media (max-width: 699px) { .holiday-art { width: 96px; top: 14px; bottom: auto; } h1 { max-width: 16ch; } .site-name { max-width: calc(100% - 104px); } }
   @media (max-width: 419px) { .holiday-art { width: 80px; top: 16px; right: 14px; } h1 { max-width: calc(100% - 88px); } }
   @media (max-width: 519px) {
-    .intro { padding-top: 14px; padding-bottom: 14px; }
+    .intro { padding-top: 14px; padding-bottom: 14px; font-size: 1rem; }
     .site-head .wrap { padding-top: 12px; padding-bottom: 22px; gap: 4px; }
     .lead { font-size: 1rem; }
     /* "Programs" and the count share one line when there is room */
@@ -533,7 +556,21 @@
 
 <main>
   <div class="wrap intro">
-    <p class="lead">Whether you're giving to a child, a teen, an adult, or an older adult, there are so many ways to make someone feel thought of this Christmas. Find an opportunity that speaks to you and works within your budget.</p>
+    <p class="lead">There are so many incredible organizations making Christmas special for people of all ages. I created this website to make it easier to discover them and find a way to give that speaks to you and fits your budget.</p>
+    <details class="story">
+      <summary>How this all started<svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></summary>
+      <div class="story-body">
+        <p>For the past few years, one of my favorite Christmas traditions has been granting wishes through New York Cares' Winter Wishes program.</p>
+        <p>This year, by the time I went to sign up, every wish had already been claimed (which is amazing!). So I started looking for other ways to give.</p>
+        <p>While gathering links to send to a friend who also wanted to participate, I thought: why not put all of these programs in one place so anyone looking for a way to give this Christmas could find them?</p>
+        <p>And that's how The Christmas Giving List came to be.</p>
+        <p>I also wanted to be intentional about including programs that serve adults. So much of holiday giving focuses on children, but we don't outgrow the joy of receiving a gift or knowing that someone thought of us.</p>
+        <p>I hope this website makes it a little easier to give and brings more attention to the incredible organizations working to bring joy into people's lives.</p>
+        <p>With love,<br>Crystal</p>
+      </div>
+    </details>
+    <!-- The date is filled in by the script, the same as in "About this list". The date written here only shows if JavaScript is off. -->
+    <p class="notice"><strong>Before you give:</strong> Some deadlines are the day your gift must arrive, so order early and confirm with the organization. Checked <span class="newest-checked">November 25, 2026</span>. Independent, not part of any listed organization.</p>
   </div>
   <div class="wrap page" id="app" hidden>
   <details class="filters" id="filterPanel" open>
@@ -604,7 +641,7 @@
     <ul>
       <!-- The name and the date below are filled in by the script from SITE.makerName and the newest "checked" date. The text here only shows if JavaScript is off. -->
       <li><span id="makerLead">I'm <span id="maker">Crystal Marte</span>. </span>I put this website together to make it a little easier for anyone who wants to give this holiday season. It is independent and is not part of any organization on it.</li>
-      <li>Every listing was checked on <span id="checkedOn">November 25, 2026</span>, and will continue to be checked on a regular basis. However, dates and openings change, so confirm with the organization before you buy.</li>
+      <li>Every listing was checked on <span class="newest-checked">November 25, 2026</span>, and will continue to be checked on a regular basis. However, dates and openings change, so confirm with the organization before you buy.</li>
       <li>For some programs, <strong>the deadline is the day your gift must arrive</strong>. An order placed on the last day can be too late.</li>
       <li>This site counts visits and button clicks without cookies or personal data.</li>
       <li>See a mistake, know a program that belongs on the list, or find something hard to use? Tell us using the form below.
@@ -2216,7 +2253,7 @@ function cardEl(p) {
             "<h4>" + esc(g.title) + '</h4><ol class="steps">' + g.steps.map((st) => "<li>" + esc(st) + "</li>").join("") + "</ol>").join("") +
           (p.about ? '<p class="goodtoknow"><strong>About the organization.</strong> ' + esc(p.about) + "</p>" : "") +
           (p.note ? '<p class="goodtoknow"><strong>Good to know.</strong> ' + esc(p.note) + "</p>" : "") +
-          '<p class="source">' + siteLink("", "See where this information came from", p.source, "for " + p.name + ", " + p.org) + "</p>" +
+          '<p class="source">' + siteLink("", hostOf(p.source) ? "Full details on " + hostOf(p.source) : "See where this information came from", p.source, "for " + p.name + ", " + p.org) + "</p>" +
         "</div></details>" +
       (p.checked < newestCheck ? '<p class="card-foot">Last checked ' + esc(longDate(p.checked)) + ".</p>" : "") +
     "</article>";
@@ -2428,7 +2465,8 @@ window.addEventListener("resize", fitSticky);
 if (window.ResizeObserver) new ResizeObserver(fitSticky).observe($("filterPanel"));
 
 const newest = PROGRAMS.map((p) => p.checked).sort().pop();
-$("checkedOn").textContent = longDate(newest);
+// The newest check date, shown in the notice at the top and in "About this list"
+document.querySelectorAll(".newest-checked").forEach((el) => { el.textContent = longDate(newest); });
 
 if (SITE.makerName) $("maker").textContent = SITE.makerName;
 else $("makerLead").remove();
