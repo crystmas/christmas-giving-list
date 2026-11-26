@@ -305,8 +305,10 @@
     background: var(--note-bg); color: var(--note-ink);
     border-left: 5px solid var(--note-ink); padding: 10px 12px; border-radius: 4px; max-width: 52ch;
   }
-  /* Two facts at a glance, each with a small picture: cost and sign-up */
+  /* Facts at a glance, each with a small picture: the cost, and the sign-up only when one is needed */
   .glance { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px 20px; margin-top: 2px; font-size: 0.9375rem; }
+  /* With no sign-up, the cost has the whole row to itself */
+  .glance > .g:only-child { grid-column: 1 / -1; }
   .g { display: grid; grid-template-columns: 20px minmax(0, 1fr); column-gap: 8px; align-content: start; }
   .g .ic { grid-row: 1 / span 2; margin-top: 1px; color: var(--brand); }
   .g dt { font-weight: 700; font-size: 0.8125rem; color: var(--ink-soft); }
@@ -326,9 +328,8 @@
   /* Ways to give. The card decides the layout by its own width, not the screen's.
      Narrow card (phones): each way is a button with one line of help under it. No lines between ways.
      Wide card (480px of room or more): words on the left, button on the right, a pale line between ways. */
-  /* Extra space above "How to give" (24px in all) so it reads as a new section. The gap below the heading stays small. */
-  .card-action { display: grid; gap: 0; container-type: inline-size; margin-top: 18px; }
-  .card .give-title { font-size: 1rem; font-weight: 700; padding-bottom: 8px; }
+  /* The "How to give" heading is there for screen readers only, so the ways to give follow the facts with the card's normal gap */
+  .card-action { display: grid; gap: 0; container-type: inline-size; }
   .give-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 16px; }
   .give { display: grid; gap: 6px; }
   .give-text { min-width: 0; padding: 0 2px; }
@@ -345,20 +346,15 @@
   .give.has-act.no-text .give-text { display: none; }
   .copy-row { justify-content: flex-start; }
   @container (min-width: 480px) {
-    /* The heading stays larger and bolder than the names of the ways under it */
-    .card .give-title { padding-bottom: 0; }
     /* All the buttons on one card share the right-hand column, so they are the same width */
     .give-list { grid-template-columns: minmax(0, 1fr) fit-content(292px); gap: 0; }
     .give { grid-column: 1 / -1; grid-template-columns: subgrid; gap: 0 16px; align-items: center; padding: 12px 0; border-top: 1px solid var(--line-soft); }
-    .give:first-child { border-top: 0; padding-top: 8px; }
+    .give:first-child { border-top: 0; padding-top: 0; }
     .give-text { grid-column: 1; grid-row: 1; padding: 0; }
     .give-act { grid-column: 2; grid-row: 1; order: 0; }
     .give-act .btn { min-height: 44px; min-width: 200px; padding: 9px 12px; }
     .give > details.msg { grid-column: 1 / -1; }
-    /* A way with a button and no words: the heading sits beside the first button, and buttons in a row stack with no line between them */
-    .give-wrap.first-bare { display: grid; grid-template-columns: minmax(0, 1fr); }
-    .give-wrap.first-bare > .give-title { grid-row: 1; grid-column: 1; align-self: start; justify-self: start; margin-top: 18px; z-index: 1; }
-    .give-wrap.first-bare > .give-list { grid-row: 1; grid-column: 1; }
+    /* Ways with a button and no words: their buttons stack with no line between them */
     .give.no-text + .give.no-text { border-top: 0; padding-top: 0; }
     .give.no-text:has(+ .give.no-text) { padding-bottom: 8px; }
   }
@@ -695,7 +691,7 @@
         action:  { type: "link", label, url }
                  { type: "email", label, email, contactName, subject, body }
                  Add srExtra: "Organization name" when another card has a button with the same words.
-        signup:  { needed: true or false, text }. Shown on every card in the "Sign-up" row.
+        signup:  { needed: true or false, text }. The card shows a "Sign-up" row only when needed is true.
                  Use needed: true only when people must do something before they can give.
         second:  { label, url }. A second, outlined button next to the main one.
    4. Set SITE.contactEmail if you want a "report a problem" line.
@@ -2069,7 +2065,6 @@ function siteLink(cls, label, url, hiddenExtra) {
 const svg = (d) => '<svg class="ic" aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">' + d + "</svg>";
 const ICON = {
   cost:   svg('<path d="M3 3.5h6.2l7.3 7.3-5.7 5.7-7.8-7.8z"/><circle cx="6.8" cy="7.3" r="1.1"/>'),
-  ok:     svg('<circle cx="10" cy="10" r="7.3"/><path d="M6.6 10.3l2.3 2.3 4.5-4.9"/>'),
   signup: svg('<path d="M4 16l.9-3.7L13.4 3.8l2.8 2.8-8.5 8.5z"/><path d="M11.6 5.6l2.8 2.8"/>'),
   ship:   svg('<path d="M2.2 3.3h2.3l2 8.9h8.4l1.7-6.4H5.6"/><circle cx="7.6" cy="15.6" r="1.2"/><circle cx="14" cy="15.6" r="1.2"/>'),
   drop:   svg('<path d="M10 17.6s5.3-5 5.3-9A5.3 5.3 0 0 0 4.7 8.6c0 4 5.3 9 5.3 9z"/><circle cx="10" cy="8.4" r="1.9"/>'),
@@ -2138,9 +2133,8 @@ function giveHTML(p) {
   const mainAt = Math.max(0, rows.findIndex((r) => r.main));
   let filled = false;
   // One heading for every card, whether it has one way to give or several
-  // When the first way has a button and no words, a wide card puts the heading beside that button
-  const firstBare = !rows[0].text && !(cardOpen && rowEnded(p, rows[0]));
-  let html = '<div class="give-wrap' + (firstBare ? " first-bare" : "") + '"><h4 class="give-title">How to give</h4><ul class="give-list">';
+  // The heading is for screen readers. On screen, the buttons speak for themselves.
+  let html = '<div class="give-wrap"><h4 class="give-title sr-only">How to give</h4><ul class="give-list">';
   rows.forEach((o, i) => {
     if (cardOpen && rowEnded(p, o)) {
       html += '<li class="give"><div class="give-text"><p class="give-name">' + esc(o.name) + "</p>" +
@@ -2178,8 +2172,8 @@ function giveHTML(p) {
   return html + "</ul></div>";
 }
 
-// Two facts at a glance. Every card says whether you must sign up first.
-// If the only way that needs a sign-up has ended, the card says no sign-up is needed.
+// Facts at a glance: the cost, and the sign-up only when one is needed. When no sign-up is needed, the card leaves it out.
+// If the only way that needs a sign-up has ended, no sign-up is needed any more, so it goes away too.
 function glanceHTML(p) {
   const need = rowsOf(p).filter((r) => r.signup);
   const st = stateOf(p);
@@ -2187,8 +2181,10 @@ function glanceHTML(p) {
     ? { needed: false, text: "None needed." } : p.signup;
   return '<dl class="glance">' +
     '<div class="g">' + ICON.cost + "<dt>Cost</dt><dd>" + esc(p.cost) + "</dd></div>" +
-    '<div class="g' + (su.needed ? " needs" : "") + '">' + (su.needed ? ICON.signup : ICON.ok) + "<dt>Sign-up</dt><dd>" +
-      (su.needed ? "<strong>" + esc(su.lead || "Sign up first.") + "</strong> " : "") + esc(su.text) + "</dd></div>" +
+    (su.needed
+      ? '<div class="g needs">' + ICON.signup + "<dt>Sign-up</dt><dd>" +
+          "<strong>" + esc(su.lead || "Sign up first.") + "</strong> " + esc(su.text) + "</dd></div>"
+      : "") +
     "</dl>";
 }
 
