@@ -2,7 +2,7 @@
 
 A one-page website that lists programs where you can give a gift at Christmas, to a child, a teen, an adult, or an older adult. Each listing shows the cost, the deadline, and how to give.
 
-**Visit the site:** https://crystmas.github.io/christmas-giving-list/
+**Visit the site:** https://thechristmasgivinglist.org/
 
 ## About
 
