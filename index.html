@@ -21,7 +21,7 @@
 <!-- The heading font and the main text font start loading right away -->
 <link rel="preload" href="fonts/lora-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=2026-11-27-7">
+<link rel="stylesheet" href="styles.css?v=2026-11-27-8">
 <!-- The folded feedback form needs JavaScript. Without it, only the plain link to the form shows. -->
 <noscript><style>#feedback { display: none; }</style></noscript>
 </head>
@@ -91,6 +91,11 @@
         </div>
         <button type="button" class="sheet-close" id="closeFilters">Close</button>
       </div>
+
+      <fieldset id="f-area" aria-describedby="f-area-hint">
+        <legend>Where your gift goes</legend>
+        <p class="hint" id="f-area-hint">"Across NYC" programs give in more than one borough, and you can't pick which one.</p>
+      </fieldset>
 
       <fieldset id="f-way">
         <legend>How to give</legend>
@@ -165,6 +170,11 @@
    2. To add a program, copy one block from { to }, paste it, and change
       the text. Keep the commas between blocks.
    3. Values you can use:
+        areas:   where the gifts go: one or more of "bronx", "brooklyn", "manhattan", "queens", "staten-island", "nyc".
+                 A borough: the gifts reach people in that borough. Use more than one when more are confirmed.
+                 "nyc": the program gives across the city, or doesn't say which borough.
+                 []: it isn't clear the gifts stay in New York City. The card shows no chip.
+                 Tag where the gifts go, not where you drop them off.
         ways:    how you give. Use one or more of "ship" (buy from the organization's wish list and the store ships it for you),
                  "drop" (drop off a gift), "mail" (get a gift yourself and mail it), "money" (give money).
                  The first one is the way the main button uses.
@@ -211,6 +221,7 @@ const SITE = {
 };
 
 const LABELS = {
+  areas:  { bronx: "Bronx", brooklyn: "Brooklyn", manhattan: "Manhattan", queens: "Queens", "staten-island": "Staten Island", nyc: "Across NYC" },
   ways:   { ship: "Buy from their wish list", drop: "Drop off a gift", mail: "Mail a gift yourself", money: "Give money" }
 };
 
@@ -219,6 +230,9 @@ const PROGRAMS = [
     "id": "onesimplewish",
     "name": "Grant a wish for a young New Yorker leaving foster care",
     "org": "One Simple Wish with City Living NY",
+    "areas": [
+      "nyc"
+    ],
     "status": "open",
     "summary": "Fund a wish for a young New Yorker who has left foster care, or for their child.",
     "about": "City Living NY is a New York City nonprofit that helps young people move from foster care to living on their own, including finding and keeping housing. One Simple Wish, a national nonprofit founded in 2008, hosts its wishes.",
@@ -257,6 +271,7 @@ const PROGRAMS = [
     "id": "sus",
     "name": "S:US Holiday Gift Project",
     "org": "Services for the UnderServed (S:US)",
+    "areas": [],
     "status": "open",
     "summary": "Fulfill a holiday wish for someone S:US supports, including adults with disabilities, veterans, and children living in shelters.",
     "about": "Services for the UnderServed (S:US) is a New York nonprofit founded in 1978. It provides housing, employment support, and mental health and substance use treatment to tens of thousands of people and their families across New York City and Long Island each year.",
@@ -347,6 +362,9 @@ const PROGRAMS = [
     "id": "sanctuary",
     "name": "Sanctuary's Winter Wishes gift drive",
     "org": "Sanctuary for Families",
+    "areas": [
+      "nyc"
+    ],
     "status": "open",
     "summary": "Give a book, game, toy, or gift card to a survivor of gender-based violence or one of their children.",
     "about": "Sanctuary for Families is a New York City nonprofit, founded in 1984. It helps survivors of domestic violence, sex trafficking, and other gender-based violence with shelter, counseling, legal help, and job training.",
@@ -405,6 +423,9 @@ const PROGRAMS = [
     "id": "nycares",
     "name": "New York Cares Winter Wishes",
     "org": "New York Cares",
+    "areas": [
+      "nyc"
+    ],
     "status": "waitlist",
     "statusNote": "Sign-up is closed for 2026. You can ask to be told if a wish opens up.",
     "summary": "If a wish opens up, get matched with a letter from a NYC child or teen, then send them the gift they asked for.",
@@ -452,6 +473,7 @@ const PROGRAMS = [
     "id": "foundling",
     "name": "The Foundling's Holiday Gift Drive",
     "org": "The New York Foundling",
+    "areas": [],
     "status": "open",
     "summary": "Give a holiday gift to a child in foster care, an adult with a developmental disability, or a family facing financial or housing hardship.",
     "about": "The New York Foundling is a New York City nonprofit, founded in 1869. It runs child welfare, education, health, and disability programs for children, adults, and families.",
@@ -519,6 +541,9 @@ const PROGRAMS = [
     "id": "henrystreet",
     "name": "Henry Street Holiday Drive",
     "org": "Henry Street Settlement",
+    "areas": [
+      "nyc"
+    ],
     "status": "open",
     "summary": "Give a holiday gift from Henry Street's registry to someone in its programs, from kids in afterschool to older adults and families staying in shelters.",
     "about": "Henry Street Settlement is a nonprofit on Manhattan's Lower East Side, founded in 1893. It offers social services, health care, and arts programs to New Yorkers of all ages.",
@@ -558,6 +583,9 @@ const PROGRAMS = [
     "id": "coalition",
     "name": "Buy a toy for a child living in a shelter",
     "org": "Coalition for the Homeless",
+    "areas": [
+      "nyc"
+    ],
     "status": "open",
     "summary": "Pick a toy from the wish list, and the Coalition will get it to a child living in a New York City shelter.",
     "about": "Coalition for the Homeless is a New York City nonprofit, founded in 1981. It gives food, housing help, and job training to people who are homeless, and it advocates for their rights.",
@@ -615,6 +643,9 @@ const PROGRAMS = [
     "id": "bronxworks",
     "name": "Holiday gifts for Bronx children",
     "org": "BronxWorks",
+    "areas": [
+      "bronx"
+    ],
     "status": "open",
     "summary": "Pick a holiday gift from the BronxWorks wish list for a child in one of its Bronx programs.",
     "about": "BronxWorks is a Bronx nonprofit and settlement house, founded in 1972. It helps Bronx residents of all ages, from toddlers to older adults, including people experiencing homelessness.",
@@ -653,6 +684,9 @@ const PROGRAMS = [
     "id": "newalternatives",
     "name": "Santa Project",
     "org": "New Alternatives",
+    "areas": [
+      "nyc"
+    ],
     "status": "open",
     "summary": "Help buy a holiday gift for an LGBTQ+ teen or young adult experiencing homelessness or at risk of losing housing.",
     "about": "New Alternatives is a New York City nonprofit, founded in 2008. It helps LGBTQ+ young people experiencing homelessness with housing, health, school, and jobs.",
@@ -691,6 +725,9 @@ const PROGRAMS = [
     "id": "unionsettlement",
     "name": "Union Settlement Holiday Toy Drive",
     "org": "Union Settlement",
+    "areas": [
+      "manhattan"
+    ],
     "status": "open",
     "summary": "Give a toy to a child in East Harlem or help Union Settlement buy gifts for local families.",
     "about": "Union Settlement is an East Harlem nonprofit, founded in 1895. It offers early childhood education, youth programs, services for older adults, and mental health care to East Harlem residents.",
@@ -757,6 +794,9 @@ const PROGRAMS = [
     "id": "atlanticave",
     "name": "Atlantic Avenue Annual Toy Drive",
     "org": "Atlantic Avenue Local Development Corporation",
+    "areas": [
+      "brooklyn"
+    ],
     "status": "open",
     "summary": "Pick a toy from the wish list for children staying in Brooklyn shelters.",
     "about": "The Atlantic Avenue Local Development Corporation is a Brooklyn nonprofit started by local merchants and community activists. It became a nonprofit in 1986 and supports businesses, events, and historic buildings on Atlantic Avenue. Its toy drive gives toys to children and families in local homeless shelters.",
@@ -811,6 +851,9 @@ const PROGRAMS = [
     "id": "chips",
     "name": "CHiPS Toy Drive",
     "org": "CHiPS (Community Help in Park Slope)",
+    "areas": [
+      "brooklyn"
+    ],
     "status": "open",
     "summary": "Drop off a new toy in Park Slope for a Brooklyn kid or teen ages 3 to 16.",
     "about": "CHiPS (Community Help in Park Slope) is a Brooklyn nonprofit founded in 1971. It serves meals, runs a food pantry, and provides temporary housing for pregnant women and mothers with young children.",
@@ -852,6 +895,9 @@ const PROGRAMS = [
     "id": "whitney",
     "name": "Whitney Museum Toy Drive",
     "org": "Whitney Museum of American Art",
+    "areas": [
+      "nyc"
+    ],
     "status": "open",
     "summary": "Bring a new toy, game, book, or art supply for families in NYC shelters or temporary housing. Multilingual gifts are welcome.",
     "about": "The Whitney Museum of American Art is an art museum in Manhattan, founded in 1930. It runs this drive with the NYC Department of Homeless Services, which gives the gifts to families in shelters or temporary housing.",
@@ -894,6 +940,9 @@ const PROGRAMS = [
     "id": "littleessentials",
     "name": "Little Essentials Toy and Book Drive",
     "org": "Little Essentials",
+    "areas": [
+      "nyc"
+    ],
     "status": "open",
     "summary": "Give a book or a new or gently used toy to a young child in New York City.",
     "about": "Little Essentials is a Brooklyn nonprofit, founded in 2011. It gives clothing, gear, and supplies to New York City families living in poverty who have children aged 5 and under.",
@@ -960,6 +1009,9 @@ const PROGRAMS = [
     "id": "wheretoturn",
     "name": "Staten Island Holiday Toy Drive",
     "org": "Chelsea Financial Services with Where to Turn",
+    "areas": [
+      "staten-island"
+    ],
     "status": "open",
     "summary": "Give an unwrapped toy to a Staten Island child whose parent or caregiver requested a holiday gift.",
     "about": "Where to Turn is a Staten Island crisis relief nonprofit, started in 2001 to help families who lost loved ones on September 11. Chelsea Financial Services, a financial services firm, runs this drive with Where to Turn. The toys go to Staten Island children and families in need.",
@@ -1019,6 +1071,12 @@ const PROGRAMS = [
     "id": "hfh",
     "name": "Homes for the Homeless Holiday Wish List",
     "org": "Homes for the Homeless",
+    "areas": [
+      "bronx",
+      "manhattan",
+      "queens",
+      "staten-island"
+    ],
     "status": "open",
     "summary": "Send a holiday gift to a family staying at one of the six NYC shelters run by Homes for the Homeless.",
     "about": "Homes for the Homeless is a New York City nonprofit, founded in 1986. It runs six shelters for families with children in the Bronx, Manhattan, Queens, and Staten Island.",
@@ -1069,6 +1127,9 @@ const PROGRAMS = [
     "id": "win",
     "name": "Win Holiday Gift Drive",
     "org": "Win",
+    "areas": [
+      "nyc"
+    ],
     "status": "open",
     "summary": "Choose a toy or gift card for children living in Win's family shelters or supportive housing in New York City.",
     "about": "Win is a New York City nonprofit, founded in 1983 as Women in Need. It is the city's largest provider of shelter and supportive housing for families experiencing homelessness.",
@@ -1107,6 +1168,9 @@ const PROGRAMS = [
     "id": "uft",
     "name": "Teachers' Union Toy Drive",
     "org": "United Federation of Teachers",
+    "areas": [
+      "nyc"
+    ],
     "status": "open",
     "summary": "Give a new, unwrapped toy for a child up to age 16 through the New York City teachers' union.",
     "about": "The United Federation of Teachers is the union for most New York City public school teachers, founded in 1960. It runs this toy drive each year for children in need.",
@@ -1174,6 +1238,9 @@ const PROGRAMS = [
     "id": "childrensaid",
     "name": "10,000 Toys for Girls and Boys",
     "org": "Children's Aid",
+    "areas": [
+      "nyc"
+    ],
     "status": "open",
     "summary": "Choose a gift like a bracelet-making kit, basketball, or beginner guitar for a child served by Children's Aid in NYC.",
     "about": "Children's Aid is a New York City nonprofit, founded in 1853. It supports about 50,000 children and families in under-resourced neighborhoods with education, health care, and family support. The morning show on radio station NEW 102.7 runs this drive.",
@@ -1213,6 +1280,11 @@ const PROGRAMS = [
     "id": "mdlayafs",
     "name": "Winter Wishes",
     "org": "Mommy & Daddy's Little Angels Youth and Family Services (MDLAYAFS)",
+    "areas": [
+      "brooklyn",
+      "queens",
+      "staten-island"
+    ],
     "status": "open",
     "summary": "Grant a holiday wish for a child, teen, adult, or older adult in Brooklyn, Far Rockaway, or Staten Island.",
     "about": "MDLAYAFS is a nonprofit based on Staten Island. It runs programs for youth, families, older adults, people with disabilities, and people living with HIV in New York City.",
@@ -1303,6 +1375,9 @@ const PROGRAMS = [
     "id": "wishingtree",
     "name": "The Wishing Tree Project",
     "org": "Fit4Dance with Brooklyn Community Services",
+    "areas": [
+      "brooklyn"
+    ],
     "status": "open",
     "summary": "Shop a Brooklyn child's wish list, or buy clothing, winter gear, and toys for families Brooklyn Community Services supports.",
     "about": "Fit4Dance is a dance fitness studio in Brooklyn. Brooklyn Community Services, founded in 1866, is one of New York City's oldest nonprofit social service agencies. The families in this project take part in its Preventative Care Program.",
@@ -1368,6 +1443,9 @@ const PROGRAMS = [
     "id": "tinytotall",
     "name": "Christmas Extravaganza",
     "org": "Tiny To Tall",
+    "areas": [
+      "staten-island"
+    ],
     "status": "open",
     "summary": "Buy a toy or pajamas for a Staten Island child, up to age 16, at a free holiday giveaway.",
     "about": "Tiny To Tall is a tutoring network on Staten Island that also holds free community events. Its fourth annual Christmas Extravaganza gives toys and pajamas to children whose families register.",
@@ -1406,6 +1484,9 @@ const PROGRAMS = [
     "id": "foresthills",
     "name": "Forest Hills Stadium Holiday Toy Drive",
     "org": "Forest Hills Stadium with Queens Community House",
+    "areas": [
+      "queens"
+    ],
     "status": "open",
     "summary": "Give a new toy to a child in Queens, ages 0 to 13, through Queens Community House.",
     "about": "Queens Community House is a settlement house, founded in 1975 as Forest Hills Community House. It serves about 30,000 children, adults, and older adults in Queens. Forest Hills Stadium has run this toy drive with it since 2023.",
@@ -1461,6 +1542,9 @@ const PROGRAMS = [
     "id": "ghostbusters",
     "name": "South Bronx Toy Drive",
     "org": "New York City Ghostbusters",
+    "areas": [
+      "bronx"
+    ],
     "status": "open",
     "summary": "Give a new toy to a South Bronx child through Community School District 9.",
     "about": "New York City Ghostbusters is a nonprofit group of Ghostbusters fans. Every toy it collects goes to the South Bronx Toy Drive, which Community School District 9 of the Bronx runs.",
@@ -1528,6 +1612,9 @@ const PROGRAMS = [
     "id": "catholicguardian",
     "name": "Christmas Toy Drive",
     "org": "Catholic Guardian Services",
+    "areas": [
+      "nyc"
+    ],
     "status": "open",
     "summary": "Give a toy to a New York City child in foster care or facing other hard times.",
     "about": "Catholic Guardian Services is a New York City nonprofit whose foster care work goes back to 1899. It is one of the largest foster care providers in New York and helps more than 3,000 people and 1,400 families.",
@@ -1597,6 +1684,9 @@ const PROGRAMS = [
     "id": "familycenter",
     "name": "The Family Center Toy Drive",
     "org": "The Family Center",
+    "areas": [
+      "nyc"
+    ],
     "status": "open",
     "summary": "Choose a holiday gift for a child in a family The Family Center supports.",
     "about": "The Family Center is a nonprofit in Brooklyn. It offers family support, legal, health education, and behavioral health services.",
@@ -1650,6 +1740,9 @@ const PROGRAMS = [
     "id": "stignatius",
     "name": "Annual Toy Drive",
     "org": "Church of St. Ignatius Loyola",
+    "areas": [
+      "staten-island"
+    ],
     "status": "open",
     "summary": "Bring a new toy or game to the Upper East Side for a Staten Island child, ages 3 to 12.",
     "about": "St. Ignatius Loyola is a Catholic parish on the Upper East Side of Manhattan. Its toy drive is for the children of St. Mary of the Assumption–Our Lady of Mt. Carmel–St. Benedict Parish on Staten Island.",
@@ -1691,6 +1784,9 @@ const PROGRAMS = [
     "id": "boogiedown",
     "name": "Boogie Down Bronx Runners Toy Drive",
     "org": "Boogie Down Bronx Runners",
+    "areas": [
+      "bronx"
+    ],
     "status": "open",
     "summary": "Bring a new toy or learning gift for a Bronx child to a one-evening toy drive.",
     "about": "Boogie Down Bronx Runners is a Bronx running crew, started in 2017. This is its 8th annual toy drive.",
@@ -1731,6 +1827,9 @@ const PROGRAMS = [
     "id": "bradycourt",
     "name": "Bronx Community Holiday Toy Drive",
     "org": "White Plains Road BID with Brady Court",
+    "areas": [
+      "bronx"
+    ],
     "status": "open",
     "summary": "Give a new toy to a Bronx child, ages 2 to 12, for a community Christmas celebration on December 19.",
     "about": "The White Plains Road Business Improvement District and Brady Court host this drive. The toys go to children at a community Christmas celebration at Brady Court on December 19.",
@@ -1776,6 +1875,9 @@ const PROGRAMS = [
     "id": "astoriacenter",
     "name": "December Toy Drive",
     "org": "Astoria Center of Israel",
+    "areas": [
+      "staten-island"
+    ],
     "status": "open",
     "summary": "Bring a new toy to a synagogue in Astoria for families Project Hospitality serves on Staten Island.",
     "about": "Astoria Center of Israel is a synagogue in Astoria, Queens. The toys go to Project Hospitality, a Staten Island nonprofit that helps people with food, housing, health care, and family support.",
@@ -1818,6 +1920,9 @@ const PROGRAMS = [
     "id": "district33",
     "name": "District 33 Holiday Toy Drive",
     "org": "Council Member Lincoln Restler's office",
+    "areas": [
+      "brooklyn"
+    ],
     "status": "open",
     "summary": "Give a new toy or gift to a child at one of the highest-need public schools in Brooklyn's District 33.",
     "about": "Council Member Lincoln Restler represents District 33 in Brooklyn, from Greenpoint to Brooklyn Heights. His office runs this drive with The Service Collective and Spread Love Brooklyn.",
@@ -1863,6 +1968,9 @@ const PROGRAMS = [
     "id": "fordham",
     "name": "Fordham Holiday Toy Drive",
     "org": "Fordham University",
+    "areas": [
+      "bronx"
+    ],
     "status": "open",
     "summary": "Buy a toy for a child in the Bronx neighborhoods near Fordham's Rose Hill campus.",
     "about": "Fordham University's Division for External Affairs runs this drive. The toys go to local children and families at a community celebration on Fordham's Rose Hill campus in the Bronx on December 18.",
@@ -1914,6 +2022,9 @@ const PROGRAMS = [
     "id": "histoystore",
     "name": "His Toy Store",
     "org": "Hope For New York",
+    "areas": [
+      "nyc"
+    ],
     "status": "open",
     "summary": "Give money to stock free toy stores in all five boroughs, where parents in need choose gifts for their children.",
     "about": "Hope For New York is a New York City nonprofit that connects donors and volunteers with partner organizations serving people in need.",
@@ -1950,6 +2061,11 @@ const PROGRAMS = [
     "id": "camba-shelters",
     "name": "Bring Joy Home: shelters",
     "org": "CAMBA",
+    "areas": [
+      "bronx",
+      "brooklyn",
+      "queens"
+    ],
     "status": "open",
     "summary": "Send a holiday gift to a child staying in a CAMBA shelter in Queens, Brooklyn, or the Bronx.",
     "about": "CAMBA is a Brooklyn nonprofit, founded in 1977. It runs shelters, family support, and youth programs across New York City.",
@@ -2015,6 +2131,12 @@ const PROGRAMS = [
     "id": "camba-housing",
     "name": "Bring Joy Home: supportive housing",
     "org": "CAMBA",
+    "areas": [
+      "bronx",
+      "brooklyn",
+      "queens",
+      "staten-island"
+    ],
     "status": "open",
     "summary": "Send a holiday gift to a child living in CAMBA supportive housing in Brooklyn, the Bronx, Queens, or Staten Island.",
     "about": "CAMBA is a Brooklyn nonprofit, founded in 1977. It runs shelters, family support, and youth programs across New York City.",
@@ -2084,6 +2206,9 @@ const PROGRAMS = [
     "id": "camba-afterschool",
     "name": "Bring Joy Home: afterschool programs",
     "org": "CAMBA",
+    "areas": [
+      "brooklyn"
+    ],
     "status": "open",
     "summary": "Send a holiday gift to a child in a CAMBA afterschool program in Brooklyn.",
     "about": "CAMBA is a Brooklyn nonprofit, founded in 1977. It runs shelters, family support, and youth programs across New York City.",
@@ -2235,12 +2360,17 @@ function badgeFor(p) {
   }
   return { text: p.openLabel || (p.yearRound ? "Open all year" : "Open now"), cls: "" };
 }
-// The deadline label, then "Today" or "Tomorrow" when the deadline is that close.
-// Everything that draws the badges row uses this.
-function badgeHTML(b) {
+// The deadline label ("Today" or "Tomorrow" when it is that close), then where the gifts go. The hidden full stop makes
+// a screen reader say them as two separate items. Everything that draws the badges row uses this, so the
+// "where your gift goes" chip is never lost when the row is redrawn. A program with no areas shows no chip.
+function badgeHTML(b, p) {
   return '<span class="badge ' + b.cls + '">' + esc(b.text) + "</span>" +
-    (b.soon ? '<span class="soon">' + esc(b.soon) + "</span>" : "");
+    (b.soon ? '<span class="soon">' + esc(b.soon) + "</span>" : "") +
+    (p.areas.length ? '<span class="sr-only">. </span><span class="badge place">' + HEART +
+      '<span class="sr-only">Where your gift goes: </span>' + esc(p.areas.map((a) => LABELS.areas[a]).join(", ")) + "</span>" : "");
 }
+// A small heart for the "where your gift goes" chip. It is decoration only.
+const HEART = '<svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 16.4s-6.3-3.8-6.3-8A3.5 3.5 0 0 1 10 6.2a3.5 3.5 0 0 1 6.3 2.2c0 4.2-6.3 8-6.3 8z"/></svg>';
 
 function mailto(a) {
   const body = a.body.replace(/\n/g, "\r\n");
@@ -2395,7 +2525,7 @@ function refreshDates() {
     const li = cards.get(p.id);
     const b = badgeFor(p);
     if (li.dataset.badge !== badgeSig(b)) {
-      li.querySelector(".badges").innerHTML = badgeHTML(b);
+      li.querySelector(".badges").innerHTML = badgeHTML(b, p);
       li.dataset.badge = badgeSig(b);
     }
     if (li.dataset.rows !== rowsSig(p)) {
@@ -2438,7 +2568,7 @@ function cardEl(p) {
         '<div class="card-head">' +
           '<div class="card-title"><h3 id="t-' + p.id + '" tabindex="-1">' + esc(p.name) + "</h3>" +
             '<p class="org">' + esc(p.org) + "</p></div>" +
-          '<p class="badges">' + badgeHTML(b) + "</p>" +
+          '<p class="badges">' + badgeHTML(b, p) + "</p>" +
         "</div>" +
         '<p class="summary">' + esc(p.summary) + "</p>" +
         (p.statusNote ? '<p class="flag"><strong>Check first.</strong> ' + esc(p.statusNote) + "</p>" : "") +
@@ -2501,6 +2631,7 @@ function buildGroup(fieldsetId, key, labels) {
     fs.appendChild(label);
   });
 }
+buildGroup("f-area", "areas", LABELS.areas);
 buildGroup("f-way", "ways", LABELS.ways);
 
 // Build cards once, then show, hide, and reorder them
@@ -2513,6 +2644,7 @@ function checked(name) {
 }
 function matches(p, f) {
   if (f.hideClosed && !isActionable(p)) return false;
+  if (f.areas.length && !f.areas.some((v) => p.areas.includes(v))) return false;
   if (f.ways.length && !f.ways.some((v) => p.ways.includes(v))) return false;
   return true;
 }
@@ -2545,12 +2677,12 @@ function update() {
   showSort();
   refreshDates();
   const f = {
-    ways: checked("ways"),
+    areas: checked("areas"), ways: checked("ways"),
     hideClosed: $("hideClosed").checked
   };
   try {
     sessionStorage.setItem("wishFinderFilters", JSON.stringify({
-      ways: f.ways, hideClosed: f.hideClosed, sort: $("sort").value
+      areas: f.areas, ways: f.ways, hideClosed: f.hideClosed, sort: $("sort").value
     }));
   } catch (e) { /* storage is off: filters just start fresh next time */ }
   const list = $("list");
@@ -2579,7 +2711,7 @@ function update() {
     (closedHidden ? " " + closedHidden + (closedHidden === 1 ? " is" : " are") + " full or closed." : "");
   // Showing full and closed programs is a change from the usual view, so it counts as a filter that is on
   const showAll = !f.hideClosed;
-  const active = f.ways.length + (showAll ? 1 : 0);
+  const active = f.areas.length + f.ways.length + (showAll ? 1 : 0);
   // The number on the Filters button. The icon and the word are in the HTML, so only the number changes.
   let badge = $("filterSummary").querySelector(".fs-count");
   if (!active) {
@@ -2595,7 +2727,7 @@ function update() {
 
   // Line above the list that names the filters that are on. When nothing matches, it stays hidden:
   // the "No programs match" box has its own "Reset filters". The styles also hide it while the filter panel is open.
-  const names = f.ways.map((v) => LABELS.ways[v]);
+  const names = f.areas.map((v) => LABELS.areas[v]).concat(f.ways.map((v) => LABELS.ways[v]));
   $("applied").hidden = (names.length === 0 && !showAll) || shown === 0;
   $("appliedText").textContent = [names.length ? "Filters on: " + names.join(", ") + "." : "",
     showAll ? "Full and closed programs are showing." : ""].filter(Boolean).join(" ");
