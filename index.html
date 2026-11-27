@@ -21,7 +21,7 @@
 <!-- The heading font and the main text font start loading right away -->
 <link rel="preload" href="fonts/lora-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=2026-11-26-2">
+<link rel="stylesheet" href="styles.css?v=2026-11-27">
 <!-- The folded feedback form needs JavaScript. Without it, only the plain link to the form shows. -->
 <noscript><style>#feedback { display: none; }</style></noscript>
 </head>
@@ -65,14 +65,14 @@
 
 <main>
   <div class="wrap intro">
-    <h2 class="intro-title">Find your way to give</h2>
-    <p class="lead">Compare costs, deadlines and ways to give.</p>
-    <a class="page-link" href="about.html">About this project<svg class="arrow arrow-after" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
-    <!-- The date is filled in by the script, the same as in the footer. The date written here only shows if JavaScript is off. -->
-    <div class="fineprint">
-      <p>This website is not affiliated with any listed organization.</p>
-      <p>Last updated: <span class="newest-checked">November 25, 2026</span></p>
+    <!-- "Updated" is the day the list's information last changed, in New York time. It is written here by hand,
+         not filled in by the script. See "How to edit" in README.md for when to change it, and change both
+         the datetime value and the text. -->
+    <div class="topline">
+      <a class="page-link" href="about.html">About this project<svg class="arrow arrow-after" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
+      <span class="updated">Updated <time datetime="2026-11-26">Nov 26, 2026</time></span>
     </div>
+    <h2 class="intro-title">Find your way to give</h2>
   </div>
   <div class="wrap page" id="app" hidden>
   <details class="filters" id="filterPanel" open>
@@ -148,7 +148,7 @@
     </details>
     <a class="form-link" href="https://docs.google.com/forms/d/e/1FAIpQLSfdwLZCQvjUqEZg6rhdhUFrDyp4WQBQvWkwpQ0rKYL52Z11yQ/viewform">Open the form on its own page</a>
     <!-- The date is filled in by the script from the newest "checked" date. The date written here only shows if JavaScript is off. -->
-    <p class="footnote">Every listing was checked on <span class="newest-checked">November 25, 2026</span>. Dates and openings change, so confirm with the organization before you buy. This site counts visits and button clicks without cookies or personal data.</p>
+    <p class="footnote">Every listing was checked on <span class="newest-checked">November 25, 2026</span>. Dates and openings change, so confirm with the organization before you buy. This website is not affiliated with any listed organization. This site counts visits and button clicks without cookies or personal data.</p>
     <a class="page-link" href="about.html">About this project</a>
     <p id="contact" hidden></p>
   </div>
@@ -2000,7 +2000,7 @@ function stepHTML(st) {
 function cardEl(p) {
   const li = document.createElement("li");
   li.className = "card";
-  // The page header shows the newest check date. A card shows its own date only if it is older.
+  // The footer shows the newest check date. A card shows its own date only if it is older.
   const newestCheck = PROGRAMS.map((x) => x.checked).sort().pop();
   const b = badgeFor(p);
   li.innerHTML =
@@ -2237,7 +2237,7 @@ window.addEventListener("resize", fitSticky);
 if (window.ResizeObserver) new ResizeObserver(fitSticky).observe($("filterPanel"));
 
 const newest = PROGRAMS.map((p) => p.checked).sort().pop();
-// The newest check date, shown in the small print at the top and in the footer
+// The newest check date, shown in the footer
 document.querySelectorAll(".newest-checked").forEach((el) => { el.textContent = longDate(newest); });
 
 

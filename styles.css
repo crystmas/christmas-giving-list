@@ -158,22 +158,19 @@ a { color: var(--brand); text-underline-offset: 0.15em; }
   .tagline { font-size: 1rem; max-width: min(16.42em, calc(100% - 104px)); }
   .holiday-art { width: 96px; right: 14px; bottom: 14px; }
 }
-/* The opening paragraph sits just below the green band, in dark text on the light page, so it is easy to read.
-   The link to the About page and the small print under it share one column, as wide as the paragraph. */
-.intro { padding-top: 18px; padding-bottom: 22px; display: grid; grid-template-columns: minmax(0, 41.04em); gap: 4px; font-size: 1.0625rem; }
-.intro-title { font-family: var(--font-display); font-weight: 700; font-size: 2rem; line-height: 1.1; color: var(--ink); margin: 0 0 4px; }
-.lead { max-width: 41.04em; font-size: 1.0625rem; line-height: 1.55; color: var(--ink); }
-/* The About link keeps its 44px tap height but sits close to the words around it */
-.intro .page-link { margin: -6px 0 -10px; }
+/* Just below the green band: a small row with the About link and the date the list last changed,
+   then the page heading. Filters, Sort and the count follow right under the heading. */
+.intro { padding-bottom: 22px; }
+/* The link and the date sit side by side on the left. On a narrow phone the date can wrap under the link. */
+.topline { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 20px; padding-top: 4px; }
+/* The About link keeps its 44px tap height */
+.topline .page-link { font-size: 0.9375rem; }
 /* The small gray text uses weight 500: at 400, DM Sans looks fainter than the old font at this size */
-.fineprint { margin-top: 0; font-size: 0.8125rem; font-weight: 500; color: var(--ink-soft); }
+.updated { font-size: 0.875rem; font-weight: 500; color: var(--ink-soft); }
+.intro-title { font-family: var(--font-display); font-weight: 700; font-size: 2rem; line-height: 1.1; color: var(--ink); margin: 4px 0 0; }
 @media (max-width: 699px) {
-  .intro { padding-top: 16px; }
+  .intro { padding-bottom: 12px; }
   .intro-title { font-size: 1.375rem; }
-}
-@media (max-width: 519px) {
-  .intro { padding-bottom: 14px; font-size: 1rem; }
-  .lead { font-size: 1rem; }
 }
 
 /* Page grid */
@@ -220,9 +217,7 @@ a { color: var(--brand); text-underline-offset: 0.15em; }
 #clear { border-color: transparent; text-decoration: underline; padding: 6px 0; min-height: 44px; }
 #clear:hover { background: transparent; text-decoration-thickness: 2px; }
 .filters .hint { margin-top: 2px; }
-.field { display: grid; gap: 4px; }
-.field > label, legend { font-weight: 700; }
-legend { margin-bottom: 2px; }
+legend { font-weight: 700; margin-bottom: 2px; }
 input[type="search"], select {
   font: inherit; color: var(--ink); background: var(--surface);
   border: 1px solid var(--line-strong); border-radius: 6px;
@@ -316,7 +311,7 @@ input[type="search"], select {
 .g.needs .ic, .g.needs strong { color: var(--note-ink); }
 .ic { flex: none; }
 /* Long email addresses and links wrap instead of pushing past the card on narrow phones */
-.more-body, .email-lead, .glance dd, .second { overflow-wrap: anywhere; }
+.more-body, .glance dd { overflow-wrap: anywhere; }
 .card h4 { font-size: 0.9375rem; }
 .steps { list-style: decimal; padding-left: 1.4em; display: grid; gap: 4px; max-width: 36.94em; margin-top: -6px; }
 /* Choices inside a step: the giver picks one, so they are bullets, not numbers */
@@ -364,12 +359,9 @@ details.more[open] > summary { margin-bottom: 0; }
 }
 .action-row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-self: stretch; }
 .card-action .hint { max-width: 35.57em; }
-.goes-to { margin-top: -4px; }
 /* Buttons sit at the bottom right of the card. Help text stays left so it is easy to read. */
 .action-row { justify-content: flex-end; }
-.goes-to, .second { justify-self: end; text-align: right; }
 .action-row .btn.primary { min-width: min(100%, 240px); }
-.email-lead { background: var(--calm-bg); padding: 7px 10px; border-radius: 6px; font-size: 0.9375rem; }
 .addr, .give-detail strong { font-weight: 700; color: var(--ink); overflow-wrap: anywhere; }
 .copy-status { font-weight: 600; font-size: 0.875rem; }
 details.msg > summary { cursor: pointer; font-weight: 600; color: var(--brand); padding: 10px 0; min-height: 44px; font-size: 0.9375rem; }
@@ -477,7 +469,6 @@ details.feedback > summary { cursor: pointer; font-weight: 600; color: var(--bra
   .card article { padding: 18px 16px; }
   .glance { grid-template-columns: minmax(0, 1fr); }
   .action-row .btn { width: 100%; }
-  .goes-to, .second { justify-self: start; text-align: left; }
 }
 /* Very narrow phones: no room for two controls in a row, so "Sort by" drops below "Filters" */
 @media (max-width: 359px), (max-width: 22.4em) {
