@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Christmas Giving List</title>
-<meta name="description" content="Everyone deserves a gift this Christmas, at every age. Find a New York City program, see the cost and the deadline, and give.">
+<meta name="description" content="Everyone deserves a gift this Christmas. Give a holiday gift to someone in New York City, from anywhere. Each listing shows the cost, the deadline and how to give.">
 <!-- What a pasted link shows in a text or on social media. The picture is og-image.png in the top folder. -->
 <link rel="canonical" href="https://thechristmasgivinglist.org/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="The Christmas Giving List">
-<meta property="og:description" content="Everyone deserves a gift this Christmas. Find a New York City program, see the cost and the deadline, and give.">
+<meta property="og:description" content="Everyone deserves a gift this Christmas. Give a holiday gift to someone in New York City, from anywhere. Each listing shows the cost, the deadline and how to give.">
 <meta property="og:url" content="https://thechristmasgivinglist.org/">
 <meta property="og:image" content="https://thechristmasgivinglist.org/og-image.png?v=2026-11-26-2">
 <meta property="og:image:width" content="1200">
@@ -21,7 +21,7 @@
 <!-- The heading font and the main text font start loading right away -->
 <link rel="preload" href="fonts/lora-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=2026-11-27-12">
+<link rel="stylesheet" href="styles.css?v=2026-11-27-13">
 <!-- The folded feedback form needs JavaScript. Without it, only the plain link to the form shows. -->
 <noscript><style>#feedback { display: none; }</style></noscript>
 </head>
@@ -73,8 +73,8 @@
     <div class="topline">
       <a class="page-link" href="about.html">About this project<svg class="arrow arrow-after" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
     </div>
-    <h2 class="intro-title">Find your way to give in New&nbsp;York&nbsp;City</h2>
-    <p class="intro-lead">Pick a program below to give a holiday gift to a child or adult in need. Local organizations run every program, and each listing shows the cost, the deadline, and how to give.</p>
+    <h2 class="intro-title">Give a holiday gift to someone in New&nbsp;York&nbsp;City</h2>
+    <p class="intro-lead">Pick a program below to give a holiday gift to a child or adult in need in New York City. You can give from anywhere: most programs have an online wish list that ships the gift for you, or let you give money online. Local organizations run every program, and each listing shows the cost, the deadline, and how to give.</p>
   </div>
   <div class="wrap page" id="app" hidden>
   <details class="filters" id="filterPanel" open>
@@ -92,8 +92,9 @@
         <legend>Where your gift goes</legend>
       </fieldset>
 
-      <fieldset id="f-way">
+      <fieldset id="f-way" aria-describedby="f-way-hint">
         <legend>How to give</legend>
+        <p class="check-hint group-hint" id="f-way-hint">Not in New York City? Pick Buy from their wish list, Mail a gift yourself or Give money.</p>
       </fieldset>
 
       <label class="check" for="hideClosed">
@@ -2933,8 +2934,15 @@ function badgeHTML(b, p) {
     (x.soon ? '<span class="soon">' + esc(x.soon) + "</span>" : "");
   return one(b) +
     (b.next ? '<span class="sr-only">. </span>' + one(b.next) : "") +
-    (p.areas.length ? '<span class="sr-only">. </span><span class="badge place">' + HEART +
-      '<span class="sr-only">Where your gift goes: </span>' + esc(p.areas.map((a) => LABELS.areas[a]).join(", ")) + "</span>" : "");
+    (p.areas.length ? '<span class="sr-only">. </span><span class="badge place">' + HEART + placeHTML(p) + "</span>" : "");
+}
+// The words in the "where your gift goes" chip. On screen they start with "Gift goes to", so no one reads the borough
+// as where they need to be: "Gift goes to Bronx", or "Gift goes anywhere in NYC". Screen readers still hear
+// "Where your gift goes: Bronx". The words on screen are hidden from them, so nothing is read twice.
+function placeHTML(p) {
+  const names = p.areas.map((a) => LABELS.areas[a]).join(", ");
+  const shown = p.areas.length === 1 && p.areas[0] === "nyc" ? "Gift goes anywhere in NYC" : "Gift goes to " + names;
+  return '<span aria-hidden="true">' + esc(shown) + '</span><span class="sr-only">Where your gift goes: ' + esc(names) + "</span>";
 }
 // A small heart for the "where your gift goes" chip. It is decoration only.
 const HEART = '<svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 16.4s-6.3-3.8-6.3-8A3.5 3.5 0 0 1 10 6.2a3.5 3.5 0 0 1 6.3 2.2c0 4.2-6.3 8-6.3 8z"/></svg>';
