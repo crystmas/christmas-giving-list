@@ -47,6 +47,9 @@
   --note-ink: #574000;
   --note-bg: #fdf1cf;
   --calm-bg: #e3f0ea;
+  --place-bg: #eef3f0;
+  --place-ink: #0b4535;
+  --place-line: #d4e1da;
   /* Header: a solid evergreen band, the same in light and dark mode */
   --head-bg: #0b4535;
   --head-ink: #ffffff;
@@ -70,6 +73,9 @@
     --note-ink: #f4dd9c;
     --note-bg: #3a3013;
     --calm-bg: #1c342a;
+    --place-bg: var(--calm-bg);
+    --place-ink: var(--ink);
+    --place-line: var(--line);
     --head-ink: #f1f8f4;
     color-scheme: dark;
   }
@@ -255,6 +261,12 @@ select {
 }
 .badge.urgent { background: var(--urgent-bg); color: var(--urgent); border-color: var(--urgent); }
 .badge.note { background: var(--note-bg); color: var(--note-ink); border-color: var(--note-ink); }
+/* Where the gifts go: a quieter pill after the deadline. It is a label, not a control. */
+.badge.place {
+  display: inline-flex; align-items: center; gap: 5px; font-size: 0.8125rem; font-weight: 600;
+  background: var(--place-bg); color: var(--place-ink); border-color: var(--place-line);
+}
+.badge.place svg { flex: none; }
 .summary { max-width: 35.57em; }
 .flag {
   background: var(--note-bg); color: var(--note-ink);
