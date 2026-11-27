@@ -21,7 +21,7 @@
 <!-- The heading font and the main text font start loading right away -->
 <link rel="preload" href="fonts/lora-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=2026-11-27-4">
+<link rel="stylesheet" href="styles.css?v=2026-11-27-5">
 <!-- The folded feedback form needs JavaScript. Without it, only the plain link to the form shows. -->
 <noscript><style>#feedback { display: none; }</style></noscript>
 </head>
@@ -152,8 +152,9 @@
       <iframe id="feedbackFrame" title="Feedback form for The Christmas Giving List" data-src="https://docs.google.com/forms/d/e/1FAIpQLSfdwLZCQvjUqEZg6rhdhUFrDyp4WQBQvWkwpQ0rKYL52Z11yQ/viewform?embedded=true"></iframe>
     </details>
     <a class="form-link" href="https://docs.google.com/forms/d/e/1FAIpQLSfdwLZCQvjUqEZg6rhdhUFrDyp4WQBQvWkwpQ0rKYL52Z11yQ/viewform">Open the form on its own page</a>
-    <!-- The date is filled in by the script from the newest "checked" date. The date written here only shows if JavaScript is off. -->
-    <p class="footnote">Every listing was checked on <span class="newest-checked">November 25, 2026</span>. Dates and openings change, so confirm with the organization before you buy. This website is not affiliated with any listed organization. This site counts visits and button clicks without cookies or personal data.</p>
+    <!-- The date is filled in by the script from the oldest "checked" date, so the sentence is true for every listing.
+         The date written here only shows if JavaScript is off. -->
+    <p class="footnote">Every listing was checked on or after <span class="oldest-checked">November 25, 2026</span>. Dates and openings change, so confirm with the organization before you buy. This website is not affiliated with any listed organization. This site counts visits and button clicks without cookies or personal data.</p>
     <a class="page-link" href="about.html">About this project</a>
   </div>
 </footer>
@@ -1967,8 +1968,6 @@ function stepHTML(st) {
 function cardEl(p) {
   const li = document.createElement("li");
   li.className = "card";
-  // The footer shows the newest check date. A card shows its own date only if it is older.
-  const newestCheck = PROGRAMS.map((x) => x.checked).sort().pop();
   const b = badgeFor(p);
   li.innerHTML =
     '<article aria-labelledby="t-' + p.id + '">' +
@@ -1994,7 +1993,6 @@ function cardEl(p) {
           (p.note ? '<p class="goodtoknow"><strong>Good to know.</strong> ' + esc(p.note) + "</p>" : "") +
           '<p class="source">' + siteLink("", hostOf(p.source) ? "Full details on " + hostOf(p.source) : "See where this information came from", p.source, "for " + p.name + ", " + p.org) + "</p>" +
         "</div></details>" +
-      (p.checked < newestCheck ? '<p class="card-foot">Last checked ' + esc(longDate(p.checked)) + ".</p>" : "") +
     "</article>";
 
   // The steps control says "Hide" while it is open
@@ -2215,9 +2213,9 @@ fitSticky();
 window.addEventListener("resize", fitSticky);
 if (window.ResizeObserver) new ResizeObserver(fitSticky).observe($("filterPanel"));
 
-const newest = PROGRAMS.map((p) => p.checked).sort().pop();
-// The newest check date, shown in the footer
-document.querySelectorAll(".newest-checked").forEach((el) => { el.textContent = longDate(newest); });
+// The oldest check date, shown in the footer: every listing was checked on that day or later
+const oldest = PROGRAMS.map((p) => p.checked).sort()[0];
+document.querySelectorAll(".oldest-checked").forEach((el) => { el.textContent = longDate(oldest); });
 
 
 // Feedback form. It is not loaded until the section is first opened, so the page asks Google for nothing before that.
