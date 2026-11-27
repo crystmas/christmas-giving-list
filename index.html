@@ -222,7 +222,7 @@
 
 const SITE = {
   season: "2026",            // the holiday season this list is for
-  seasonEnds: "2027-01-15"   // after this day, every program that is not open all year shows as ended
+  seasonEnds: "2026-12-25"   // after this day, every program that is not open all year shows as ended
 };
 
 const LABELS = {
@@ -699,7 +699,7 @@ const PROGRAMS = [
     "summary": "Help buy a holiday gift for an LGBTQ+ teen or young adult experiencing homelessness or at risk of losing housing.",
     "about": "New Alternatives is a New York City nonprofit, founded in 2008. It helps LGBTQ+ young people experiencing homelessness with housing, health, school, and jobs.",
     "cost": "Any amount.",
-    "deadline": null,
+    "deadline": "2026-12-18",
     "stepGroups": [
       {
         "title": "Give money",
@@ -727,7 +727,7 @@ const PROGRAMS = [
     "options": [
       {}
     ],
-    "note": "Gifts are handed out at a holiday party on December 18. No giving deadline is listed, so give before then."
+    "note": "No giving deadline is listed. Gifts are handed out at a holiday party on December 18, so this list treats that as the last day."
   },
   {
     "id": "unionsettlement",
@@ -1559,7 +1559,7 @@ const PROGRAMS = [
     "summary": "Give a new toy to a South Bronx child through Community School District 9.",
     "about": "New York City Ghostbusters is a nonprofit group of Ghostbusters fans. Every toy it collects goes to the South Bronx Toy Drive, which Community School District 9 of the Bronx runs.",
     "cost": "No minimum. Any new toy, or give money.",
-    "deadline": null,
+    "deadline": "2026-12-18",
     "mustArrive": true,
     "action": {
       "type": "link",
@@ -1616,7 +1616,8 @@ const PROGRAMS = [
           "Choose an amount. The money buys toys for the drive."
         ]
       }
-    ]
+    ],
+    "note": "The toys go out on December 18, so this list treats that as the last day."
   },
   {
     "id": "catholicguardian",
@@ -2227,7 +2228,8 @@ const PROGRAMS = [
     "action": {
       "type": "link",
       "label": "Choose a program's wish list",
-      "url": "https://camba.org/support/toy-drive-supporters/"
+      "url": "https://camba.org/support/toy-drive-supporters/",
+      "srExtra": "CAMBA afterschool programs"
     },
     "source": "https://camba.org/support/toy-drive-supporters/",
     "checked": "2026-11-26",
@@ -2519,7 +2521,8 @@ const PROGRAMS = [
     "action": {
       "type": "link",
       "label": "Choose a program's wish list",
-      "url": "https://www.stmaryskids.org/ways-to-give/in-kind-giving/"
+      "url": "https://www.stmaryskids.org/ways-to-give/in-kind-giving/",
+      "srExtra": "St. Mary's Healthcare System for Children"
     },
     "source": "https://www.stmaryskids.org/ways-to-give/in-kind-giving/",
     "checked": "2026-11-27",
@@ -2761,7 +2764,9 @@ const PROGRAMS = [
       "text": "None needed."
     },
     "options": [
-      {},
+      {
+        "ends": "2026-12-12"
+      },
       {
         "text": "Bring a new toy in its original packaging to Chabad UES, 419 East 77th Street, by Tuesday, December 1.",
         "map": "419 East 77th Street, New York, NY 10075",
@@ -2785,7 +2790,7 @@ const PROGRAMS = [
         ]
       }
     ],
-    "note": "Questions: office@friendshipcirclenyc.org or 929-207-4370."
+    "note": "No end date is listed for the registry. Chanukah ends December 12, so this list treats that as the last day. Questions: office@friendshipcirclenyc.org or 929-207-4370."
   },
   {
     "id": "nycommonpantry",
@@ -2839,16 +2844,25 @@ function parseDate(iso) {
   const [y, m, d] = iso.split("-").map(Number);
   return new Date(y, m - 1, d);
 }
+// Today's date in New York, as "YYYY-MM-DD". Every program is in New York City, so deadlines follow New York's
+// calendar wherever the visitor is.
+const NY_DATE = new Intl.DateTimeFormat("en-US", { timeZone: "America/New_York", year: "numeric", month: "2-digit", day: "2-digit" });
+function nyToday() {
+  const part = {};
+  NY_DATE.formatToParts(new Date()).forEach((x) => { part[x.type] = x.value; });
+  return part.year + "-" + part.month + "-" + part.day;
+}
+// Whole days from today in New York to a date. Both are counted as plain calendar days, so the visitor's
+// time zone and daylight saving time make no difference.
 function daysUntil(iso) {
-  const now = new Date();
-  const today = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  return Math.round((parseDate(iso) - today) / 86400000);
+  const day = (s) => { const [y, m, d] = s.split("-").map(Number); return Date.UTC(y, m - 1, d); };
+  return Math.round((day(iso) - day(nyToday())) / 86400000);
 }
 function shortDate(iso) {
   return parseDate(iso).toLocaleDateString("en-US", { month: "long", day: "numeric" });
 }
 
-// The list is for one holiday season. After the season ends, only programs that are open all year stay open.
+// The list is for one holiday season. After the season ends (in New York), only programs that are open all year stay open.
 function seasonOver() {
   return !!SITE.seasonEnds && daysUntil(SITE.seasonEnds) < 0;
 }
@@ -2893,26 +2907,32 @@ function badgeFor(p) {
     return { text: "Deadline passed" + (last ? ": " + shortDate(last) : ""), cls: "note" };
   }
   if (s === "waitlist") return { text: "Full for this year", cls: "note" };
-  if (s === "confirm") return { text: "Confirm details first", cls: "note" };
-  const next = nextDeadline(p);
-  if (next) {
-    const n = daysUntil(next);
-    // Two labels: "Must arrive by" when the gift has to be there by the date, and "Closes on" when you can still
-    // order, ship, or give on the date itself. The date always comes last, so dates are still easy to compare down the page.
-    const base = (p.mustArrive ? "Must arrive by " : "Closes on ") + shortDate(next);
-    if (n === 0) return { text: base, cls: "urgent", soon: "Today" };
-    if (n === 1) return { text: base, cls: "urgent", soon: "Tomorrow" };
-    if (n <= 7) return { text: base, cls: "urgent" };   // red in the last week, with no extra words
-    return { text: base, cls: "" };
-  }
-  return { text: p.openLabel || (p.yearRound ? "Open all year" : "Open now"), cls: "" };
+  // A program with something to confirm keeps that warning, and still shows its next deadline beside it
+  if (s === "confirm") return { text: "Confirm details first", cls: "note", next: deadlineBadge(p) };
+  return deadlineBadge(p) || { text: p.openLabel || (p.yearRound ? "Open all year" : "Open now"), cls: "" };
 }
-// The deadline label ("Today" or "Tomorrow" when it is that close), then where the gifts go. The hidden full stop makes
-// a screen reader say them as two separate items. Everything that draws the badges row uses this, so the
-// "where your gift goes" chip is never lost when the row is redrawn. A program with no areas shows no chip.
+// The label for the next deadline still ahead on a card, or null when it has none
+function deadlineBadge(p) {
+  const next = nextDeadline(p);
+  if (!next) return null;
+  const n = daysUntil(next);
+  // Two labels: "Must arrive by" when the gift has to be there by the date, and "Closes on" when you can still
+  // order, ship, or give on the date itself. The date always comes last, so dates are still easy to compare down the page.
+  const base = (p.mustArrive ? "Must arrive by " : "Closes on ") + shortDate(next);
+  if (n === 0) return { text: base, cls: "urgent", soon: "Today" };
+  if (n === 1) return { text: base, cls: "urgent", soon: "Tomorrow" };
+  if (n <= 7) return { text: base, cls: "urgent" };   // red in the last week, with no extra words
+  return { text: base, cls: "" };
+}
+// The label ("Today" or "Tomorrow" when the deadline is that close), the deadline after "Confirm details first",
+// then where the gifts go. The hidden full stops make a screen reader say them as separate items. Everything that
+// draws the badges row uses this, so the "where your gift goes" chip is never lost when the row is redrawn.
+// A program with no areas shows no chip.
 function badgeHTML(b, p) {
-  return '<span class="badge ' + b.cls + '">' + esc(b.text) + "</span>" +
-    (b.soon ? '<span class="soon">' + esc(b.soon) + "</span>" : "") +
+  const one = (x) => '<span class="badge ' + x.cls + '">' + esc(x.text) + "</span>" +
+    (x.soon ? '<span class="soon">' + esc(x.soon) + "</span>" : "");
+  return one(b) +
+    (b.next ? '<span class="sr-only">. </span>' + one(b.next) : "") +
     (p.areas.length ? '<span class="sr-only">. </span><span class="badge place">' + HEART +
       '<span class="sr-only">Where your gift goes: </span>' + esc(p.areas.map((a) => LABELS.areas[a]).join(", ")) + "</span>" : "");
 }
@@ -2948,9 +2968,10 @@ const ICON = {
   info:   svg('<circle cx="10" cy="10" r="7.3"/><path d="M10 9.4v4.4"/><path d="M10 6.5v.01"/>')
 };
 
-// Screen readers hear the organization after the button label, so buttons with the same words can be told apart
+// Screen readers hear the organization after the button label, so buttons with the same words can be told apart.
+// The full name goes in aria-label: hidden words inside the button would make the browser add a space before the comma.
 function srName(a) {
-  return a.srExtra ? '<span class="sr-only">, ' + esc(a.srExtra) + "</span>" : "";
+  return a.srExtra ? ' aria-label="' + esc(a.label + ", " + a.srExtra) + '"' : "";
 }
 
 // What a person needs if the email button does nothing, folded into one line under that button
@@ -3049,8 +3070,8 @@ function giveHTML(p) {
         if (ic) used.push(ic);
         const cls = filled ? "secondary" : "primary";
         filled = true;
-        return '<a class="btn ' + cls + '" data-program="' + esc(p.id) + '" href="' + esc(x.type === "email" ? mailto(x) : x.url) + '">' + (ic ? ICON[ic] : "") +
-          '<span class="btn-label">' + esc(x.label) + srName(x) + "</span></a>";
+        return '<a class="btn ' + cls + '" data-program="' + esc(p.id) + '" href="' + esc(x.type === "email" ? mailto(x) : x.url) + '"' + srName(x) + ">" + (ic ? ICON[ic] : "") +
+          '<span class="btn-label">' + esc(x.label) + "</span></a>";
       }).join("");
       // A way with a button shows only the button. A way with no button shows its name and its text.
       const detail = o.text
@@ -3081,7 +3102,7 @@ function glanceHTML(p) {
 }
 
 // Short text that changes when a card's label, or which of its ways have ended, changes
-function badgeSig(b) { return b.text + "|" + (b.soon || "") + "|" + b.cls; }
+function badgeSig(b) { return b.text + "|" + (b.soon || "") + "|" + b.cls + (b.next ? "|" + badgeSig(b.next) : ""); }
 function rowsSig(p) { return stateOf(p) + rowsOf(p).map((r) => (rowEnded(p, r) ? 1 : 0)).join(""); }
 
 // Labels depend on today's date. This redraws only what changed, so open sections and keyboard focus stay put.
@@ -3361,11 +3382,10 @@ document.addEventListener("keydown", (e) => {
 // If the browser restores the page after Back, make the list match the restored filters
 window.addEventListener("pageshow", update);
 // A page left open stays right: check once a minute, and when the tab is shown again, whether the date
-// or a closing time has changed anything.
+// in New York or a closing time has changed anything.
 let lastSig = "";
 function dateSig() {
-  const n = new Date();
-  return n.getFullYear() + "-" + n.getMonth() + "-" + n.getDate() + PROGRAMS.map((p) => stateOf(p)[1]).join("");
+  return nyToday() + PROGRAMS.map((p) => stateOf(p)[1]).join("");
 }
 function tick() {
   const k = dateSig();
