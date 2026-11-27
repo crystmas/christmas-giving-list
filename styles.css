@@ -135,20 +135,24 @@ a { color: var(--brand); text-underline-offset: 0.15em; }
   .tagline { font-size: 1rem; max-width: min(16.42em, calc(100% - 104px)); }
   .holiday-art { width: 96px; right: 14px; bottom: 14px; }
 }
-/* Just below the green band: a small row with the About link, the page heading and a short introduction.
-   Filters, Sort and the count follow right under them. */
-.intro { padding-bottom: 22px; }
-/* The small row just below the green band, on both pages: "About this project" on the list page,
-   "Back to the list" on the About page. */
+/* List page, just below the green band: the page heading, a short introduction, then the "About this project" link.
+   Filters, Sort and the count follow right under them. The heading starts 24px below the band (20px on phones). */
+.intro { padding-top: 24px; padding-bottom: 22px; }
+/* The small row just below the green band on the About page, with "Back to the list" */
 .topline { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 20px; padding-top: 4px; }
 /* The link keeps its 44px tap height */
 .topline .page-link { font-size: 0.9375rem; }
-/* The page heading on both pages: "Find your way to give in New York City" and "About this project" */
+/* The page heading on both pages: "Give a holiday gift to someone in New York City" and "About this project" */
 .intro-title { font-family: var(--font-display); font-weight: 700; font-size: 2rem; line-height: 1.1; color: var(--ink); margin: 4px 0 0; }
+/* On the list page the space above the heading comes from .intro */
+.intro .intro-title { margin-top: 0; }
 /* A short introduction under the heading on the list page, no wider than 60 characters (41.04em) */
 .intro-lead { font-size: 1.0625rem; line-height: 1.5; color: var(--ink); max-width: 41.04em; margin: 8px 0 0; text-wrap: pretty; }
+/* "About this project" under the introduction. It keeps its 44px tap height; moving it up 4px leaves about 6px
+   between the introduction and the link's words. */
+.intro > .page-link { display: block; width: fit-content; margin-top: -4px; font-size: 0.9375rem; }
 @media (max-width: 699px) {
-  .intro { padding-bottom: 12px; }
+  .intro { padding-top: 20px; padding-bottom: 12px; }
   .intro-title { font-size: 1.375rem; }
   .intro-lead { font-size: 1rem; margin-top: 6px; }
 }
@@ -182,6 +186,8 @@ a { color: var(--brand); text-underline-offset: 0.15em; }
 .filters .check input { width: 22px; height: 22px; margin: 0; }
 /* A short hint under one option ("Anywhere in NYC"). It lines up with the option's words: checkbox width plus the 10px gap. */
 .check-hint { font-size: 0.875rem; color: var(--ink-soft); line-height: 1.4; margin: -6px 0 6px; padding-left: 32px; }
+/* A hint for a whole group ("How to give"). It sits right under the group's name and lines up with it, not with the options. */
+.check-hint.group-hint { padding-left: 0; margin: 0 0 4px; }
 .filters-body > label.check { padding: 8px 14px; margin: 0; border-radius: 0; }
 /* "Reset filters" as an underlined text button: in the filter panel (#clear) and in the line above the list (#clear3) */
 #clear, #clear3 { border-color: transparent; text-decoration: underline; padding: 6px 0; min-height: 44px; }
@@ -471,7 +477,7 @@ details.feedback > summary { cursor: pointer; font-weight: 600; color: var(--bra
 }
 
 /* About page: one column, no wider than 60 characters (41.04em). The link row and the heading use .topline and
-   .intro-title, so they sit at the same height as on the list page. The parts after the first section are 28px apart,
+   .intro-title. The parts after the first section are 28px apart,
    with 36px after the first section itself. */
 .about-page { display: grid; grid-template-columns: minmax(0, 41.04em); padding-bottom: 48px; }
 .about-page > section ~ * { margin-top: 28px; }
