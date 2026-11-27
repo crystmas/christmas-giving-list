@@ -6,7 +6,7 @@ A one-page website that lists programs where you can give a gift at Christmas, t
 
 ## About
 
-- Some programs on the list help people anywhere in the United States. Others help people in New York City.
+- Every program on the list helps people in New York City.
 - It is not a complete list of every program.
 - The site is independent. It is not part of any organization on the list.
 - Each listing links to the page its information came from. Dates and openings change, so confirm with the organization before you buy a gift.
@@ -19,7 +19,7 @@ https://docs.google.com/forms/d/e/1FAIpQLSfdwLZCQvjUqEZg6rhdhUFrDyp4WQBQvWkwpQ0r
 
 ## How it is built
 
-- `index.html` holds the list and its script.
+- `index.html` holds the list and its script. The PROGRAM FIELDS note at the top of the script lists every field a program can have and the values each one can take.
 - `about.html` is the About page.
 - `styles.css` is shared by both pages.
 - `fonts/` holds the self-hosted fonts.
