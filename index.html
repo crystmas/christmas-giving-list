@@ -177,6 +177,9 @@
         ways:    how you give. Use one or more of "ship" (buy from the organization's wish list and the store ships it for you),
                  "drop" (drop off a gift), "mail" (get a gift yourself and mail it), "money" (give money).
                  The first one is the way the main button uses.
+        oneWish: true when you can grant one person's wish: you pick or get matched with one person and give what they
+                 asked for. It puts the program under "Grant one person's wish" in the "How to give" filter. It doesn't
+                 add a button.
         status:  "open", "confirm" (something is unconfirmed), "waitlist" (full)
         statusNote: a short warning shown on the card after the words "Check first."
         deadline: "YYYY-MM-DD" or null. Past deadlines are marked on their own.
@@ -236,6 +239,7 @@ const PROGRAMS = [
       "nyc"
     ],
     "status": "open",
+    "oneWish": true,
     "summary": "Fund a wish for a young New Yorker who has left foster care, or for their child.",
     "about": "City Living NY is a New York City nonprofit that helps young people move from foster care to living on their own, including finding and keeping housing. One Simple Wish, a national nonprofit founded in 2008, hosts its wishes.",
     "cost": "Wishes ranged from $46 to $388 when checked. Some accept partial donations.",
@@ -275,6 +279,7 @@ const PROGRAMS = [
     "org": "Services for the UnderServed (S:US)",
     "areas": [],
     "status": "open",
+    "oneWish": true,
     "summary": "Fulfill a holiday wish for someone S:US supports, including adults with disabilities, veterans, and children living in shelters.",
     "about": "Services for the UnderServed (S:US) is a New York nonprofit founded in 1978. It provides housing, employment support, and mental health and substance use treatment to tens of thousands of people and their families across New York City and Long Island each year.",
     "cost": "About $15 to $30 for each gift.",
@@ -429,6 +434,7 @@ const PROGRAMS = [
       "nyc"
     ],
     "status": "waitlist",
+    "oneWish": true,
     "statusNote": "Sign-up is closed for 2026. You can ask to be told if a wish opens up.",
     "summary": "If a wish opens up, get matched with a letter from a NYC child or teen, then send them the gift they asked for.",
     "about": "New York Cares is New York City's largest volunteer organization, founded in 1987. It runs volunteer projects in education, hunger and homelessness relief, health for older adults, and parks.",
@@ -1288,6 +1294,7 @@ const PROGRAMS = [
       "staten-island"
     ],
     "status": "open",
+    "oneWish": true,
     "summary": "Grant a holiday wish for a child, teen, adult, or older adult in Brooklyn, Far Rockaway, or Staten Island.",
     "about": "MDLAYAFS is a nonprofit based on Staten Island. It runs programs for youth, families, older adults, people with disabilities, and people living with HIV in New York City.",
     "cost": "About $50 per gift. Gift cards and money are also welcome.",
@@ -1381,6 +1388,7 @@ const PROGRAMS = [
       "brooklyn"
     ],
     "status": "open",
+    "oneWish": true,
     "summary": "Shop a Brooklyn child's wish list, or buy clothing, winter gear, and toys for families Brooklyn Community Services supports.",
     "about": "Fit4Dance is a dance fitness studio in Brooklyn. Brooklyn Community Services, founded in 1866, is one of New York City's oldest nonprofit social service agencies. The families in this project take part in its Preventative Care Program.",
     "cost": "You choose.",
@@ -3173,13 +3181,21 @@ function cardEl(p) {
 }
 
 // A short hint under one filter option. A screen reader reads it with that option's checkbox.
-const OPTION_HINTS = { areas: { nyc: "Your gift could go to someone in any borough." } };
+const OPTION_HINTS = {
+  areas: { nyc: "Your gift could go to someone in any borough." },
+  ways: { wish: "You pick or get matched with one person and give what they asked for." }
+};
+// The "How to give" choices. "Grant one person's wish" comes first. It comes from a program's oneWish, not from its ways,
+// so it adds no button or row to any card. LABELS.ways stays as it is, because the cards use it for their rows.
+const FILTER_WAYS = Object.assign({ wish: "Grant one person's wish" }, LABELS.ways);
+// What a program offers for one filter group: its areas, or its ways plus "wish" when it has oneWish
+function valuesOf(p, key) { return key === "ways" && p.oneWish ? ["wish"].concat(p.ways) : p[key]; }
 
 // Build filter checkboxes with counts
 function buildGroup(fieldsetId, key, labels) {
   const fs = $(fieldsetId);
   Object.keys(labels).forEach((value) => {
-    const n = PROGRAMS.filter((p) => p[key].includes(value)).length;
+    const n = PROGRAMS.filter((p) => valuesOf(p, key).includes(value)).length;
     const id = "f-" + key + "-" + value;
     const hint = (OPTION_HINTS[key] || {})[value];
     const label = document.createElement("label");
@@ -3199,7 +3215,7 @@ function buildGroup(fieldsetId, key, labels) {
   });
 }
 buildGroup("f-area", "areas", LABELS.areas);
-buildGroup("f-way", "ways", LABELS.ways);
+buildGroup("f-way", "ways", FILTER_WAYS);
 
 // Build cards once, then show, hide, and reorder them
 const cards = new Map();
@@ -3212,7 +3228,7 @@ function checked(name) {
 function matches(p, f) {
   if (f.hideClosed && !isActionable(p)) return false;
   if (f.areas.length && !f.areas.some((v) => p.areas.includes(v))) return false;
-  if (f.ways.length && !f.ways.some((v) => p.ways.includes(v))) return false;
+  if (f.ways.length && !f.ways.some((v) => valuesOf(p, "ways").includes(v))) return false;
   return true;
 }
 function sorter(mode) {
@@ -3294,7 +3310,7 @@ function update() {
 
   // Line above the list that names the filters that are on. When nothing matches, it stays hidden:
   // the "No programs match" box has its own "Reset filters". The styles also hide it while the filter panel is open.
-  const names = f.areas.map((v) => LABELS.areas[v]).concat(f.ways.map((v) => LABELS.ways[v]));
+  const names = f.areas.map((v) => LABELS.areas[v]).concat(f.ways.map((v) => FILTER_WAYS[v]));
   $("applied").hidden = (names.length === 0 && !showAll) || shown === 0;
   $("appliedText").textContent = [names.length ? "Filters on: " + names.join(", ") + "." : "",
     showAll ? "Full and closed programs are showing." : ""].filter(Boolean).join(" ");
