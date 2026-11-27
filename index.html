@@ -21,7 +21,7 @@
 <!-- The heading font and the main text font start loading right away -->
 <link rel="preload" href="fonts/lora-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=2026-11-27-11">
+<link rel="stylesheet" href="styles.css?v=2026-11-27-12">
 <!-- The folded feedback form needs JavaScript. Without it, only the plain link to the form shows. -->
 <noscript><style>#feedback { display: none; }</style></noscript>
 </head>
@@ -88,9 +88,8 @@
         <button type="button" class="sheet-close" id="closeFilters">Close</button>
       </div>
 
-      <fieldset id="f-area" aria-describedby="f-area-hint">
+      <fieldset id="f-area">
         <legend>Where your gift goes</legend>
-        <p class="hint" id="f-area-hint">"Anywhere in NYC" means your gift could go to someone in any borough.</p>
       </fieldset>
 
       <fieldset id="f-way">
@@ -194,8 +193,11 @@
                  filter's words ("Buy from their wish list", "Drop off a gift", "Mail a gift yourself", "Give money").
                  Use "Mail or drop off a gift" when the same steps end in either. Number only steps that happen in order.
                  When the giver picks one option, use { text: "… one of these ways:", choices: [ … ] }.
-        Buttons: the first button on a card is solid, the rest are outlined. A button gets a small picture only when the
-                 picture shows what the button does. To choose it by hand, add "icon" to "action" or to a "link"
+        Buttons: a card shows its ways in this order, keeping the data order within each group: the row with the main
+                 button ("main", or the first row), other rows with a button, "money" rows with a button, then rows with
+                 no button (including ways that have ended). The first button shown is solid, the rest are outlined. Any
+                 "If your email app does not open" help comes after the last button. A button gets a small picture only
+                 when the picture shows what the button does. To choose it by hand, add "icon" to "action" or to a "link"
                  (ship, money, mail, drop, signup, info, or "" for none).
         rows:    only for a card whose ways all start in the same place. One or more { icon, name, text } shown in place of
                  the usual one row for each way. "ways" still decides which filters find the card. A row can also have
@@ -2705,7 +2707,10 @@ function iconFor(btn, row) {
 }
 
 // Every way to give is one list item: its buttons, or its name and a short detail when it has no button.
-// The first button on the card is the solid one. Every other button is outlined.
+// The ways are shown in this order, keeping the data order within each group: the row with the card's main button,
+// other rows with a button, "money" rows with a button, then rows with no button (including ways that have ended).
+// The first button shown is the solid one. Every other button is outlined. Any "If your email app does not open"
+// help comes after the last button and before the rows with no button, so nothing sits between two buttons.
 // The styles decide the layout (see "Ways to give" in styles.css).
 function giveHTML(p) {
   const a = p.action;
@@ -2715,43 +2720,57 @@ function giveHTML(p) {
   const cardOpen = st !== "closed" && st !== "ended";
   // The card's main button sits on the row marked "main", or on the first row
   const mainAt = Math.max(0, rows.findIndex((r) => r.main));
+  // Sort the rows into the four groups first, then draw them in that order
+  const groups = [[], [], [], []];
+  rows.forEach((o, i) => {
+    const ended = cardOpen && rowEnded(p, o);
+    const btns = [];
+    if (!ended) {
+      if (i === mainAt) {
+        btns.push(a);
+        if (p.second) btns.push({ type: "link", label: p.second.label, url: p.second.url, srExtra: p.second.label.includes(p.org.split(" ")[0]) ? "" : p.org });
+      } else if (o.link) {
+        btns.push(Object.assign({ type: "link" }, o.link));
+      }
+      if (o.map) btns.push({ type: "link", icon: "drop", label: "Get directions to drop-off", url: mapLink(o.map), srExtra: "at " + o.map });
+    }
+    const g = !btns.length ? 3 : i === mainAt ? 0 : o.icon === "money" ? 2 : 1;
+    groups[g].push({ o, ended, btns });
+  });
   let filled = false;
+  const helps = [];
   // One heading for every card, whether it has one way to give or several
   // The heading is for screen readers. On screen, the buttons speak for themselves.
   let html = '<div><h4 class="sr-only">How to give</h4><ul class="give-list">';
-  rows.forEach((o, i) => {
-    if (cardOpen && rowEnded(p, o)) {
-      html += '<li class="give"><div class="give-text"><p class="give-name">' + esc(o.name) + "</p>" +
-        '<p class="give-detail">' + boldDates(esc("This way to give ended " + shortDate(rowEnd(p, o)) + ".")) + "</p></div></li>";
-      return;
-    }
-    const btns = [];
-    if (i === mainAt) {
-      btns.push(a);
-      if (p.second) btns.push({ type: "link", label: p.second.label, url: p.second.url, srExtra: p.second.label.includes(p.org.split(" ")[0]) ? "" : p.org });
-    } else if (o.link) {
-      btns.push(Object.assign({ type: "link" }, o.link));
-    }
-    if (o.map) btns.push({ type: "link", icon: "drop", label: "Get directions to drop-off", url: mapLink(o.map), srExtra: "at " + o.map });
-    const email = btns.find((x) => x.type === "email");
-    const used = [];
-    const act = btns.map((x) => {
-      let ic = iconFor(x, o);
-      if (used.includes(ic)) ic = "";   // never the same picture twice in one row
-      if (ic) used.push(ic);
-      const cls = filled ? "secondary" : "primary";
-      filled = true;
-      return '<a class="btn ' + cls + '" data-program="' + esc(p.id) + '" href="' + esc(x.type === "email" ? mailto(x) : x.url) + '">' + (ic ? ICON[ic] : "") +
-        '<span class="btn-label">' + esc(x.label) + srName(x) + "</span></a>";
-    }).join("");
-    // A way with a button shows only the button. A way with no button shows its name and its text.
-    const detail = o.text
-      ? '<p class="give-detail">' + (o.signup ? '<strong class="signup-first">Sign up first.</strong> ' : "") +
-          boldDates(boldAddress(esc(o.text), email ? email.email : "")) + "</p>"
-      : "";
-    html += '<li class="give' + (act ? " has-act" : "") + '">' +
-      (act ? '<div class="give-act">' + act + "</div>" : '<div class="give-text"><p class="give-name">' + esc(o.name) + "</p>" + detail + "</div>") +
-      (email ? emailHelpHTML(email, p.id) : "") + "</li>";
+  groups.forEach((group, g) => {
+    // The email help goes after the last button, before the rows with no button
+    if (g === 3) helps.forEach((email) => { html += '<li class="give give-help">' + emailHelpHTML(email, p.id) + "</li>"; });
+    group.forEach(({ o, ended, btns }) => {
+      if (ended) {
+        html += '<li class="give"><div class="give-text"><p class="give-name">' + esc(o.name) + "</p>" +
+          '<p class="give-detail">' + boldDates(esc("This way to give ended " + shortDate(rowEnd(p, o)) + ".")) + "</p></div></li>";
+        return;
+      }
+      const email = btns.find((x) => x.type === "email");
+      if (email) helps.push(email);
+      const used = [];
+      const act = btns.map((x) => {
+        let ic = iconFor(x, o);
+        if (used.includes(ic)) ic = "";   // never the same picture twice in one row
+        if (ic) used.push(ic);
+        const cls = filled ? "secondary" : "primary";
+        filled = true;
+        return '<a class="btn ' + cls + '" data-program="' + esc(p.id) + '" href="' + esc(x.type === "email" ? mailto(x) : x.url) + '">' + (ic ? ICON[ic] : "") +
+          '<span class="btn-label">' + esc(x.label) + srName(x) + "</span></a>";
+      }).join("");
+      // A way with a button shows only the button. A way with no button shows its name and its text.
+      const detail = o.text
+        ? '<p class="give-detail">' + (o.signup ? '<strong class="signup-first">Sign up first.</strong> ' : "") +
+            boldDates(boldAddress(esc(o.text), email ? email.email : "")) + "</p>"
+        : "";
+      html += '<li class="give' + (act ? " has-act" : "") + '">' +
+        (act ? '<div class="give-act">' + act + "</div>" : '<div class="give-text"><p class="give-name">' + esc(o.name) + "</p>" + detail + "</div>") + "</li>";
+    });
   });
   return html + "</ul></div>";
 }
@@ -2873,19 +2892,30 @@ function cardEl(p) {
   return li;
 }
 
+// A short hint under one filter option. A screen reader reads it with that option's checkbox.
+const OPTION_HINTS = { areas: { nyc: "Your gift could go to someone in any borough." } };
+
 // Build filter checkboxes with counts
 function buildGroup(fieldsetId, key, labels) {
   const fs = $(fieldsetId);
   Object.keys(labels).forEach((value) => {
     const n = PROGRAMS.filter((p) => p[key].includes(value)).length;
     const id = "f-" + key + "-" + value;
+    const hint = (OPTION_HINTS[key] || {})[value];
     const label = document.createElement("label");
     label.className = "check";
     label.htmlFor = id;
     label.innerHTML =
-      '<input type="checkbox" id="' + id + '" name="' + key + '" value="' + value + '">' +
+      '<input type="checkbox" id="' + id + '" name="' + key + '" value="' + value + '"' + (hint ? ' aria-describedby="' + id + '-hint"' : "") + ">" +
       "<span>" + esc(labels[value]) + ' <span class="count" data-key="' + key + '" data-value="' + value + '">(' + n + ")</span></span>";
     fs.appendChild(label);
+    if (hint) {
+      const p = document.createElement("p");
+      p.className = "check-hint";
+      p.id = id + "-hint";
+      p.textContent = hint;
+      fs.appendChild(p);
+    }
   });
 }
 buildGroup("f-area", "areas", LABELS.areas);
