@@ -21,7 +21,7 @@
 <!-- The heading font and the main text font start loading right away -->
 <link rel="preload" href="fonts/lora-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=2026-11-27-3">
+<link rel="stylesheet" href="styles.css?v=2026-11-27-4">
 <!-- The folded feedback form needs JavaScript. Without it, only the plain link to the form shows. -->
 <noscript><style>#feedback { display: none; }</style></noscript>
 </head>
@@ -76,7 +76,7 @@
   </div>
   <div class="wrap page" id="app" hidden>
   <details class="filters" id="filterPanel" open>
-    <summary id="filterSummary"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 5h7M15 5h1M2 13h1M9 13h7"/><circle cx="12" cy="5" r="2.2"/><circle cx="6" cy="13" r="2.2"/></svg><span class="fs-label">Filters</span></summary>
+    <summary id="filterSummary"><svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 5h7M15 5h1M2 13h1M9 13h7"/><circle cx="12" cy="5" r="2.2"/><circle cx="6" cy="13" r="2.2"/></svg><span>Filters</span></summary>
     <form class="filters-body" id="filters" aria-label="Filter the list of programs">
       <div class="sheet-head">
         <div>
@@ -150,14 +150,14 @@
     <!-- The date is filled in by the script from the newest "checked" date. The date written here only shows if JavaScript is off. -->
     <p class="footnote">Every listing was checked on <span class="newest-checked">November 25, 2026</span>. Dates and openings change, so confirm with the organization before you buy. This website is not affiliated with any listed organization. This site counts visits and button clicks without cookies or personal data.</p>
     <a class="page-link" href="about.html">About this project</a>
-    <p id="contact" hidden></p>
   </div>
 </footer>
 
 <script>
 /* =====================================================================
-   HOW TO EDIT THIS SITE
+   PROGRAM FIELDS
    ---------------------------------------------------------------------
+   For when to change the "Updated" date, the "checked" dates and the styles version, see "How to edit" in README.md.
    1. Everything visitors see in the list comes from PROGRAMS below.
    2. To add a program, copy one block from { to }, paste it, and change
       the text. Keep the commas between blocks.
@@ -167,6 +167,7 @@
                  "drop" (drop off a gift), "mail" (get a gift yourself and mail it), "money" (give money).
                  The first one is the way the main button uses.
         status:  "open", "confirm" (something is unconfirmed), "waitlist" (full)
+        statusNote: a short warning shown on the card after the words "Check first."
         deadline: "YYYY-MM-DD" or null. Past deadlines are marked on their own.
         closesAt: only when a program closes at a set time, such as "2026-12-12T20:00:00-05:00" (8 pm Eastern).
         mustArrive: true when the gift must be there by the date, including drop-off. Leave it out when you can still
@@ -174,6 +175,7 @@
         ends:    on one row or option, "YYYY-MM-DD", when only that way to give has a deadline. The card stays open
                  while any other way is still open.
         openLabel: words for the label when there is no deadline, such as "Dates vary by area". Leave it out to show "Open now".
+        yearRound: true for a program that is open all year. It stays open after SITE.seasonEnds.
         summary: one or two short sentences: what the gift is and who gets it.
         about:   background on the organization. Shown inside "Steps and details", not on the card.
         stepGroups: every program has stepGroups, a list of { title, steps }. Use one group per way to give, titled with the
@@ -183,27 +185,25 @@
         Buttons: the first button on a card is solid, the rest are outlined. A button gets a small picture only when the
                  picture shows what the button does. To choose it by hand, add "icon" to "action" or to a "link"
                  (ship, money, mail, drop, signup, info, or "" for none).
-        rows:    a row can also have "main": true (the card's main button sits on this row, not the first one)
-                 and "signup": true (the row's text starts with "Sign up first.").
         rows:    only for a card whose ways all start in the same place. One or more { icon, name, text } shown in place of
-                 the usual one row for each way. "ways" still decides which filters find the card.
-        (an option can also have map: "street address", which adds a "Get directions to drop-off" link)
+                 the usual one row for each way. "ways" still decides which filters find the card. A row can also have
+                 "main": true (the card's main button sits on this row, not the first one) and "signup": true (the row's
+                 text starts with "Sign up first.").
         options: one entry for each way to give, in the same order as "ways". Each can have text (a short detail such as an
                  address) and, for the second and third way, a link { label, url }. The link can also be an email button,
-                 written like an email action: { type: "email", label, email, contactName, subject, body }.
+                 written like an email action: { type: "email", label, email, subject, body }. An option can also have
+                 map: "street address", which adds a "Get directions to drop-off" link.
         action:  { type: "link", label, url }
-                 { type: "email", label, email, contactName, subject, body }
+                 { type: "email", label, email, subject, body }
                  Add srExtra: "Organization name" when another card has a button with the same words.
         signup:  { needed: true or false, text }. The card shows a "Sign-up" row only when needed is true.
                  Use needed: true only when people must do something before they can give.
         second:  { label, url }. A second, outlined button next to the main one.
-   4. Set SITE.contactEmail if you want a "report a problem" line.
-   5. Each year, set SITE.season and SITE.seasonEnds. After that day, every program that is not open all year
+   4. Each year, set SITE.season and SITE.seasonEnds. After that day, every program that is not open all year
       shows as ended.
    ===================================================================== */
 
 const SITE = {
-  contactEmail: "",  // example: "hello@yoursite.org". Leave empty to hide the contact line.
   season: "2026",            // the holiday season this list is for
   seasonEnds: "2027-01-15"   // after this day, every program that is not open all year shows as ended
 };
@@ -225,9 +225,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Choose a letter to Santa from a child or family and send a gift they asked for.",
     "about": "USPS Operation Santa is a US Postal Service program, started in 1912. It lets people adopt letters sent to Santa and send the gifts. It is not a charity.",
-    "whoText": "Children and families who wrote to Santa",
     "cost": "You choose. You also pay for shipping.",
-    "costMin": null,
     "deadline": "2026-12-12",
     "stepGroups": [
       {
@@ -293,9 +291,7 @@ const PROGRAMS = [
     "yearRound": true,
     "summary": "Fund a wish, like art supplies or a bike, for a child or young adult affected by foster care or a crisis.",
     "about": "One Simple Wish is a nonprofit, founded in 2008. It grants wishes for children and young adults affected by foster care and crisis, working with agencies across the US.",
-    "whoText": "Children and young adults affected by foster care or crisis",
     "cost": "Full wishes range from under $25 to over $200. Some accept partial donations.",
-    "costMin": null,
     "deadline": null,
     "stepGroups": [
       {
@@ -335,9 +331,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Pick a child's Angel Tree tag or shop your local Walmart registry to give toys or clothes to kids in your community.",
     "about": "The Salvation Army is a Christian church that also runs social services, active in the US since 1880. It started Angel Tree in 1979 to give Christmas gifts to children in need.",
-    "whoText": "Children in your own community",
     "cost": "You choose from the wish list.",
-    "costMin": null,
     "deadline": null,
     "stepGroups": [
       {
@@ -395,9 +389,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Pick a gift an older adult in your area asked for, like a warm blanket.",
     "about": "Home Instead is a company that provides in-home care for older adults, founded in 1994 in Omaha, Nebraska. Its local offices collect and deliver the gifts.",
-    "whoText": "Older adults who may be alone or on a fixed income",
     "cost": "You choose. Requests are often basics like blankets.",
-    "costMin": null,
     "deadline": null,
     "stepGroups": [
       {
@@ -455,9 +447,7 @@ const PROGRAMS = [
     "yearRound": true,
     "summary": "Chip in toward an older adult's wish, from hearing aids to a trip somewhere they've always wanted to visit.",
     "about": "Twilight Wish Foundation is a nonprofit founded in 2003 in Bucks County, Pennsylvania. It grants wishes for adults 65 and older who have limited incomes or live in long-term care facilities.",
-    "whoText": "Low-income older adults",
     "cost": "You choose the amount.",
-    "costMin": null,
     "deadline": null,
     "stepGroups": [
       {
@@ -503,16 +493,13 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Fulfill a holiday wish for someone S:US supports, including adults with disabilities, veterans, and children living in shelters.",
     "about": "Services for the UnderServed (S:US) is a New York nonprofit founded in 1978. It provides housing, employment support, and mental health and substance use treatment to tens of thousands of people and their families across New York City and Long Island each year.",
-    "whoText": "Adults with intellectual or developmental disabilities, seniors with disabilities, children living in shelters, and veterans",
     "cost": "About $15 to $30 for each gift.",
-    "costMin": 40,
     "deadline": null,
     "mustArrive": true,
     "action": {
       "type": "email",
       "label": "Email Siona for a wish",
       "email": "sschmid@sus.org",
-      "contactName": "Siona Schmid",
       "subject": "Holiday Gift Project 2026 wish request",
       "body": "Hello Siona,\n\nI would like to take part in the S:US Holiday Gift Project.\n\nI can buy gifts for [number] people. Please send me their wishes and tell me how to deliver the gifts.\n\nThank you,\n[Your name]\n[Your phone number]",
       "srExtra": "Services for the UnderServed (S:US)"
@@ -599,9 +586,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Give a book, game, toy, or gift card to a survivor of gender-based violence or one of their children.",
     "about": "Sanctuary for Families is a New York City nonprofit, founded in 1984. It helps survivors of domestic violence, sex trafficking, and other gender-based violence with shelter, counseling, legal help, and job training.",
-    "whoText": "Adults and children who are survivors of abuse",
     "cost": "About $25 to $30 per gift.",
-    "costMin": 25,
     "deadline": "2026-12-01",
     "mustArrive": true,
     "stepGroups": [
@@ -645,7 +630,6 @@ const PROGRAMS = [
           "type": "email",
           "label": "Email to set up a drop-off",
           "email": "elobue@sffny.org",
-          "contactName": "Emily Lo Bue",
           "subject": "Winter Wishes gift drop-off",
           "body": "Hello Emily,\n\nI would like to drop off new gifts for Sanctuary's Winter Wishes gift drive. Could we set up a time for me to bring them by December 1?\n\nThank you,\n[Your name]\n[Your phone number]"
         },
@@ -664,9 +648,7 @@ const PROGRAMS = [
     "statusNote": "Sign-up is closed for 2026. You can ask to be told if a wish opens up.",
     "summary": "If a wish opens up, get matched with a letter from a NYC child or teen, then send them the gift they asked for.",
     "about": "New York Cares is New York City's largest volunteer organization, founded in 1987. It runs volunteer projects in education, hunger and homelessness relief, health for older adults, and parks.",
-    "whoText": "New York City children and teens",
     "cost": "Up to $40 per letter, plus postage.",
-    "costMin": 40,
     "deadline": "2026-12-04",
     "mustArrive": true,
     "stepGroups": [
@@ -684,7 +666,6 @@ const PROGRAMS = [
       "type": "email",
       "label": "Email for wish updates",
       "email": "winter.wishes@newyorkcares.org",
-      "contactName": "the Winter Wishes team",
       "subject": "Winter Wishes 2026 notification",
       "body": "Hello,\n\nI missed registration for Winter Wishes this year. Please let me know if any wishes become available.\n\nThank you,\n[Your name]",
       "srExtra": "New York Cares"
@@ -716,9 +697,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Give a holiday gift to a child in foster care, an adult with a developmental disability, or a family facing financial or housing hardship.",
     "about": "The New York Foundling is a New York City nonprofit, founded in 1869. It runs child welfare, education, health, and disability programs for children, adults, and families.",
-    "whoText": "Children in foster care, adults with developmental disabilities, and families facing money or housing trouble",
     "cost": "About $15 to $20 per gift on Amazon. You can also donate any amount.",
-    "costMin": null,
     "deadline": "2026-12-08",
     "stepGroups": [
       {
@@ -788,9 +767,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Give a holiday gift from Henry Street's registry to someone in its programs, from kids in afterschool to older adults and families staying in shelters.",
     "about": "Henry Street Settlement is a nonprofit on Manhattan's Lower East Side, founded in 1893. It offers social services, health care, and arts programs to New Yorkers of all ages.",
-    "whoText": "More than 4,000 people of all ages in Henry Street programs, including children in afterschool programs and families living in shelter",
     "cost": "You choose from the wish list.",
-    "costMin": null,
     "deadline": "2026-12-15",
     "stepGroups": [
       {
@@ -832,9 +809,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Choose a shelter, supportive housing site, or afterschool program and send a gift from its wish list.",
     "about": "CAMBA is a Brooklyn nonprofit, founded in 1977. It runs shelters, family support, and youth programs across New York City.",
-    "whoText": "Children and families at CAMBA shelters, supportive housing, and afterschool programs",
     "cost": "You choose from the wish list.",
-    "costMin": null,
     "deadline": "2026-12-18",
     "stepGroups": [
       {
@@ -893,9 +868,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Pick a toy from the wish list, and the Coalition will get it to a child living in a New York City shelter.",
     "about": "Coalition for the Homeless is a New York City nonprofit, founded in 1981. It gives food, housing help, and job training to people who are homeless, and it advocates for their rights.",
-    "whoText": "Children living in New York City homeless shelters",
     "cost": "You choose the toy or the amount.",
-    "costMin": null,
     "deadline": null,
     "stepGroups": [
       {
@@ -955,9 +928,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Pick a holiday gift from the BronxWorks wish list for a child in one of its Bronx programs.",
     "about": "BronxWorks is a Bronx nonprofit and settlement house, founded in 1972. It helps Bronx residents of all ages, from toddlers to older adults, including people experiencing homelessness.",
-    "whoText": "Children in BronxWorks programs in the Bronx",
     "cost": "You choose from the wish list.",
-    "costMin": null,
     "deadline": null,
     "stepGroups": [
       {
@@ -998,9 +969,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Choose a child's Angel Tag and buy a gift they asked for on their Christmas wish list.",
     "about": "The Salvation Army is a Christian church that also runs social services, active in the US since 1880. It started Angel Tree in 1979 to give Christmas gifts to children in need. Its Greater New York branch runs this one.",
-    "whoText": "Children in the Greater New York area",
     "cost": "$25 minimum per child. $25 to $50 is suggested.",
-    "costMin": 25,
     "deadline": "2026-12-14",
     "mustArrive": true,
     "stepGroups": [
@@ -1050,9 +1019,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Help buy a holiday gift for an LGBTQ+ teen or young adult experiencing homelessness or at risk of losing housing.",
     "about": "New Alternatives is a New York City nonprofit, founded in 2008. It helps LGBTQ+ young people experiencing homelessness with housing, health, school, and jobs.",
-    "whoText": "LGBTQ+ youth and young adults in need",
     "cost": "Any amount.",
-    "costMin": null,
     "deadline": null,
     "stepGroups": [
       {
@@ -1093,9 +1060,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Give a toy to a child in East Harlem or help Union Settlement buy gifts for local families.",
     "about": "Union Settlement is an East Harlem nonprofit, founded in 1895. It offers early childhood education, youth programs, services for older adults, and mental health care to East Harlem residents.",
-    "whoText": "Children and families in East Harlem",
     "cost": "You choose the toy or the amount.",
-    "costMin": null,
     "deadline": "2026-12-08",
     "stepGroups": [
       {
@@ -1164,9 +1129,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Pick a toy from the wish list for children staying in Brooklyn shelters.",
     "about": "The Atlantic Avenue Local Development Corporation is a Brooklyn nonprofit started by local merchants and community activists. It became a nonprofit in 1986 and supports businesses, events, and historic buildings on Atlantic Avenue. Its toy drive gives toys to children and families in local homeless shelters.",
-    "whoText": "Children and families at local homeless shelters",
     "cost": "You choose the toy or the amount.",
-    "costMin": null,
     "deadline": "2026-12-10",
     "stepGroups": [
       {
@@ -1223,9 +1186,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Drop off a new toy in Park Slope for a Brooklyn kid or teen ages 3 to 16.",
     "about": "CHiPS (Community Help in Park Slope) is a Brooklyn nonprofit founded in 1971. It serves meals, runs a food pantry, and provides temporary housing for pregnant women and mothers with young children.",
-    "whoText": "Children ages 3 to 16",
     "cost": "You choose the toy.",
-    "costMin": null,
     "deadline": "2026-12-11",
     "mustArrive": true,
     "stepGroups": [
@@ -1269,9 +1230,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Bring a new toy, game, book, or art supply for families in NYC shelters or temporary housing. Multilingual gifts are welcome.",
     "about": "The Whitney Museum of American Art is an art museum in Manhattan, founded in 1930. It runs this drive with the NYC Department of Homeless Services, which gives the gifts to families in shelters or temporary housing.",
-    "whoText": "Families in New York City shelters or temporary housing",
     "cost": "You choose the gift.",
-    "costMin": null,
     "deadline": "2026-12-17",
     "mustArrive": true,
     "stepGroups": [
@@ -1316,9 +1275,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Give a book or a new or gently used toy to a young child in New York City.",
     "about": "Little Essentials is a Brooklyn nonprofit, founded in 2011. It gives clothing, gear, and supplies to New York City families living in poverty who have children aged 5 and under.",
-    "whoText": "Young children in need in New York City",
     "cost": "You choose from the wish list.",
-    "costMin": null,
     "deadline": "2026-12-18",
     "stepGroups": [
       {
@@ -1387,9 +1344,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Give an unwrapped toy to a Staten Island child whose parent or caregiver requested a holiday gift.",
     "about": "Where to Turn is a Staten Island crisis relief nonprofit, started in 2001 to help families who lost loved ones on September 11. Chelsea Financial Services, a financial services firm, runs this drive with Where to Turn. The toys go to Staten Island children and families in need.",
-    "whoText": "Staten Island children and families in need",
     "cost": "You choose the toy.",
-    "costMin": null,
     "deadline": "2026-12-18",
     "mustArrive": true,
     "stepGroups": [
@@ -1445,9 +1400,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Send a holiday gift to a family staying at one of the six NYC shelters run by Homes for the Homeless.",
     "about": "Homes for the Homeless is a New York City nonprofit, founded in 1986. It runs six shelters for families with children in the Bronx, Manhattan, Queens, and Staten Island.",
-    "whoText": "Children and families in Homes for the Homeless family residences",
     "cost": "You choose from the wish list.",
-    "costMin": null,
     "deadline": null,
     "stepGroups": [
       {
@@ -1500,9 +1453,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Choose a toy or gift card for children living in Win's family shelters or supportive housing in New York City.",
     "about": "Win is a New York City nonprofit, founded in 1983 as Women in Need. It is the city's largest provider of shelter and supportive housing for families experiencing homelessness.",
-    "whoText": "Families with children in Win shelters and supportive housing",
     "cost": "About $4 to $34 per gift.",
-    "costMin": null,
     "deadline": "2026-12-04",
     "stepGroups": [
       {
@@ -1543,9 +1494,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Give a new, unwrapped toy for a child up to age 16 through the New York City teachers' union.",
     "about": "The United Federation of Teachers is the union for most New York City public school teachers, founded in 1960. It runs this toy drive each year for children in need.",
-    "whoText": "Children from newborn to age 16",
     "cost": "You choose the toy or the amount.",
-    "costMin": null,
     "deadline": "2026-12-17",
     "mustArrive": true,
     "stepGroups": [
@@ -1615,9 +1564,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Choose a gift like a bracelet-making kit, basketball, or beginner guitar for a child served by Children's Aid in NYC.",
     "about": "Children's Aid is a New York City nonprofit, founded in 1853. It supports about 50,000 children and families in under-resourced neighborhoods with education, health care, and family support. The morning show on radio station NEW 102.7 runs this drive.",
-    "whoText": "Children and families in under-resourced New York City neighborhoods",
     "cost": "About $5 to $26 per gift.",
-    "costMin": 5,
     "deadline": "2026-12-11",
     "stepGroups": [
       {
@@ -1659,9 +1606,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Read a letter from a trans young person and send a gift they picked out, without exchanging personal information.",
     "about": "Transanta is a trans-led gift-giving project for trans young people that started in 2020. It's part of Allies in Arts, a nonprofit.",
-    "whoText": "Trans young people in need",
     "cost": "You choose from their registry.",
-    "costMin": null,
     "deadline": null,
     "stepGroups": [
       {
@@ -1704,9 +1649,7 @@ const PROGRAMS = [
     "status": "open",
     "summary": "Pick a toy online, and Toys for Tots will distribute it to a child who could use a Christmas gift.",
     "about": "Toys for Tots began in 1947 with a Marine Corps Reserve unit and now collects gifts for children across the US. The Marine Toys for Tots Foundation partners with Amazon on this virtual toy box.",
-    "whoText": "Children and families in need across the US",
     "cost": "About $3 to $180 per toy. Many options are under $30.",
-    "costMin": null,
     "deadline": null,
     "stepGroups": [
       {
@@ -1867,7 +1810,7 @@ function srName(a) {
 function emailHelpHTML(a, id) {
   return '<details class="msg"><summary>If your email app does not open</summary><div class="msg-body">' +
         '<p class="hint">Copy the address and the message, then paste them into any email.</p>' +
-        '<div class="action-row copy-row">' +
+        '<div class="action-row">' +
           '<button type="button" class="btn secondary small" data-copy="addr" data-program="' + esc(id) + '">Copy email address</button>' +
           '<button type="button" class="btn secondary small" data-copy="msg" data-program="' + esc(id) + '">Copy message text</button>' +
         "</div>" +
@@ -1905,9 +1848,9 @@ function iconFor(btn, row) {
   return row.icon === "ship" || row.icon === "money" ? row.icon : "";
 }
 
-// Every way to give is one list item: its name, a short detail, and its buttons.
+// Every way to give is one list item: its buttons, or its name and a short detail when it has no button.
 // The first button on the card is the solid one. Every other button is outlined.
-// The styles decide the layout: button first on a narrow card, words left and button right on a wide card.
+// The styles decide the layout (see "Ways to give" in styles.css).
 function giveHTML(p) {
   const a = p.action;
   const rows = rowsOf(p);
@@ -1919,7 +1862,7 @@ function giveHTML(p) {
   let filled = false;
   // One heading for every card, whether it has one way to give or several
   // The heading is for screen readers. On screen, the buttons speak for themselves.
-  let html = '<div class="give-wrap"><h4 class="give-title sr-only">How to give</h4><ul class="give-list">';
+  let html = '<div><h4 class="sr-only">How to give</h4><ul class="give-list">';
   rows.forEach((o, i) => {
     if (cardOpen && rowEnded(p, o)) {
       html += '<li class="give"><div class="give-text"><p class="give-name">' + esc(o.name) + "</p>" +
@@ -1984,7 +1927,6 @@ function refreshDates() {
     const b = badgeFor(p);
     if (li.dataset.badge !== badgeSig(b)) {
       li.querySelector(".badges").innerHTML = badgeHTML(b, p);
-      li.querySelector(".card-head").classList.toggle("has-soon", !!b.soon);
       li.dataset.badge = badgeSig(b);
     }
     if (li.dataset.rows !== rowsSig(p)) {
@@ -2026,7 +1968,7 @@ function cardEl(p) {
   li.innerHTML =
     '<article aria-labelledby="t-' + p.id + '">' +
       '<div class="card-main">' +
-        '<div class="card-head' + (b.soon ? " has-soon" : "") + '">' +
+        '<div class="card-head">' +
           '<div class="card-title"><h3 id="t-' + p.id + '" tabindex="-1">' + esc(p.name) + "</h3>" +
             '<p class="org">' + esc(p.org) + "</p></div>" +
           '<p class="badges">' + badgeHTML(b, p) + "</p>" +
@@ -2134,7 +2076,6 @@ function showSort() {
 }
 phone.addEventListener("change", showSort);
 
-const FILTER_ICON = '<svg aria-hidden="true" width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 5h7M15 5h1M2 13h1M9 13h7"/><circle cx="12" cy="5" r="2.2"/><circle cx="6" cy="13" r="2.2"/></svg>';
 
 function update() {
   showSort();
@@ -2175,8 +2116,18 @@ function update() {
   // Showing full and closed programs is a change from the usual view, so it counts as a filter that is on
   const showAll = !f.hideClosed;
   const active = f.areas.length + f.ways.length + (showAll ? 1 : 0);
-  $("filterSummary").innerHTML = FILTER_ICON + '<span class="fs-label">Filters</span>' +
-    (active ? '<span class="fs-count">' + active + '<span class="sr-only"> on</span></span>' : "");
+  // The number on the Filters button. The icon and the word are in the HTML, so only the number changes.
+  let badge = $("filterSummary").querySelector(".fs-count");
+  if (!active) {
+    if (badge) badge.remove();
+  } else {
+    if (!badge) {
+      badge = document.createElement("span");
+      badge.className = "fs-count";
+      $("filterSummary").appendChild(badge);
+    }
+    badge.innerHTML = active + '<span class="sr-only"> on</span>';
+  }
 
   // Line above the list that names the filters that are on. When nothing matches, it stays hidden:
   // the "No programs match" box has its own "Reset filters". The styles also hide it while the filter panel is open.
@@ -2269,12 +2220,6 @@ $("feedback").addEventListener("toggle", () => {
   const frame = $("feedbackFrame");
   if ($("feedback").open && !frame.src) frame.src = frame.dataset.src;
 });
-if (SITE.contactEmail) {
-  const c = $("contact");
-  c.hidden = false;
-  c.innerHTML = "See a mistake or know a program that belongs here? Write to " +
-    '<a href="mailto:' + esc(SITE.contactEmail) + '">' + esc(SITE.contactEmail) + "</a>.";
-}
 
 // Visit counts (GoatCounter, no cookies or personal data). The cards are drawn by this script and redrawn
 // when filters change, so one listener on the list counts clicks on every card's buttons, old or new.

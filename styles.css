@@ -32,8 +32,6 @@
   size-adjust: 101.29%; ascent-override: 97.94%; descent-override: 30.61%; line-gap-override: 0%;
 }
 
-/* Layout idea: filters in a left rail, programs as one sortable column of rows.
-   Each row puts the facts on the left and the one action on the right. */
 :root {
   --bg: #f3f6f4;
   --surface: #ffffff;
@@ -60,7 +58,7 @@
   color-scheme: light;
 }
 @media (prefers-color-scheme: dark) {
-  :root:not([data-theme="light"]) {
+  :root {
     --bg: #0f1814;
     --surface: #17231e;
     --ink: #e8f0ec;
@@ -82,27 +80,6 @@
     color-scheme: dark;
   }
 }
-:root[data-theme="dark"] {
-  --bg: #0f1814;
-  --surface: #17231e;
-  --ink: #e8f0ec;
-  --ink-soft: #b1c2b9;
-  --line: #2e4138;
-  --line-soft: #25372f;
-  --line-strong: #8aa096;
-  --brand: #84d8b8;
-  --on-brand: #06231a;
-  --urgent: #ffa3ad;
-  --urgent-bg: #3b1a20;
-  --note-ink: #f4dd9c;
-  --note-bg: #3a3013;
-  --calm-bg: #1c342a;
-  --place-bg: var(--calm-bg);
-  --place-ink: var(--ink);
-  --place-line: var(--line);
-  --head-ink: #f1f8f4;
-  color-scheme: dark;
-}
 
 *, *::before, *::after { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
@@ -114,9 +91,9 @@ body {
   font-size: 1rem;
   line-height: 1.5;
 }
-h1, h2, h3, h4, p, ul, ol, dl, dd, fieldset, legend { margin: 0; padding: 0; }
-ul, ol { list-style: none; }
-fieldset { border: 0; min-width: 0; }
+h1, h2, h3, h4, p, dl, dd { margin: 0; padding: 0; }
+ul, ol { margin: 0; padding: 0; list-style: none; }
+fieldset { margin: 0; padding: 0; border: 0; min-width: 0; }
 a { color: var(--brand); text-underline-offset: 0.15em; }
 :focus-visible { outline: 3px solid var(--brand); outline-offset: 3px; border-radius: 4px; }
 [hidden] { display: none !important; }
@@ -175,38 +152,25 @@ a { color: var(--brand); text-underline-offset: 0.15em; }
   .intro-title { font-size: 1.375rem; }
 }
 
-/* Page grid */
 /* Page grid. Wide screens: filters at the side, list heading and sort menu on one row above the list. */
 .page {
   display: grid; grid-template-columns: 230px minmax(0, 1fr) auto; grid-template-rows: auto 1fr;
   grid-template-areas: "filters head sort" "filters results results";
   column-gap: 24px; row-gap: 12px; align-items: start; padding-bottom: 48px;
 }
-.filters { grid-area: filters; }
 .results-head { grid-area: head; align-self: end; }
-.sort { grid-area: sort; align-self: end; }
 #results { grid-area: results; min-width: 0; }
 
 /* Filters */
-/* The base look of the filter panel: a white box like the program cards, a divider between
-   groups, and the same checkboxes. Wide screens turn it into a quiet side rail further down. */
-.filters {
-  background: var(--surface); border: 1px solid var(--line); border-radius: 10px;
-}
+/* The base look of the filter panel: a white box like the program cards, a divider between groups, and the same
+   checkboxes. Further down, wide screens turn it into a quiet side rail and small screens into a tinted panel. */
+.filters { grid-area: filters; background: var(--surface); border: 1px solid var(--line); border-radius: 10px; }
 /* The panel follows you down the page only when all of it fits on the screen,
    so it never needs its own scroll bar. The script below adds this class. */
 .filters.sticky { position: sticky; top: 16px; }
-.filters > summary {
-  display: none; cursor: pointer; font-weight: 700; padding: 11px 14px; min-height: 44px;
-}
-/* Arrow on the folded "Filters" control. It points right when closed and down when open. */
-.filters > summary { list-style: none; }
+/* The "Filters" button that opens the panel shows only on small screens. It has no open/closed marker. */
+.filters > summary { display: none; cursor: pointer; font-weight: 700; padding: 11px 14px; min-height: 44px; list-style: none; }
 .filters > summary::-webkit-details-marker { display: none; }
-.filters > summary::before {
-  content: ""; display: inline-block; margin-right: 10px; vertical-align: 1px;
-  border-left: 7px solid currentColor; border-top: 5px solid transparent; border-bottom: 5px solid transparent;
-}
-.filters[open] > summary::before { transform: rotate(90deg); }
 .filters-body > * { padding: 12px 14px; }
 .filters-body > * + * { border-top: 1px solid var(--line); }
 .filters h2 { font-size: 1rem; }
@@ -220,8 +184,8 @@ a { color: var(--brand); text-underline-offset: 0.15em; }
 #clear, #clear3 { border-color: transparent; text-decoration: underline; padding: 6px 0; min-height: 44px; }
 #clear:hover, #clear3:hover { background: transparent; text-decoration-thickness: 2px; }
 .filters .hint { margin-top: 2px; }
-legend { font-weight: 700; margin-bottom: 2px; }
-input[type="search"], select {
+legend { margin: 0 0 2px; padding: 0; font-weight: 700; }
+select {
   font: inherit; color: var(--ink); background: var(--surface);
   border: 1px solid var(--line-strong); border-radius: 6px;
   padding: 7px 10px; min-height: 40px; width: 100%;
@@ -250,20 +214,21 @@ input[type="search"], select {
 /* Results bar */
 #count { color: var(--ink-soft); font-variant-numeric: tabular-nums; font-size: 0.9375rem; }
 @media (max-width: 699px) { #count { font-size: 0.875rem; } }
-/* Sort control. What you see is the "face": a box that reads "Sort: Deadline, soonest first" with an arrow.
+/* Sort control. What you see is the "face": a small pill that reads "Sort: Deadline, soonest first" with an arrow.
    The real menu sits on top of it and is see-through, so the control looks the same in every
-   browser and still opens the phone's or computer's own menu. */
-.sort { position: relative; display: inline-flex; min-width: 0; }
+   browser and still opens the phone's or computer's own menu. The pill looks 36px tall; the menu reaches
+   4px above and below it, so the tap area is 44px tall. */
+.sort { grid-area: sort; align-self: end; position: relative; display: inline-flex; min-width: 0; }
 .sort-face {
   display: flex; align-items: center; justify-content: space-between; gap: 8px; box-sizing: border-box;
-  width: 100%; min-width: 13.75rem; min-height: 44px; padding: 0 12px; white-space: nowrap; font-weight: 600;
-  border: 1px solid var(--line-strong); border-radius: 8px; background: var(--surface);
+  width: 100%; min-width: 0; min-height: 36px; padding: 0 12px 0 14px; white-space: nowrap; font-size: 0.875rem; font-weight: 600;
+  border: 1px solid var(--line); border-radius: 18px; background: var(--surface);
 }
 .sort-face svg { flex: none; }
 /* With large text or wide letter spacing the label wraps onto a second line. It is never cut off. */
 #sortText { min-width: 0; white-space: normal; line-height: 1.25; padding: 4px 0; }
 .sort select {
-  position: absolute; inset: 0; width: 100%; height: 100%; min-height: 0; padding: 0; border: 0; opacity: 0;
+  position: absolute; inset: -4px 0; width: 100%; height: calc(100% + 8px); min-height: 0; padding: 0; border: 0; opacity: 0;
   -webkit-appearance: none; appearance: none; font-size: 1rem; cursor: pointer;
 }
 .sort:hover .sort-face { border-color: var(--brand); }
@@ -313,8 +278,8 @@ input[type="search"], select {
 .g dt { font-weight: 700; font-size: 0.8125rem; color: var(--ink-soft); }
 .g.needs .ic, .g.needs strong { color: var(--note-ink); }
 .ic { flex: none; }
-/* Long email addresses and links wrap instead of pushing past the card on narrow phones */
-.more-body, .glance dd { overflow-wrap: anywhere; }
+/* Long email addresses and links wrap instead of pushing past the card on narrow phones (see also .more-body) */
+.glance dd { overflow-wrap: anywhere; }
 .card h4 { font-size: 0.9375rem; }
 .steps { list-style: decimal; padding-left: 1.4em; display: grid; gap: 4px; max-width: 36.94em; margin-top: -6px; }
 /* Choices inside a step: the giver picks one, so they are bullets, not numbers */
@@ -324,7 +289,7 @@ input[type="search"], select {
 details.more { border-top: 1px solid var(--line-soft); margin-top: -2px; }
 details.more > summary { cursor: pointer; font-weight: 600; color: var(--brand); padding: 11px 0; margin-bottom: -11px; min-height: 44px; font-size: 0.9375rem; }
 details.more[open] > summary { margin-bottom: 0; }
-.more-body { display: grid; gap: 10px; padding-top: 4px; font-size: 0.9375rem; }
+.more-body { display: grid; gap: 10px; padding-top: 4px; font-size: 0.9375rem; overflow-wrap: anywhere; }
 
 /* Ways to give. The card decides the layout by its own width, not the screen's.
    A way with a button shows just the button; its details are in "Steps and details".
@@ -350,7 +315,6 @@ details.more[open] > summary { margin-bottom: 0; }
 .give-detail { color: var(--ink-soft); font-size: 0.875rem; line-height: 1.45; overflow-wrap: anywhere; }
 .give-name + .give-detail { margin-top: 2px; }
 .give-detail .signup-first { color: var(--note-ink); }
-.copy-row { justify-content: flex-start; }
 @container (min-width: 480px) {
   /* All the buttons on one card share the left-hand column. It is as wide as the widest button, so they all match.
      Words and the email help use the whole width. */
@@ -360,11 +324,9 @@ details.more[open] > summary { margin-bottom: 0; }
   .give-act { grid-column: 1; }
   .give-act .btn { min-height: 44px; padding: 9px 12px; }
 }
-.action-row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-self: stretch; }
+/* The copy buttons under "If your email app does not open": at the right, or full width on phones */
+.action-row { display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center; justify-content: flex-end; justify-self: stretch; }
 .card-action .hint { max-width: 35.57em; }
-/* Buttons sit at the bottom right of the card. Help text stays left so it is easy to read. */
-.action-row { justify-content: flex-end; }
-.action-row .btn.primary { min-width: min(100%, 240px); }
 .addr, .give-detail strong { font-weight: 700; color: var(--ink); overflow-wrap: anywhere; }
 .copy-status { font-weight: 600; font-size: 0.875rem; }
 details.msg > summary { cursor: pointer; font-weight: 600; color: var(--brand); padding: 10px 0; min-height: 44px; font-size: 0.9375rem; }
@@ -426,26 +388,30 @@ details.feedback > summary { cursor: pointer; font-weight: 600; color: var(--bra
    a title with Close, large rows, and a bar at the bottom that stays in view. */
 @media (max-width: 699px) {
   html { scroll-padding-bottom: 96px; }
-  .page { grid-template-columns: 8.5rem minmax(0, 1fr); grid-template-rows: none; grid-template-areas: none; column-gap: 10px; }
+  /* The Filters button is as wide as its label, and a little wider when it shows how many filters are on */
+  .page { grid-template-columns: 6.25rem minmax(0, 1fr); grid-template-rows: none; grid-template-areas: none; column-gap: 8px; }
+  .page:has(.fs-count) { grid-template-columns: 7.75rem minmax(0, 1fr); }
   /* The panel spans the full width. The sort menu sits over its empty top right corner. */
   .filters { grid-area: auto; grid-column: 1 / -1; grid-row: 1; border: 0; border-radius: 0; background: transparent; }
   .filters.sticky { position: static; }
   .sort { grid-area: auto; grid-column: 2; grid-row: 1; align-self: start; justify-self: start; position: relative; z-index: 1; }
+  #sortText { overflow-wrap: anywhere; }   /* with very large text the label breaks instead of pushing the page sideways */
   .results-head { grid-area: auto; grid-column: 1 / -1; grid-row: 2; }
   #results { grid-area: auto; grid-column: 1 / -1; grid-row: 3; }
 
-  /* The Filters button. It matches the sort control beside it: same height, border and corners. */
+  /* The Filters button. It matches the sort pill beside it: it looks 36px tall, and its tap area is 44px tall. */
   .filters > summary {
-    display: flex; align-items: center; gap: 6px; box-sizing: border-box; width: 8.5rem; min-height: 44px;
-    padding: 0 12px; white-space: nowrap; font-weight: 600;
-    border: 1px solid var(--line-strong); border-radius: 8px; background: var(--surface); color: var(--ink);
+    position: relative; display: flex; align-items: center; gap: 6px; box-sizing: border-box; width: 6.25rem; min-height: 36px;
+    padding: 0 12px; white-space: nowrap; font-size: 0.875rem; font-weight: 600;
+    border: 1px solid var(--line); border-radius: 18px; background: var(--surface); color: var(--ink);
   }
-  .filters > summary:hover, .filters > summary:has(.fs-count) { border-color: var(--brand); }
-  .filters > summary::before { display: none; }
+  .filters > summary::after { content: ""; position: absolute; inset: -4px 0 -5px; }
+  .filters > summary:hover { border-color: var(--brand); }
+  .filters > summary:has(.fs-count) { width: 7.75rem; border-color: var(--brand); }
   .filters > summary svg { flex: none; }
   .filters[open] > summary { background: var(--calm-bg); border-color: var(--brand); }
   .fs-count {
-    margin-left: auto; min-width: 22px; height: 22px; padding: 0 6px; box-sizing: border-box; border-radius: 11px;
+    margin-left: auto; min-width: 20px; height: 20px; padding: 0 6px; box-sizing: border-box; border-radius: 11px;
     display: inline-flex; align-items: center; justify-content: center;
     background: var(--brand); color: var(--on-brand); font-size: 0.8125rem; font-variant-numeric: tabular-nums;
   }
@@ -474,39 +440,16 @@ details.feedback > summary { cursor: pointer; font-weight: 600; color: var(--bra
 }
 /* Phones: cards stack and buttons run the full width */
 @media (max-width: 519px) {
-  /* The two controls share the row equally */
-  .page { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
-  .filters > summary { width: calc(50% - 5px); padding: 0 10px; }
-  .sort { justify-self: stretch; }
-  .sort-face { padding: 0 10px; min-width: 0; }
   .card article { padding: 18px 16px; }
   .glance { grid-template-columns: minmax(0, 1fr); }
   .action-row .btn { width: 100%; }
 }
 /* Very narrow phones: no room for two controls in a row, so "Sort by" drops below "Filters" */
 @media (max-width: 359px), (max-width: 22.4em) {
-  .page { grid-template-columns: minmax(0, 1fr); }
-  .filters > summary { width: 100%; }
+  .page, .page:has(.fs-count) { grid-template-columns: minmax(0, 1fr); }
   .sort { grid-column: 1; grid-row: 2; }
   .results-head { grid-row: 3; }
   #results { grid-row: 4; }
-}
-/* Quiet controls: "Filters" and "Sort" are small pills. Each pill looks 36px tall. Its tap area is 44px tall. */
-.sort-face { min-width: 0; min-height: 36px; padding: 0 12px 0 14px; font-size: 0.875rem; border-color: var(--line); border-radius: 18px; }
-.sort select { inset: -4px 0; height: calc(100% + 8px); }
-@media (max-width: 699px) {
-  .page { grid-template-columns: 6.25rem minmax(0, 1fr); column-gap: 8px; }
-  .page:has(.fs-count) { grid-template-columns: 7.75rem minmax(0, 1fr); }
-  .filters > summary { position: relative; width: 6.25rem; min-height: 36px; padding: 0 12px; font-size: 0.875rem; border-color: var(--line); border-radius: 18px; }
-  .filters > summary:has(.fs-count) { width: 7.75rem; }
-  .filters > summary::after { content: ""; position: absolute; inset: -4px 0 -5px; }
-  .fs-count { min-width: 20px; height: 20px; }
-  .sort { justify-self: start; }
-  .sort-face { padding: 0 12px 0 14px; }
-  #sortText { overflow-wrap: anywhere; }   /* with very large text the label breaks instead of pushing the page sideways */
-}
-@media (max-width: 359px), (max-width: 22.4em) {
-  .page, .page:has(.fs-count) { grid-template-columns: minmax(0, 1fr); }
 }
 
 /* A text link that leads to another page: "About this project", "Back to the list".
