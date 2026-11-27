@@ -4,12 +4,12 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>The Christmas Giving List</title>
-<meta name="description" content="Everyone deserves a gift this Christmas, at every age. Find a program, see the cost and the deadline, and give.">
+<meta name="description" content="Everyone deserves a gift this Christmas, at every age. Find a New York City program, see the cost and the deadline, and give.">
 <!-- What a pasted link shows in a text or on social media. The picture is og-image.png in the top folder. -->
 <link rel="canonical" href="https://thechristmasgivinglist.org/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="The Christmas Giving List">
-<meta property="og:description" content="Everyone deserves a gift this Christmas. Find a program, see the cost and the deadline, and give.">
+<meta property="og:description" content="Everyone deserves a gift this Christmas. Find a New York City program, see the cost and the deadline, and give.">
 <meta property="og:url" content="https://thechristmasgivinglist.org/">
 <meta property="og:image" content="https://thechristmasgivinglist.org/og-image.png?v=2026-11-26-2">
 <meta property="og:image:width" content="1200">
@@ -21,7 +21,7 @@
 <!-- The heading font and the main text font start loading right away -->
 <link rel="preload" href="fonts/lora-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=2026-11-27-5">
+<link rel="stylesheet" href="styles.css?v=2026-11-27-6">
 <!-- The folded feedback form needs JavaScript. Without it, only the plain link to the form shows. -->
 <noscript><style>#feedback { display: none; }</style></noscript>
 </head>
@@ -77,7 +77,7 @@
       <a class="page-link" href="about.html">About this project<svg class="arrow arrow-after" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
       <span class="updated">Updated <time datetime="2026-11-27">Nov 27, 2026</time></span>
     </div>
-    <h2 class="intro-title">Find your way to give</h2>
+    <h2 class="intro-title">Find your way to give in New&nbsp;York&nbsp;City</h2>
   </div>
   <div class="wrap page" id="app" hidden>
   <details class="filters" id="filterPanel" open>
@@ -90,10 +90,6 @@
         </div>
         <button type="button" class="sheet-close" id="closeFilters">Close</button>
       </div>
-
-      <fieldset id="f-area">
-        <legend>Where your gift goes</legend>
-      </fieldset>
 
       <fieldset id="f-way">
         <legend>How to give</legend>
@@ -168,7 +164,6 @@
    2. To add a program, copy one block from { to }, paste it, and change
       the text. Keep the commas between blocks.
    3. Values you can use:
-        areas:   "us" (anywhere in the US), "nyc"
         ways:    how you give. Use one or more of "ship" (buy from the organization's wish list and the store ships it for you),
                  "drop" (drop off a gift), "mail" (get a gift yourself and mail it), "money" (give money).
                  The first one is the way the main button uses.
@@ -215,107 +210,27 @@ const SITE = {
 };
 
 const LABELS = {
-  areas:  { us: "Across the US", nyc: "New York City" },
-  helps:  { us: "Helps people across the US", nyc: "Helps people in New York City" },
   ways:   { ship: "Buy from their wish list", drop: "Drop off a gift", mail: "Mail a gift yourself", money: "Give money" }
 };
 
 const PROGRAMS = [
   {
-    "id": "usps",
-    "name": "Answer a letter to Santa",
-    "org": "USPS Operation Santa",
-    "areas": [
-      "us"
-    ],
-    "status": "open",
-    "summary": "Choose a letter to Santa from a child or family and send a gift they asked for.",
-    "about": "USPS Operation Santa is a US Postal Service program, started in 1912. It lets people adopt letters sent to Santa and send the gifts. It is not a charity.",
-    "cost": "You choose. You also pay for shipping.",
-    "deadline": "2026-12-12",
-    "stepGroups": [
-      {
-        "title": "Mail a gift yourself",
-        "steps": [
-          "Create a free account and verify your identity.",
-          "Read the letters and adopt one or more.",
-          {
-            "text": "Send the gifts by December 12 one of these ways:",
-            "choices": [
-              "Buy them yourself and ship them from a participating Post Office.",
-              "Order them from Santa's Gift Shoppe, and USPS delivers them."
-            ]
-          }
-        ]
-      }
-    ],
-    "note": "The site closes at 8 pm Eastern on December 12. It is open to people in the continental US, Hawaii, and Puerto Rico. Letters go quickly and the ID check takes time, so start early.",
-    "action": {
-      "type": "link",
-      "label": "Sign up with USPS",
-      "url": "https://www.uspsoperationsanta.com/account/new"
-    },
-    "source": "https://www.uspsoperationsanta.com/how-to-adopt",
-    "checked": "2026-11-25",
-    "ways": [
-      "mail",
-      "ship"
-    ],
-    "options": [
-      {
-        "text": "Buy the gifts and ship them from a Post Office."
-      },
-      {
-        "text": "After you adopt a letter, you can order from Santa's Gift Shoppe and USPS delivers."
-      }
-    ],
-    "signup": {
-      "needed": true,
-      "text": "Create a free account and verify your ID."
-    },
-    "second": {
-      "label": "Read letters first",
-      "url": "https://www.uspsoperationsanta.com/letters"
-    },
-    "rows": [
-      {
-        "icon": "mail",
-        "name": "Adopt a letter, then send the gifts",
-        "text": "Adopt a letter and ship the gifts by December 12. The site closes at 8 pm Eastern that day. Ship from a Post Office, or order from Santa's Gift Shoppe and USPS delivers them."
-      }
-    ],
-    "closesAt": "2026-12-12T20:00:00-05:00"
-  },
-  {
     "id": "onesimplewish",
-    "name": "Grant a wish for a child in foster care",
-    "org": "One Simple Wish",
-    "areas": [
-      "us"
-    ],
+    "name": "Grant a wish for a young New Yorker leaving foster care",
+    "org": "One Simple Wish with City Living NY",
     "status": "open",
-    "yearRound": true,
-    "summary": "Fund a wish, like art supplies or a bike, for a child or young adult affected by foster care or a crisis.",
-    "about": "One Simple Wish is a nonprofit, founded in 2008. It grants wishes for children and young adults affected by foster care and crisis, working with agencies across the US.",
-    "cost": "Full wishes range from under $25 to over $200. Some accept partial donations.",
+    "summary": "Fund a wish for a young New Yorker who has left foster care, or for their child.",
+    "about": "City Living NY is a New York City nonprofit that helps young people move from foster care to living on their own, including finding and keeping housing. One Simple Wish, a national nonprofit founded in 2008, hosts its wishes.",
+    "cost": "Wishes ranged from $46 to $388 when checked. Some accept partial donations.",
     "deadline": null,
-    "stepGroups": [
-      {
-        "title": "Give money",
-        "steps": [
-          "Browse the wishes. Choose “Holiday Wishes” to see the seasonal list.",
-          "Pay for a wish, or pay part of a wish that allows it.",
-          "One Simple Wish buys the gift and gets it to the child."
-        ]
-      }
-    ],
+    "yearRound": true,
     "action": {
       "type": "link",
-      "label": "Browse One Simple Wish",
-      "url": "https://www.onesimplewish.org/wish/wish-grant/"
+      "label": "Browse City Living NY wishes",
+      "url": "https://www.onesimplewish.org/community-partner/1131-city-living-ny"
     },
-    "source": "https://www.onesimplewish.org/giving/holiday",
-    "checked": "2026-11-25",
+    "source": "https://www.onesimplewish.org/community-partner/1131-city-living-ny",
+    "checked": "2026-11-26",
     "ways": [
       "money"
     ],
@@ -325,177 +240,22 @@ const PROGRAMS = [
     },
     "options": [
       {}
-    ]
-  },
-  {
-    "id": "angeltree",
-    "name": "Buy a gift for a local child (Angel Tree)",
-    "org": "The Salvation Army",
-    "areas": [
-      "us"
     ],
-    "status": "open",
-    "summary": "Pick a child's Angel Tree tag or shop your local Walmart registry to give toys or clothes to kids in your community.",
-    "about": "The Salvation Army is a Christian church that also runs social services, active in the US since 1880. It started Angel Tree in 1979 to give Christmas gifts to children in need.",
-    "cost": "You choose from the wish list.",
-    "deadline": null,
-    "stepGroups": [
-      {
-        "title": "Buy from their wish list",
-        "steps": [
-          "Enter your ZIP code to find your local Salvation Army.",
-          "Add gifts from its wish list to your Walmart cart.",
-          "Check out with delivery. Walmart ships the gifts to the Salvation Army for you."
-        ]
-      },
-      {
-        "title": "Drop off a gift",
-        "steps": [
-          "Find an Angel Tree in a participating Walmart or Sam's Club.",
-          "Take a paper tag from the tree. Each tag lists what one child wished for.",
-          "Buy the gifts.",
-          "Leave them unwrapped in the store's collection bin."
-        ]
-      }
-    ],
-    "note": "Dates are different in each area. Check with your local Salvation Army.",
-    "action": {
-      "type": "link",
-      "label": "Find your local Angel Tree",
-      "url": "https://www.salvationarmyusa.org/walmart-angel-tree/",
-      "srExtra": "The Salvation Army"
-    },
-    "source": "https://www.salvationarmyusa.org/walmart-angel-tree/",
-    "checked": "2026-11-25",
-    "ways": [
-      "ship",
-      "drop"
-    ],
-    "options": [
-      {
-        "text": "Shop the Walmart registry. It ships to your local Salvation Army."
-      },
-      {
-        "text": "Pick a child's tag from an Angel Tree in a participating Walmart or Sam's Club, and leave the gifts in the store."
-      }
-    ],
-    "signup": {
-      "needed": false,
-      "text": "None. You enter your ZIP code."
-    },
-    "openLabel": "Dates vary by area"
-  },
-  {
-    "id": "bastas",
-    "name": "Be a Santa to a Senior",
-    "org": "Home Instead",
-    "areas": [
-      "us"
-    ],
-    "status": "open",
-    "summary": "Pick a gift an older adult in your area asked for, like a warm blanket.",
-    "about": "Home Instead is a company that provides in-home care for older adults, founded in 1994 in Omaha, Nebraska. Its local offices collect and deliver the gifts.",
-    "cost": "You choose. Requests are often basics like blankets.",
-    "deadline": null,
-    "stepGroups": [
-      {
-        "title": "Drop off a gift",
-        "steps": [
-          "Find your local office in the list. Every office on the list takes part this year.",
-          "Check the office's website or Facebook page, or call, to learn where its gift trees are. They are often in stores, banks, and libraries.",
-          "Pick an ornament from a tree. Each one lists a gift an older adult asked for.",
-          "Buy the gift and return it the way your office asks."
-        ]
-      },
-      {
-        "title": "Buy from their wish list",
-        "steps": [
-          "Find your local office in the list. A few offices show an Amazon link.",
-          "Open that office's wish list.",
-          "Choose a gift and check out."
-        ]
-      }
-    ],
-    "note": "Dates are different at each office. No New York City or Long Island office is on the 2026 list.",
-    "action": {
-      "type": "link",
-      "label": "Find a Home Instead office",
-      "url": "https://www.homeinstead.com/news-and-media/bastas-2026/"
-    },
-    "source": "https://www.homeinstead.com/news-and-media/bastas-2026/",
-    "checked": "2026-11-25",
-    "ways": [
-      "drop",
-      "ship"
-    ],
-    "options": [
-      {
-        "text": "Pick a gift request from one of your office's gift trees, buy the gift, and bring it back to the same place."
-      },
-      {
-        "text": "A few offices also have an Amazon wish list. The office list shows an Amazon link beside those."
-      }
-    ],
-    "signup": {
-      "needed": false,
-      "text": "None needed."
-    },
-    "openLabel": "Dates vary by office"
-  },
-  {
-    "id": "twilight",
-    "name": "Grant a wish for an older adult",
-    "org": "Twilight Wish Foundation",
-    "areas": [
-      "us"
-    ],
-    "status": "open",
-    "yearRound": true,
-    "summary": "Chip in toward an older adult's wish, from hearing aids to a trip somewhere they've always wanted to visit.",
-    "about": "Twilight Wish Foundation is a nonprofit founded in 2003 in Bucks County, Pennsylvania. It grants wishes for adults 65 and older who have limited incomes or live in long-term care facilities.",
-    "cost": "You choose the amount.",
-    "deadline": null,
     "stepGroups": [
       {
         "title": "Give money",
         "steps": [
-          "Read the open wishes.",
-          "Open a wish and use its donation link.",
-          "Enter the amount you want to give."
+          "Open City Living NY's page on One Simple Wish.",
+          "Choose a wish.",
+          "Pay for the whole wish, or part of it if the wish allows that. One Simple Wish buys the gift and gets it to the person."
         ]
       }
-    ],
-    "note": "Twilight Wish tries to use your gift for the wish you chose. If it can't, the money goes to a similar urgent wish. Questions: 877-893-9474 (toll-free).",
-    "action": {
-      "type": "link",
-      "label": "Browse Twilight Wishes",
-      "url": "https://twilightwish.org/open-twilight-wishes/",
-      "srExtra": "Twilight Wish Foundation"
-    },
-    "source": "https://www.twilightwish.org",
-    "checked": "2026-11-25",
-    "ways": [
-      "money"
-    ],
-    "second": {
-      "label": "Donate to Twilight Wish",
-      "url": "https://twilightwish.org/donate/"
-    },
-    "signup": {
-      "needed": false,
-      "text": "None needed."
-    },
-    "options": [
-      {}
     ]
   },
   {
     "id": "sus",
     "name": "S:US Holiday Gift Project",
     "org": "Services for the UnderServed (S:US)",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Fulfill a holiday wish for someone S:US supports, including adults with disabilities, veterans, and children living in shelters.",
     "about": "Services for the UnderServed (S:US) is a New York nonprofit founded in 1978. It provides housing, employment support, and mental health and substance use treatment to tens of thousands of people and their families across New York City and Long Island each year.",
@@ -586,9 +346,6 @@ const PROGRAMS = [
     "id": "sanctuary",
     "name": "Sanctuary's Winter Wishes gift drive",
     "org": "Sanctuary for Families",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Give a book, game, toy, or gift card to a survivor of gender-based violence or one of their children.",
     "about": "Sanctuary for Families is a New York City nonprofit, founded in 1984. It helps survivors of domestic violence, sex trafficking, and other gender-based violence with shelter, counseling, legal help, and job training.",
@@ -647,9 +404,6 @@ const PROGRAMS = [
     "id": "nycares",
     "name": "New York Cares Winter Wishes",
     "org": "New York Cares",
-    "areas": [
-      "nyc"
-    ],
     "status": "waitlist",
     "statusNote": "Sign-up is closed for 2026. You can ask to be told if a wish opens up.",
     "summary": "If a wish opens up, get matched with a letter from a NYC child or teen, then send them the gift they asked for.",
@@ -697,9 +451,6 @@ const PROGRAMS = [
     "id": "foundling",
     "name": "The Foundling's Holiday Gift Drive",
     "org": "The New York Foundling",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Give a holiday gift to a child in foster care, an adult with a developmental disability, or a family facing financial or housing hardship.",
     "about": "The New York Foundling is a New York City nonprofit, founded in 1869. It runs child welfare, education, health, and disability programs for children, adults, and families.",
@@ -767,9 +518,6 @@ const PROGRAMS = [
     "id": "henrystreet",
     "name": "Henry Street Holiday Drive",
     "org": "Henry Street Settlement",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Give a holiday gift from Henry Street's registry to someone in its programs, from kids in afterschool to older adults and families staying in shelters.",
     "about": "Henry Street Settlement is a nonprofit on Manhattan's Lower East Side, founded in 1893. It offers social services, health care, and arts programs to New Yorkers of all ages.",
@@ -806,71 +554,9 @@ const PROGRAMS = [
     ]
   },
   {
-    "id": "camba",
-    "name": "Bring Joy Home toy drive",
-    "org": "CAMBA",
-    "areas": [
-      "nyc"
-    ],
-    "status": "open",
-    "summary": "Choose a shelter, supportive housing site, or afterschool program and send a gift from its wish list.",
-    "about": "CAMBA is a Brooklyn nonprofit, founded in 1977. It runs shelters, family support, and youth programs across New York City.",
-    "cost": "You choose from the wish list.",
-    "deadline": "2026-12-18",
-    "stepGroups": [
-      {
-        "title": "Buy from their wish list",
-        "steps": [
-          "On the CAMBA page, pick a site's Amazon wish list.",
-          "Choose a gift.",
-          "Check out. It ships to that site for you.",
-          "Fill out CAMBA's short donor form so staff know the gift is coming and can send you a tax receipt."
-        ]
-      },
-      {
-        "title": "Give money",
-        "steps": [
-          "Open the CAMBA page.",
-          "Use the \"Make a Cash Donation\" link."
-        ]
-      }
-    ],
-    "note": "Two more CAMBA sites say their wish list is coming soon. Questions: development@CAMBA.org.",
-    "action": {
-      "type": "link",
-      "label": "Choose a CAMBA wish list",
-      "url": "https://camba.org/support/toy-drive-supporters/"
-    },
-    "source": "https://camba.org/support/toy-drive-supporters/",
-    "checked": "2026-11-25",
-    "ways": [
-      "ship",
-      "money"
-    ],
-    "signup": {
-      "needed": false,
-      "text": "None. After you order, fill out a short form."
-    },
-    "options": [
-      {
-        "text": "Each CAMBA site has its own wish list. Pick a site, and your gift ships straight there."
-      },
-      {
-        "text": "The CAMBA page has a \"Make a Cash Donation\" link.",
-        "link": {
-          "label": "Give money on the CAMBA page",
-          "url": "https://camba.org/support/toy-drive-supporters/"
-        }
-      }
-    ]
-  },
-  {
     "id": "coalition",
     "name": "Buy a toy for a child living in a shelter",
     "org": "Coalition for the Homeless",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Pick a toy from the wish list, and the Coalition will get it to a child living in a New York City shelter.",
     "about": "Coalition for the Homeless is a New York City nonprofit, founded in 1981. It gives food, housing help, and job training to people who are homeless, and it advocates for their rights.",
@@ -928,9 +614,6 @@ const PROGRAMS = [
     "id": "bronxworks",
     "name": "Holiday gifts for Bronx children",
     "org": "BronxWorks",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Pick a holiday gift from the BronxWorks wish list for a child in one of its Bronx programs.",
     "about": "BronxWorks is a Bronx nonprofit and settlement house, founded in 1972. It helps Bronx residents of all ages, from toddlers to older adults, including people experiencing homelessness.",
@@ -966,62 +649,9 @@ const PROGRAMS = [
     "note": "No deadline is listed. Order early so the gift arrives before the holidays."
   },
   {
-    "id": "angeltreeny",
-    "name": "Adopt an Angel in Greater New York",
-    "org": "The Salvation Army Greater New York",
-    "areas": [
-      "nyc"
-    ],
-    "status": "open",
-    "summary": "Choose a child's Angel Tag and buy a gift they asked for on their Christmas wish list.",
-    "about": "The Salvation Army is a Christian church that also runs social services, active in the US since 1880. It started Angel Tree in 1979 to give Christmas gifts to children in need. Its Greater New York branch runs this one.",
-    "cost": "$25 minimum per child. $25 to $50 is suggested.",
-    "deadline": "2026-12-14",
-    "mustArrive": true,
-    "stepGroups": [
-      {
-        "title": "Mail or drop off a gift",
-        "steps": [
-          "Adopt an Angel by choosing one child on the online Angel Tree.",
-          "Buy at least one unwrapped toy from the child's list, worth $25 or more.",
-          "Write the child's Angel ID on the gift note or on the second address line.",
-          "Ship or deliver it to Star Lake Camp Toy Shop, 268 Macopin Rd, Bloomingdale, NJ 07403."
-        ]
-      }
-    ],
-    "action": {
-      "type": "link",
-      "label": "Adopt an Angel",
-      "url": "https://angeltreeny.org/",
-      "srExtra": "The Salvation Army Greater New York",
-      "icon": "signup"
-    },
-    "source": "https://angeltreeny.org/guide",
-    "checked": "2026-11-25",
-    "ways": [
-      "mail",
-      "drop"
-    ],
-    "note": "Aim for your gift to arrive by December 11. December 14 is the final day. The guide also lists toy pickup by appointment through December 11.",
-    "signup": {
-      "needed": true,
-      "text": "Adopt an Angel online to get the child's wish list."
-    },
-    "rows": [
-      {
-        "icon": "mail",
-        "name": "Adopt an Angel, then send the toys",
-        "text": "Buy the toys, then ship or deliver them with the child's Angel ID."
-      }
-    ]
-  },
-  {
     "id": "newalternatives",
     "name": "Santa Project",
     "org": "New Alternatives",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Help buy a holiday gift for an LGBTQ+ teen or young adult experiencing homelessness or at risk of losing housing.",
     "about": "New Alternatives is a New York City nonprofit, founded in 2008. It helps LGBTQ+ young people experiencing homelessness with housing, health, school, and jobs.",
@@ -1060,9 +690,6 @@ const PROGRAMS = [
     "id": "unionsettlement",
     "name": "Union Settlement Holiday Toy Drive",
     "org": "Union Settlement",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Give a toy to a child in East Harlem or help Union Settlement buy gifts for local families.",
     "about": "Union Settlement is an East Harlem nonprofit, founded in 1895. It offers early childhood education, youth programs, services for older adults, and mental health care to East Harlem residents.",
@@ -1129,9 +756,6 @@ const PROGRAMS = [
     "id": "atlanticave",
     "name": "Atlantic Avenue Annual Toy Drive",
     "org": "Atlantic Avenue Local Development Corporation",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Pick a toy from the wish list for children staying in Brooklyn shelters.",
     "about": "The Atlantic Avenue Local Development Corporation is a Brooklyn nonprofit started by local merchants and community activists. It became a nonprofit in 1986 and supports businesses, events, and historic buildings on Atlantic Avenue. Its toy drive gives toys to children and families in local homeless shelters.",
@@ -1186,9 +810,6 @@ const PROGRAMS = [
     "id": "chips",
     "name": "CHiPS Toy Drive",
     "org": "CHiPS (Community Help in Park Slope)",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Drop off a new toy in Park Slope for a Brooklyn kid or teen ages 3 to 16.",
     "about": "CHiPS (Community Help in Park Slope) is a Brooklyn nonprofit founded in 1971. It serves meals, runs a food pantry, and provides temporary housing for pregnant women and mothers with young children.",
@@ -1230,9 +851,6 @@ const PROGRAMS = [
     "id": "whitney",
     "name": "Whitney Museum Toy Drive",
     "org": "Whitney Museum of American Art",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Bring a new toy, game, book, or art supply for families in NYC shelters or temporary housing. Multilingual gifts are welcome.",
     "about": "The Whitney Museum of American Art is an art museum in Manhattan, founded in 1930. It runs this drive with the NYC Department of Homeless Services, which gives the gifts to families in shelters or temporary housing.",
@@ -1275,9 +893,6 @@ const PROGRAMS = [
     "id": "littleessentials",
     "name": "Little Essentials Toy and Book Drive",
     "org": "Little Essentials",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Give a book or a new or gently used toy to a young child in New York City.",
     "about": "Little Essentials is a Brooklyn nonprofit, founded in 2011. It gives clothing, gear, and supplies to New York City families living in poverty who have children aged 5 and under.",
@@ -1344,9 +959,6 @@ const PROGRAMS = [
     "id": "wheretoturn",
     "name": "Staten Island Holiday Toy Drive",
     "org": "Chelsea Financial Services with Where to Turn",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Give an unwrapped toy to a Staten Island child whose parent or caregiver requested a holiday gift.",
     "about": "Where to Turn is a Staten Island crisis relief nonprofit, started in 2001 to help families who lost loved ones on September 11. Chelsea Financial Services, a financial services firm, runs this drive with Where to Turn. The toys go to Staten Island children and families in need.",
@@ -1358,7 +970,13 @@ const PROGRAMS = [
         "title": "Drop off a gift",
         "steps": [
           "Buy a toy and leave it unwrapped.",
-          "Bring it to 242 Main Street, Staten Island, NY 10307, Monday to Friday, 9 am to 5 pm."
+          {
+            "text": "Bring it to one of these places:",
+            "choices": [
+              "Chelsea Financial Services, 242 Main Street, Staten Island, NY 10307. Monday to Friday, 9 am to 5 pm.",
+              "Where to Turn, 22 Brienna Court, Staten Island, NY 10309. Saturdays, noon to 3 pm."
+            ]
+          }
         ]
       },
       {
@@ -1376,7 +994,7 @@ const PROGRAMS = [
       "srExtra": "Chelsea Financial Services with Where to Turn"
     },
     "source": "https://chfs.com/toy-drive/",
-    "checked": "2026-11-25",
+    "checked": "2026-11-26",
     "ways": [
       "drop",
       "mail"
@@ -1388,7 +1006,7 @@ const PROGRAMS = [
     },
     "options": [
       {
-        "text": "Bring an unwrapped toy to 242 Main Street, Staten Island, NY 10307. Monday to Friday, 9 am to 5 pm.",
+        "text": "Bring an unwrapped toy to 242 Main Street, Staten Island, NY 10307, Monday to Friday, 9 am to 5 pm. On Saturdays, noon to 3 pm, you can also bring it to 22 Brienna Court, Staten Island, NY 10309.",
         "map": "242 Main Street, Staten Island, NY 10307"
       },
       {
@@ -1400,9 +1018,6 @@ const PROGRAMS = [
     "id": "hfh",
     "name": "Homes for the Homeless Holiday Wish List",
     "org": "Homes for the Homeless",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Send a holiday gift to a family staying at one of the six NYC shelters run by Homes for the Homeless.",
     "about": "Homes for the Homeless is a New York City nonprofit, founded in 1986. It runs six shelters for families with children in the Bronx, Manhattan, Queens, and Staten Island.",
@@ -1453,9 +1068,6 @@ const PROGRAMS = [
     "id": "win",
     "name": "Win Holiday Gift Drive",
     "org": "Win",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Choose a toy or gift card for children living in Win's family shelters or supportive housing in New York City.",
     "about": "Win is a New York City nonprofit, founded in 1983 as Women in Need. It is the city's largest provider of shelter and supportive housing for families experiencing homelessness.",
@@ -1494,9 +1106,6 @@ const PROGRAMS = [
     "id": "uft",
     "name": "Teachers' Union Toy Drive",
     "org": "United Federation of Teachers",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Give a new, unwrapped toy for a child up to age 16 through the New York City teachers' union.",
     "about": "The United Federation of Teachers is the union for most New York City public school teachers, founded in 1960. It runs this toy drive each year for children in need.",
@@ -1564,9 +1173,6 @@ const PROGRAMS = [
     "id": "childrensaid",
     "name": "10,000 Toys for Girls and Boys",
     "org": "Children's Aid",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Choose a gift like a bracelet-making kit, basketball, or beginner guitar for a child served by Children's Aid in NYC.",
     "about": "Children's Aid is a New York City nonprofit, founded in 1853. It supports about 50,000 children and families in under-resourced neighborhoods with education, health care, and family support. The morning show on radio station NEW 102.7 runs this drive.",
@@ -1603,97 +1209,9 @@ const PROGRAMS = [
     "note": "NEW 102.7 aims to collect 10,000 toys by December 11. No other deadline is listed, so order early."
   },
   {
-    "id": "transanta",
-    "name": "Answer Christmas letters from trans youth",
-    "org": "Transanta",
-    "areas": [
-      "us"
-    ],
-    "status": "open",
-    "summary": "Read Christmas letters from trans youth and send a gift they picked out, without exchanging personal information.",
-    "about": "Transanta is a trans-led gift-giving project for trans young people that started in 2020. It's part of Allies in Arts, a nonprofit.",
-    "cost": "You choose from their registry.",
-    "deadline": null,
-    "stepGroups": [
-      {
-        "title": "Buy from their wish list",
-        "steps": [
-          "Open the Transanta homepage and scroll down. The letters are below the newsletter sign-up.",
-          "Pick a letter and open that young person's gift registry.",
-          "Choose a gift and check out. It ships to them, and their address stays private."
-        ]
-      }
-    ],
-    "action": {
-      "type": "link",
-      "label": "Read letters on Transanta",
-      "url": "https://www.transanta.com/"
-    },
-    "source": "https://www.transanta.com/donate",
-    "checked": "2026-11-25",
-    "ways": [
-      "ship"
-    ],
-    "signup": {
-      "needed": false,
-      "text": "None needed."
-    },
-    "options": [
-      {
-        "text": "Scroll down their homepage to find the letters. Your gift ships to the young person whose letter you pick."
-      }
-    ],
-    "note": "The campaign runs each year from about mid-November to mid-January."
-  },
-  {
-    "id": "toysfortots",
-    "name": "Fill a virtual toy box",
-    "org": "Marine Toys for Tots with Amazon",
-    "areas": [
-      "us"
-    ],
-    "status": "open",
-    "summary": "Pick a toy online, and Toys for Tots will distribute it to a child who could use a Christmas gift.",
-    "about": "Toys for Tots began in 1947 with a Marine Corps Reserve unit and now collects gifts for children across the US. The Marine Toys for Tots Foundation partners with Amazon on this virtual toy box.",
-    "cost": "About $3 to $180 per toy. Many options are under $30.",
-    "deadline": null,
-    "stepGroups": [
-      {
-        "title": "Buy from their wish list",
-        "steps": [
-          "Open the toy catalog.",
-          "Add one or more toys to your toy box. It works like a shopping cart.",
-          "Check out. Toys for Tots delivers the toys to children across the country."
-        ]
-      }
-    ],
-    "action": {
-      "type": "link",
-      "label": "Shop the virtual toy box",
-      "url": "https://amazon.toysfortotsbox.com/",
-      "srExtra": "Marine Toys for Tots with Amazon"
-    },
-    "source": "https://amazon.toysfortotsbox.com/",
-    "checked": "2026-11-25",
-    "ways": [
-      "ship"
-    ],
-    "signup": {
-      "needed": false,
-      "text": "None needed."
-    },
-    "options": [
-      {}
-    ],
-    "note": "No deadline is listed. The page also has a link for giving cash."
-  },
-  {
     "id": "mdlayafs",
     "name": "Winter Wishes",
     "org": "Mommy & Daddy's Little Angels Youth and Family Services (MDLAYAFS)",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Grant a holiday wish for a child, teen, adult, or older adult in Brooklyn, Far Rockaway, or Staten Island.",
     "about": "MDLAYAFS is a nonprofit based on Staten Island. It runs programs for youth, families, older adults, people with disabilities, and people living with HIV in New York City.",
@@ -1784,9 +1302,6 @@ const PROGRAMS = [
     "id": "wishingtree",
     "name": "The Wishing Tree Project",
     "org": "Fit4Dance with Brooklyn Community Services",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Shop a Brooklyn child's wish list, or buy clothing, winter gear, and toys for families Brooklyn Community Services supports.",
     "about": "Fit4Dance is a dance fitness studio in Brooklyn. Brooklyn Community Services, founded in 1866, is one of New York City's oldest nonprofit social service agencies. The families in this project take part in its Preventative Care Program.",
@@ -1852,9 +1367,6 @@ const PROGRAMS = [
     "id": "tinytotall",
     "name": "Christmas Extravaganza",
     "org": "Tiny To Tall",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Buy a toy or pajamas for a Staten Island child, up to age 16, at a free holiday giveaway.",
     "about": "Tiny To Tall is a tutoring network on Staten Island that also holds free community events. Its fourth annual Christmas Extravaganza gives toys and pajamas to children whose families register.",
@@ -1893,9 +1405,6 @@ const PROGRAMS = [
     "id": "foresthills",
     "name": "Forest Hills Stadium Holiday Toy Drive",
     "org": "Forest Hills Stadium with Queens Community House",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Give a new toy to a child in Queens, ages 0 to 13, through Queens Community House.",
     "about": "Queens Community House is a settlement house, founded in 1975 as Forest Hills Community House. It serves about 30,000 children, adults, and older adults in Queens. Forest Hills Stadium has run this toy drive with it since 2023.",
@@ -1951,9 +1460,6 @@ const PROGRAMS = [
     "id": "ghostbusters",
     "name": "South Bronx Toy Drive",
     "org": "New York City Ghostbusters",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Give a new toy to a South Bronx child through Community School District 9.",
     "about": "New York City Ghostbusters is a nonprofit group of Ghostbusters fans. Every toy it collects goes to the South Bronx Toy Drive, which Community School District 9 of the Bronx runs.",
@@ -2021,9 +1527,6 @@ const PROGRAMS = [
     "id": "catholicguardian",
     "name": "Christmas Toy Drive",
     "org": "Catholic Guardian Services",
-    "areas": [
-      "nyc"
-    ],
     "status": "open",
     "summary": "Give a toy to a New York City child in foster care or facing other hard times.",
     "about": "Catholic Guardian Services is a New York City nonprofit whose foster care work goes back to 1899. It is one of the largest foster care providers in New York and helps more than 3,000 people and 1,400 families.",
@@ -2088,6 +1591,566 @@ const PROGRAMS = [
       }
     ],
     "note": "Questions, including hosting a toy drive or giving new toys: Development@CatholicGuardian.org or 929-989-8959."
+  },
+  {
+    "id": "familycenter",
+    "name": "The Family Center Toy Drive",
+    "org": "The Family Center",
+    "status": "open",
+    "summary": "Choose a holiday gift for a child in a family The Family Center supports.",
+    "about": "The Family Center is a nonprofit in Brooklyn. It offers family support, legal, health education, and behavioral health services.",
+    "cost": "You choose from the wish list.",
+    "deadline": "2026-12-13",
+    "action": {
+      "type": "link",
+      "label": "Shop the Family Center wish list",
+      "url": "https://thefamilycenter.mindfulgiving.org/campaigns/2026-tfc-toy-drive/products"
+    },
+    "source": "https://www.thefamilycenter.org/tfc-toy-drive-2026/",
+    "checked": "2026-11-26",
+    "ways": [
+      "ship",
+      "money"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {},
+      {
+        "link": {
+          "label": "Give money",
+          "url": "https://www.thefamilycenter.org/tfc-toy-drive-2026/",
+          "srExtra": "The Family Center"
+        },
+        "text": "Money for the toy drive helps pay for the holiday party."
+      }
+    ],
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open the Mindful Giving wish list.",
+          "Choose a gift.",
+          "Check out by December 13. It ships to The Family Center for you."
+        ]
+      },
+      {
+        "title": "Give money",
+        "steps": [
+          "Open The Family Center's toy drive page.",
+          "Choose \"Make a donation\" and follow the steps. The money helps pay for the holiday party."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "stignatius",
+    "name": "Annual Toy Drive",
+    "org": "Church of St. Ignatius Loyola",
+    "status": "open",
+    "summary": "Bring a new toy or game to the Upper East Side for a Staten Island child, ages 3 to 12.",
+    "about": "St. Ignatius Loyola is a Catholic parish on the Upper East Side of Manhattan. Its toy drive is for the children of St. Mary of the Assumption–Our Lady of Mt. Carmel–St. Benedict Parish on Staten Island.",
+    "cost": "You choose.",
+    "deadline": "2026-12-17",
+    "mustArrive": true,
+    "action": {
+      "type": "link",
+      "label": "See toy drive details",
+      "url": "https://ignatius.nyc/event/annual-toy-drive-2026/",
+      "srExtra": "Church of St. Ignatius Loyola"
+    },
+    "source": "https://ignatius.nyc/event/annual-toy-drive-2026/",
+    "checked": "2026-11-26",
+    "ways": [
+      "drop"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {
+        "map": "980 Park Avenue, New York, NY 10028"
+      }
+    ],
+    "stepGroups": [
+      {
+        "title": "Drop off a gift",
+        "steps": [
+          "Buy a new toy or game for a child 3 to 12. Leave it unwrapped.",
+          "Bring it to the Parish House, 980 Park Avenue, Manhattan, by December 17."
+        ]
+      }
+    ],
+    "note": "The page doesn't list drop-off hours. Call 212-288-3588 before you go."
+  },
+  {
+    "id": "boogiedown",
+    "name": "Boogie Down Bronx Runners Toy Drive",
+    "org": "Boogie Down Bronx Runners",
+    "status": "open",
+    "summary": "Bring a new toy or learning gift for a Bronx child to a one-evening toy drive.",
+    "about": "Boogie Down Bronx Runners is a Bronx running crew, started in 2017. This is its 8th annual toy drive.",
+    "cost": "You choose.",
+    "deadline": "2026-12-15",
+    "mustArrive": true,
+    "action": {
+      "type": "link",
+      "label": "See toy drive details",
+      "url": "https://www.boogiedownbronxrunners.org/events/boogie-down-bronx-runners-to-host-their-8th-annual-toy-drive",
+      "srExtra": "Boogie Down Bronx Runners"
+    },
+    "source": "https://www.boogiedownbronxrunners.org/events/boogie-down-bronx-runners-to-host-their-8th-annual-toy-drive",
+    "checked": "2026-11-26",
+    "ways": [
+      "drop"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {
+        "map": "785 Pelham Parkway, Bronx, NY"
+      }
+    ],
+    "stepGroups": [
+      {
+        "title": "Drop off a gift",
+        "steps": [
+          "Buy a new toy, book, puzzle, learning game, school supplies, or art supplies. Leave it unwrapped.",
+          "Bring it to 785 Pelham Parkway, Bronx, on Tuesday, December 15, between 6 and 7:30 pm."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "bradycourt",
+    "name": "Bronx Community Holiday Toy Drive",
+    "org": "White Plains Road BID with Brady Court",
+    "status": "open",
+    "summary": "Give a new toy to a Bronx child, ages 2 to 12, for a community Christmas celebration on December 19.",
+    "about": "The White Plains Road Business Improvement District and Brady Court host this drive. The toys go to children at a community Christmas celebration at Brady Court on December 19.",
+    "cost": "You choose. No toy weapons or violent toys.",
+    "deadline": "2026-12-18",
+    "mustArrive": true,
+    "action": {
+      "type": "link",
+      "label": "See the four drop-off sites",
+      "url": "https://www.nidcny.org/events/help-bring-holiday-joy-to-bronx-kids"
+    },
+    "source": "https://www.nidcny.org/events/help-bring-holiday-joy-to-bronx-kids",
+    "checked": "2026-11-26",
+    "ways": [
+      "drop"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {}
+    ],
+    "stepGroups": [
+      {
+        "title": "Drop off a gift",
+        "steps": [
+          "Buy a new toy for a child 2 to 12. Leave it unwrapped. No toy weapons or violent toys.",
+          {
+            "text": "Bring it on Friday, December 4, 11, or 18, between noon and 6 pm, to one of these places:",
+            "choices": [
+              "Brady Court Community Center, 768 Brady Avenue, Bronx",
+              "Union Community Health Center, 1st floor lobby, 260 East 188th Street, Bronx",
+              "Union Community Health Center, 3rd floor, 2016 Bronxdale Avenue, Bronx",
+              "Bronx Community Board 11, 1741 Colden Avenue, Bronx"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "astoriacenter",
+    "name": "December Toy Drive",
+    "org": "Astoria Center of Israel",
+    "status": "open",
+    "summary": "Bring a new toy to a synagogue in Astoria for families Project Hospitality serves on Staten Island.",
+    "about": "Astoria Center of Israel is a synagogue in Astoria, Queens. The toys go to Project Hospitality, a Staten Island nonprofit that helps people with food, housing, health care, and family support.",
+    "cost": "You choose.",
+    "deadline": "2026-12-15",
+    "closesAt": "2026-12-15T17:00:00-05:00",
+    "mustArrive": true,
+    "action": {
+      "type": "link",
+      "label": "See toy drive details",
+      "url": "https://banen.astoriacenter.org/news/2026/support-acis-december-toy-drive/",
+      "srExtra": "Astoria Center of Israel"
+    },
+    "source": "https://banen.astoriacenter.org/news/2026/support-acis-december-toy-drive/",
+    "checked": "2026-11-26",
+    "ways": [
+      "drop"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {
+        "map": "27-35 Crescent Street, Astoria, NY 11102"
+      }
+    ],
+    "stepGroups": [
+      {
+        "title": "Drop off a gift",
+        "steps": [
+          "Buy a new toy. Leave it unwrapped.",
+          "Bring it to Rabbi Josh's office at Astoria Center of Israel, 27-35 Crescent Street, Astoria, by Tuesday, December 15, at 5 pm."
+        ]
+      }
+    ],
+    "note": "You can also give money: on the synagogue's donation page, choose Rabbi Josh's Discretionary Fund and write \"Toy Drive\" in the note. Questions: 718-278-2680."
+  },
+  {
+    "id": "district33",
+    "name": "District 33 Holiday Toy Drive",
+    "org": "Council Member Lincoln Restler's office",
+    "status": "open",
+    "summary": "Give a new toy or gift to a child at one of the highest-need public schools in Brooklyn's District 33.",
+    "about": "Council Member Lincoln Restler represents District 33 in Brooklyn, from Greenpoint to Brooklyn Heights. His office runs this drive with The Service Collective and Spread Love Brooklyn.",
+    "cost": "You choose.",
+    "deadline": "2026-12-19",
+    "mustArrive": true,
+    "action": {
+      "type": "link",
+      "label": "See drop-off details",
+      "url": "https://www.gensa.family/new-york-city/news/toy-and-coat-drives-for-brooklyn-families-2026",
+      "srExtra": "District 33 Holiday Toy Drive"
+    },
+    "source": "https://www.downtownbrooklyn.com/news/2026/ways-to-get-involved-in-dtbk-this-giving-season/",
+    "checked": "2026-11-26",
+    "ways": [
+      "drop"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {}
+    ],
+    "stepGroups": [
+      {
+        "title": "Drop off a gift",
+        "steps": [
+          "Buy a new toy or gift. Leave it unwrapped.",
+          {
+            "text": "Bring it to one of these places:",
+            "choices": [
+              "District 33 office, 410 Atlantic Avenue, Brooklyn. Weekdays, 9 am to 5 pm, through December 17.",
+              "St. Ann & the Holy Trinity Church, 157 Montague Street, Brooklyn. Weekdays, 9 am to 4 pm, through December 17.",
+              "Brooklyn Borough Hall Market. Saturday, December 19, 9 am to noon."
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "id": "fordham",
+    "name": "Fordham Holiday Toy Drive",
+    "org": "Fordham University",
+    "status": "open",
+    "summary": "Buy a toy for a child in the Bronx neighborhoods near Fordham's Rose Hill campus.",
+    "about": "Fordham University's Division for External Affairs runs this drive. The toys go to local children and families at a community celebration on Fordham's Rose Hill campus in the Bronx on December 18.",
+    "cost": "You choose from the wish list.",
+    "deadline": "2026-12-18",
+    "mustArrive": true,
+    "action": {
+      "type": "link",
+      "label": "Shop Fordham's wish list",
+      "url": "https://www.amazon.com/hz/wishlist/ls/3K19LP4C02C88"
+    },
+    "source": "https://www.fordham.edu/about/leadership-and-administration/administrative-offices/external-affairs/center-for-community-engaged-learning/2026-holiday-toy-drive/",
+    "checked": "2026-11-27",
+    "ways": [
+      "ship",
+      "drop"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {},
+      {
+        "text": "Bring a new, unwrapped toy to JMCC 215 on Fordham's Rose Hill campus by December 18.",
+        "map": "441 East Fordham Road, Bronx, NY 10458"
+      }
+    ],
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open Fordham's Amazon wish list.",
+          "Choose toys and check out. Fordham's address is already selected, so it ships to Fordham for you. You can add your name in the gift note.",
+          "Order so it arrives by December 18."
+        ]
+      },
+      {
+        "title": "Drop off a gift",
+        "steps": [
+          "Buy a new toy. Leave it unwrapped.",
+          "Bring it to JMCC 215 on Fordham's Rose Hill campus in the Bronx by December 18."
+        ]
+      }
+    ],
+    "note": "Fordham's page also has a \"Spread Joy in Jamaica\" tab. That's a separate drive for children in Jamaica, so use the wish list on this card."
+  },
+  {
+    "id": "histoystore",
+    "name": "His Toy Store",
+    "org": "Hope For New York",
+    "status": "open",
+    "summary": "Give money to stock free toy stores in all five boroughs, where parents in need choose gifts for their children.",
+    "about": "Hope For New York is a New York City nonprofit that connects donors and volunteers with partner organizations serving people in need.",
+    "cost": "You choose the amount.",
+    "deadline": null,
+    "action": {
+      "type": "link",
+      "label": "Give to His Toy Store",
+      "url": "https://donate.hfny.org/campaign/851631/donate"
+    },
+    "source": "https://hfny.org/holiday-volunteer-opportunities/",
+    "checked": "2026-11-26",
+    "ways": [
+      "money"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None needed."
+    },
+    "options": [
+      {}
+    ],
+    "stepGroups": [
+      {
+        "title": "Give money",
+        "steps": [
+          "Open the His Toy Store donation page.",
+          "Choose an amount. Hope For New York uses it to stock the stores."
+        ]
+      }
+    ]
+  },
+  {
+    "id": "camba-shelters",
+    "name": "Bring Joy Home: shelters",
+    "org": "CAMBA",
+    "status": "open",
+    "summary": "Send a holiday gift to a child staying in a CAMBA shelter in Queens, Brooklyn, or the Bronx.",
+    "about": "CAMBA is a Brooklyn nonprofit, founded in 1977. It runs shelters, family support, and youth programs across New York City.",
+    "cost": "You choose from the wish list.",
+    "deadline": "2026-12-18",
+    "action": {
+      "type": "link",
+      "label": "Choose a shelter's wish list",
+      "url": "https://camba.org/support/toy-drive-supporters/"
+    },
+    "source": "https://camba.org/support/toy-drive-supporters/",
+    "checked": "2026-11-26",
+    "ways": [
+      "ship",
+      "money"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None. After you order, fill out a short form."
+    },
+    "options": [
+      {},
+      {
+        "link": {
+          "label": "Give money to CAMBA",
+          "url": "https://host.nxt.blackbaud.com/adaptive-donor-form/?formId=42298a25-75cb-40f7-b436-9618c3b61729&envid=p-_aS2tlYZakyj0OLjwnnX0A&zone=usa",
+          "srExtra": "CAMBA shelters"
+        },
+        "text": "The money supports CAMBA's toy drive."
+      }
+    ],
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open CAMBA's toy drive page.",
+          {
+            "text": "Under Temporary Housing, pick one of these Amazon wish lists:",
+            "choices": [
+              "Kings Inn, Queens",
+              "The Landing, Queens",
+              "Flagstone Family Center, Brooklyn",
+              "The Kensington, Brooklyn",
+              "Park Avenue Residence, Bronx",
+              "Evergreen Family Residence, Bronx"
+            ]
+          },
+          "Choose a gift and check out by December 18. It ships to that site.",
+          "Fill out CAMBA's short donor form, linked on the same page, so staff know the gift is coming and can send you a tax receipt."
+        ]
+      },
+      {
+        "title": "Give money",
+        "steps": [
+          "Open CAMBA's donation form.",
+          "Choose an amount."
+        ]
+      }
+    ],
+    "note": "Questions: development@CAMBA.org."
+  },
+  {
+    "id": "camba-housing",
+    "name": "Bring Joy Home: supportive housing",
+    "org": "CAMBA",
+    "status": "open",
+    "summary": "Send a holiday gift to a child living in CAMBA supportive housing in Brooklyn, the Bronx, Queens, or Staten Island.",
+    "about": "CAMBA is a Brooklyn nonprofit, founded in 1977. It runs shelters, family support, and youth programs across New York City.",
+    "cost": "You choose from the wish list.",
+    "deadline": "2026-12-18",
+    "action": {
+      "type": "link",
+      "label": "Choose a housing site's wish list",
+      "url": "https://camba.org/support/toy-drive-supporters/"
+    },
+    "source": "https://camba.org/support/toy-drive-supporters/",
+    "checked": "2026-11-26",
+    "ways": [
+      "ship",
+      "money"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None. After you order, fill out a short form."
+    },
+    "options": [
+      {},
+      {
+        "link": {
+          "label": "Give money to CAMBA",
+          "url": "https://host.nxt.blackbaud.com/adaptive-donor-form/?formId=42298a25-75cb-40f7-b436-9618c3b61729&envid=p-_aS2tlYZakyj0OLjwnnX0A&zone=usa",
+          "srExtra": "CAMBA supportive housing"
+        },
+        "text": "The money supports CAMBA's toy drive."
+      }
+    ],
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open CAMBA's toy drive page.",
+          {
+            "text": "Under Supportive Housing, pick one of these Amazon wish lists:",
+            "choices": [
+              "CAMBA Gardens I & II, Brooklyn",
+              "Clarkson Estates, Brooklyn",
+              "Dumont Green, Brooklyn",
+              "Myrtle Ave, Brooklyn",
+              "Prospect Plaza, Brooklyn",
+              "Van Dyke, Brooklyn",
+              "Van Dyke III, Brooklyn",
+              "Bronx Grove, Bronx",
+              "Beach 21st Street, Queens",
+              "Seaview Estates, Staten Island"
+            ]
+          },
+          "Choose a gift and check out by December 18. It ships to that site.",
+          "Fill out CAMBA's short donor form, linked on the same page, so staff know the gift is coming and can send you a tax receipt."
+        ]
+      },
+      {
+        "title": "Give money",
+        "steps": [
+          "Open CAMBA's donation form.",
+          "Choose an amount."
+        ]
+      }
+    ],
+    "note": "Austin 147 and Via Vyse, in the Bronx, say their wish lists are coming soon. Questions: development@CAMBA.org."
+  },
+  {
+    "id": "camba-afterschool",
+    "name": "Bring Joy Home: afterschool programs",
+    "org": "CAMBA",
+    "status": "open",
+    "summary": "Send a holiday gift to a child in a CAMBA afterschool program in Brooklyn.",
+    "about": "CAMBA is a Brooklyn nonprofit, founded in 1977. It runs shelters, family support, and youth programs across New York City.",
+    "cost": "You choose from the wish list.",
+    "deadline": "2026-12-18",
+    "action": {
+      "type": "link",
+      "label": "Choose a program's wish list",
+      "url": "https://camba.org/support/toy-drive-supporters/"
+    },
+    "source": "https://camba.org/support/toy-drive-supporters/",
+    "checked": "2026-11-26",
+    "ways": [
+      "ship",
+      "money"
+    ],
+    "signup": {
+      "needed": false,
+      "text": "None. After you order, fill out a short form."
+    },
+    "options": [
+      {},
+      {
+        "link": {
+          "label": "Give money to CAMBA",
+          "url": "https://host.nxt.blackbaud.com/adaptive-donor-form/?formId=42298a25-75cb-40f7-b436-9618c3b61729&envid=p-_aS2tlYZakyj0OLjwnnX0A&zone=usa",
+          "srExtra": "CAMBA afterschool programs"
+        },
+        "text": "The money supports CAMBA's toy drive."
+      }
+    ],
+    "stepGroups": [
+      {
+        "title": "Buy from their wish list",
+        "steps": [
+          "Open CAMBA's toy drive page.",
+          {
+            "text": "Under Afterschool Programs, pick one of these Amazon wish lists:",
+            "choices": [
+              "Albany",
+              "Beacon 164",
+              "Beacon 166",
+              "Beacon 271",
+              "Beacon 361",
+              "Boulevard",
+              "Brevoort",
+              "Community School 198",
+              "Community School 306",
+              "Cypress Hills",
+              "Howard",
+              "Sheepshead Bay",
+              "Stuyvesant Gardens",
+              "Van Dyke"
+            ]
+          },
+          "Choose a gift and check out by December 18. It ships to that site.",
+          "Fill out CAMBA's short donor form, linked on the same page, so staff know the gift is coming and can send you a tax receipt."
+        ]
+      },
+      {
+        "title": "Give money",
+        "steps": [
+          "Open CAMBA's donation form.",
+          "Choose an amount."
+        ]
+      }
+    ],
+    "note": "Questions: development@CAMBA.org."
   }
 ];
 
@@ -2171,15 +2234,12 @@ function badgeFor(p) {
   }
   return { text: p.openLabel || (p.yearRound ? "Open all year" : "Open now"), cls: "" };
 }
-// The deadline, then who the program helps. The hidden full stop makes a screen reader say them as two separate items.
-// Everything that draws the badges row uses this, so the "who it helps" chip is never lost when the row is redrawn.
-function badgeHTML(b, p) {
+// The deadline label, then "Today" or "Tomorrow" when the deadline is that close.
+// Everything that draws the badges row uses this.
+function badgeHTML(b) {
   return '<span class="badge ' + b.cls + '">' + esc(b.text) + "</span>" +
-    (b.soon ? '<span class="soon">' + esc(b.soon) + "</span>" : "") +
-    p.areas.map((a) => '<span class="sr-only">. </span><span class="badge place">' + HEART + esc(LABELS.helps[a]) + "</span>").join("");
+    (b.soon ? '<span class="soon">' + esc(b.soon) + "</span>" : "");
 }
-// A small heart for the "who it helps" chip. It is decoration only.
-const HEART = '<svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 16.4s-6.3-3.8-6.3-8A3.5 3.5 0 0 1 10 6.2a3.5 3.5 0 0 1 6.3 2.2c0 4.2-6.3 8-6.3 8z"/></svg>';
 
 function mailto(a) {
   const body = a.body.replace(/\n/g, "\r\n");
@@ -2334,7 +2394,7 @@ function refreshDates() {
     const li = cards.get(p.id);
     const b = badgeFor(p);
     if (li.dataset.badge !== badgeSig(b)) {
-      li.querySelector(".badges").innerHTML = badgeHTML(b, p);
+      li.querySelector(".badges").innerHTML = badgeHTML(b);
       li.dataset.badge = badgeSig(b);
     }
     if (li.dataset.rows !== rowsSig(p)) {
@@ -2377,7 +2437,7 @@ function cardEl(p) {
         '<div class="card-head">' +
           '<div class="card-title"><h3 id="t-' + p.id + '" tabindex="-1">' + esc(p.name) + "</h3>" +
             '<p class="org">' + esc(p.org) + "</p></div>" +
-          '<p class="badges">' + badgeHTML(b, p) + "</p>" +
+          '<p class="badges">' + badgeHTML(b) + "</p>" +
         "</div>" +
         '<p class="summary">' + esc(p.summary) + "</p>" +
         (p.statusNote ? '<p class="flag"><strong>Check first.</strong> ' + esc(p.statusNote) + "</p>" : "") +
@@ -2440,7 +2500,6 @@ function buildGroup(fieldsetId, key, labels) {
     fs.appendChild(label);
   });
 }
-buildGroup("f-area", "areas", LABELS.areas);
 buildGroup("f-way", "ways", LABELS.ways);
 
 // Build cards once, then show, hide, and reorder them
@@ -2453,7 +2512,6 @@ function checked(name) {
 }
 function matches(p, f) {
   if (f.hideClosed && !isActionable(p)) return false;
-  if (f.areas.length && !f.areas.some((v) => p.areas.includes(v))) return false;
   if (f.ways.length && !f.ways.some((v) => p.ways.includes(v))) return false;
   return true;
 }
@@ -2486,12 +2544,12 @@ function update() {
   showSort();
   refreshDates();
   const f = {
-    areas: checked("areas"), ways: checked("ways"),
+    ways: checked("ways"),
     hideClosed: $("hideClosed").checked
   };
   try {
     sessionStorage.setItem("wishFinderFilters", JSON.stringify({
-      areas: f.areas, ways: f.ways, hideClosed: f.hideClosed, sort: $("sort").value
+      ways: f.ways, hideClosed: f.hideClosed, sort: $("sort").value
     }));
   } catch (e) { /* storage is off: filters just start fresh next time */ }
   const list = $("list");
@@ -2520,7 +2578,7 @@ function update() {
     (closedHidden ? " " + closedHidden + (closedHidden === 1 ? " is" : " are") + " full or closed." : "");
   // Showing full and closed programs is a change from the usual view, so it counts as a filter that is on
   const showAll = !f.hideClosed;
-  const active = f.areas.length + f.ways.length + (showAll ? 1 : 0);
+  const active = f.ways.length + (showAll ? 1 : 0);
   // The number on the Filters button. The icon and the word are in the HTML, so only the number changes.
   let badge = $("filterSummary").querySelector(".fs-count");
   if (!active) {
@@ -2536,7 +2594,7 @@ function update() {
 
   // Line above the list that names the filters that are on. When nothing matches, it stays hidden:
   // the "No programs match" box has its own "Reset filters". The styles also hide it while the filter panel is open.
-  const names = f.areas.map((v) => LABELS.areas[v]).concat(f.ways.map((v) => LABELS.ways[v]));
+  const names = f.ways.map((v) => LABELS.ways[v]);
   $("applied").hidden = (names.length === 0 && !showAll) || shown === 0;
   $("appliedText").textContent = [names.length ? "Filters on: " + names.join(", ") + "." : "",
     showAll ? "Full and closed programs are showing." : ""].filter(Boolean).join(" ");
