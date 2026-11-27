@@ -19,12 +19,17 @@ https://docs.google.com/forms/d/e/1FAIpQLSfdwLZCQvjUqEZg6rhdhUFrDyp4WQBQvWkwpQ0r
 
 ## How it is built
 
-- The whole site is one file, `index.html`, with its styles and scripts inside it.
-- It uses no libraries and needs no build step.
-- GitHub Pages publishes it from the `main` branch.
+- `index.html` holds the list and its script.
+- `about.html` is the About page.
+- `styles.css` is shared by both pages.
+- `fonts/` holds the self-hosted fonts.
+- There are still no libraries and no build step.
+- GitHub Pages publishes the site from the `main` branch.
 
 ## How to edit
 
 - Whenever `styles.css` changes, change the `v=` value in both pages (for example, to today's date plus a number), so visitors' browsers download the new file instead of reusing an old one.
+- The 'Updated' date at the top of index.html shows when the list's information last changed. When a change adds or removes a program, or changes a program's details (deadline, cost, steps, about text, status or links), set that date to the day of the change in New York time. Change both the datetime value and the text. Don't change it for changes that only affect the look or the code.
+- Change a program's 'checked' date only when its details have been confirmed against the organization's own page.
 
 Made by Crystal Marte.
