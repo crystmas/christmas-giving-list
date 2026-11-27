@@ -155,7 +155,7 @@
     <p class="footnote">Updated <time datetime="2026-11-27">Nov 27, 2026</time>.</p>
     <p class="footnote">Dates and openings can change, so confirm with the organization before you buy.</p>
     <p class="footnote">This website is not affiliated with any listed organization.</p>
-    <p class="footnote">This site counts visits and button clicks without cookies or personal data.</p>
+    <p class="footnote">This site counts visits and clicks without cookies or personal data.</p>
     <a class="page-link" href="about.html">About this project</a>
   </div>
 </footer>
@@ -2930,8 +2930,9 @@ function hostOf(url) {
     return (host === "a.co" || host === "amzn.to") ? "amazon.com" : host;
   } catch (e) { return ""; }
 }
-function siteLink(cls, label, url, hiddenExtra) {
-  return '<a' + (cls ? ' class="' + cls + '"' : "") + ' href="' + esc(url) + '">' + esc(label) +
+// program: a program id, so the click is counted (see "Visit counts" below)
+function siteLink(cls, label, url, hiddenExtra, program) {
+  return '<a' + (cls ? ' class="' + cls + '"' : "") + (program ? ' data-program="' + esc(program) + '"' : "") + ' href="' + esc(url) + '">' + esc(label) +
     (hiddenExtra ? '<span class="sr-only"> ' + esc(hiddenExtra) + "</span>" : "") + "</a>";
 }
 
@@ -3148,7 +3149,7 @@ function cardEl(p) {
             "<h4>" + esc(g.title) + '</h4><ol class="steps">' + g.steps.map(stepHTML).join("") + "</ol>").join("") +
           (p.about ? '<p class="goodtoknow"><strong>About the organization.</strong> ' + esc(p.about) + "</p>" : "") +
           (p.note ? '<p class="goodtoknow"><strong>Good to know.</strong> ' + esc(p.note) + "</p>" : "") +
-          '<p class="source">' + siteLink("", hostOf(p.source) ? "Full details on " + hostOf(p.source) : "See where this information came from", p.source, "for " + p.name + ", " + p.org) + "</p>" +
+          '<p class="source">' + siteLink("", hostOf(p.source) ? "Full details on " + hostOf(p.source) : "See where this information came from", p.source, "for " + p.name + ", " + p.org, p.id) + "</p>" +
         "</div></details>" +
     "</article>";
 
@@ -3396,7 +3397,7 @@ $("feedback").addEventListener("toggle", () => {
 });
 
 // Visit counts (GoatCounter, no cookies or personal data). The cards are drawn by this script and redrawn
-// when filters change, so one listener on the list counts clicks on every card's buttons, old or new.
+// when filters change, so one listener on the list counts clicks on every card's buttons and "Full details" link, old or new.
 // If the GoatCounter script did not load (for example, an ad blocker stopped it), nothing is counted and nothing breaks.
 $("list").addEventListener("click", (e) => {
   const btn = e.target.closest("[data-program]");
