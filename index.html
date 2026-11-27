@@ -189,7 +189,8 @@
                  the usual one row for each way. "ways" still decides which filters find the card.
         (an option can also have map: "street address", which adds a "Get directions to drop-off" link)
         options: one entry for each way to give, in the same order as "ways". Each can have text (a short detail such as an
-                 address) and, for the second and third way, a link { label, url }.
+                 address) and, for the second and third way, a link { label, url }. The link can also be an email button,
+                 written like an email action: { type: "email", label, email, contactName, subject, body }.
         action:  { type: "link", label, url }
                  { type: "email", label, email, contactName, subject, body }
                  Add srExtra: "Organization name" when another card has a button with the same words.
@@ -599,8 +600,8 @@ const PROGRAMS = [
     "summary": "Give a book, game, toy, or gift card to a survivor of gender-based violence or one of their children.",
     "about": "Sanctuary for Families is a New York City nonprofit, founded in 1984. It helps survivors of domestic violence, sex trafficking, and other gender-based violence with shelter, counseling, legal help, and job training.",
     "whoText": "Adults and children who are survivors of abuse",
-    "cost": "Gifts range from under $10 to about $100.",
-    "costMin": 8,
+    "cost": "About $25 to $30 per gift.",
+    "costMin": 25,
     "deadline": "2026-12-01",
     "mustArrive": true,
     "stepGroups": [
@@ -611,9 +612,16 @@ const PROGRAMS = [
           "Choose a gift or gift card.",
           "Check out with Sanctuary's shipping address. Order so it arrives by December 1."
         ]
+      },
+      {
+        "title": "Drop off a gift",
+        "steps": [
+          "Email elobue@sffny.org to set up a drop-off. Sanctuary only accepts drop-offs arranged ahead of time.",
+          "Bring new gifts by December 1."
+        ]
       }
     ],
-    "note": "You can also deliver new gifts yourself by December 1, but you must arrange it first with Emily Lo Bue. Questions: elobue@sffny.org.",
+    "note": "Questions: elobue@sffny.org.",
     "action": {
       "type": "link",
       "label": "Shop the wish list",
@@ -621,16 +629,28 @@ const PROGRAMS = [
       "srExtra": "Sanctuary for Families"
     },
     "source": "https://sanctuaryforfamilies.org/support-us/holiday-opportunities/",
-    "checked": "2026-11-25",
+    "checked": "2026-11-26",
     "ways": [
-      "ship"
+      "ship",
+      "drop"
     ],
     "signup": {
       "needed": false,
       "text": "None needed."
     },
     "options": [
-      {}
+      {},
+      {
+        "link": {
+          "type": "email",
+          "label": "Email to set up a drop-off",
+          "email": "elobue@sffny.org",
+          "contactName": "Emily Lo Bue",
+          "subject": "Winter Wishes gift drop-off",
+          "body": "Hello Emily,\n\nI would like to drop off new gifts for Sanctuary's Winter Wishes gift drive. Could we set up a time for me to bring them by December 1?\n\nThank you,\n[Your name]\n[Your phone number]"
+        },
+        "text": "Email elobue@sffny.org to set up a drop-off, then bring new gifts by December 1."
+      }
     ]
   },
   {
@@ -697,7 +717,7 @@ const PROGRAMS = [
     "summary": "Give a holiday gift to a child in foster care, an adult with a developmental disability, or a family facing financial or housing hardship.",
     "about": "The New York Foundling is a New York City nonprofit, founded in 1869. It runs child welfare, education, health, and disability programs for children, adults, and families.",
     "whoText": "Children in foster care, adults with developmental disabilities, and families facing money or housing trouble",
-    "cost": "About $7 to $27 per gift on YouGiveGoods. Bundles go up to $250.",
+    "cost": "About $15 to $20 per gift on Amazon. You can also donate any amount.",
     "costMin": null,
     "deadline": "2026-12-08",
     "stepGroups": [
@@ -719,8 +739,8 @@ const PROGRAMS = [
       {
         "title": "Give money",
         "steps": [
-          "Open The Foundling's gift drive page.",
-          "Choose an amount."
+          "Open The Foundling's YouGiveGoods page.",
+          "Give any amount. The Foundling uses it to buy gifts."
         ]
       }
     ],
@@ -732,7 +752,7 @@ const PROGRAMS = [
       "srExtra": "The New York Foundling"
     },
     "source": "https://www.nyfoundling.org/holiday-gift-drive/",
-    "checked": "2026-11-25",
+    "checked": "2026-11-26",
     "ways": [
       "ship",
       "drop",
@@ -746,11 +766,11 @@ const PROGRAMS = [
       },
       {
         "link": {
-          "label": "Give to The Foundling",
-          "url": "https://www.nyfoundling.org/holiday-gift-drive/",
+          "label": "Give on YouGiveGoods",
+          "url": "https://yougivegoods.com/campaign-landing/sy05bu5sgwyzp3c1n95vzkumz",
           "srExtra": "The New York Foundling"
         },
-        "text": "You give on The Foundling's gift drive page."
+        "text": "The Foundling uses this to buy gifts."
       }
     ],
     "signup": {
@@ -2042,7 +2062,9 @@ function cardEl(p) {
     if (!btn) return;
     const status = li.querySelector(".copy-status");
     const isAddr = btn.dataset.copy === "addr";
-    const text = isAddr ? p.action.email : p.action.body;
+    // The email is the card's main button, or the email button on one of its ways (such as a drop-off)
+    const mail = p.action.type === "email" ? p.action : rowsOf(p).map((r) => r.link).find((l) => l && l.type === "email");
+    const text = isAddr ? mail.email : mail.body;
     try {
       await navigator.clipboard.writeText(text);
       status.textContent = isAddr ? "Email address copied." : "Message text copied.";
