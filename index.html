@@ -21,7 +21,7 @@
 <!-- The heading font and the main text font start loading right away -->
 <link rel="preload" href="fonts/lora-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=2026-11-27-9">
+<link rel="stylesheet" href="styles.css?v=2026-11-27-10">
 <!-- The folded feedback form needs JavaScript. Without it, only the plain link to the form shows. -->
 <noscript><style>#feedback { display: none; }</style></noscript>
 </head>
@@ -70,12 +70,8 @@
 
 <main>
   <div class="wrap intro">
-    <!-- "Updated" is the day the list's information last changed, in New York time. It is written here by hand,
-         not filled in by the script. See "How to edit" in README.md for when to change it, and change both
-         the datetime value and the text. -->
     <div class="topline">
       <a class="page-link" href="about.html">About this project<svg class="arrow arrow-after" aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 8h10M9 4l4 4-4 4"/></svg></a>
-      <span class="updated">Updated <time datetime="2026-11-27">Nov 27, 2026</time></span>
     </div>
     <h2 class="intro-title">Find your way to give in New&nbsp;York&nbsp;City</h2>
     <p class="intro-lead">Pick a program below to give a holiday gift to a child or adult in need. Local organizations run every program, and each listing shows the cost, the deadline, and how to give.</p>
@@ -154,9 +150,13 @@
       <iframe id="feedbackFrame" title="Feedback form for The Christmas Giving List" data-src="https://docs.google.com/forms/d/e/1FAIpQLSfdwLZCQvjUqEZg6rhdhUFrDyp4WQBQvWkwpQ0rKYL52Z11yQ/viewform?embedded=true"></iframe>
     </details>
     <a class="form-link" href="https://docs.google.com/forms/d/e/1FAIpQLSfdwLZCQvjUqEZg6rhdhUFrDyp4WQBQvWkwpQ0rKYL52Z11yQ/viewform">Open the form on its own page</a>
-    <!-- The date is filled in by the script from the oldest "checked" date, so the sentence is true for every listing.
-         The date written here only shows if JavaScript is off. -->
-    <p class="footnote">Every listing was checked on or after <span class="oldest-checked">November 25, 2026</span>. Dates and openings change, so confirm with the organization before you buy. This website is not affiliated with any listed organization. This site counts visits and button clicks without cookies or personal data.</p>
+    <!-- "Updated" is the day the list's information last changed, in New York time. It is written in the line below
+         by hand, not filled in by the script. See "How to edit" in README.md for when to change it, and change both
+         the datetime value and the text. -->
+    <p class="footnote">Updated <time datetime="2026-11-27">Nov 27, 2026</time>.</p>
+    <p class="footnote">Dates and openings can change, so confirm with the organization before you buy.</p>
+    <p class="footnote">This website is not affiliated with any listed organization.</p>
+    <p class="footnote">This site counts visits and button clicks without cookies or personal data.</p>
     <a class="page-link" href="about.html">About this project</a>
   </div>
 </footer>
@@ -2297,9 +2297,6 @@ function daysUntil(iso) {
 function shortDate(iso) {
   return parseDate(iso).toLocaleDateString("en-US", { month: "long", day: "numeric" });
 }
-function longDate(iso) {
-  return parseDate(iso).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" });
-}
 
 // The list is for one holiday season. After the season ends, only programs that are open all year stay open.
 function seasonOver() {
@@ -2805,11 +2802,6 @@ function fitSticky() {
 fitSticky();
 window.addEventListener("resize", fitSticky);
 if (window.ResizeObserver) new ResizeObserver(fitSticky).observe($("filterPanel"));
-
-// The oldest check date, shown in the footer: every listing was checked on that day or later
-const oldest = PROGRAMS.map((p) => p.checked).sort()[0];
-document.querySelectorAll(".oldest-checked").forEach((el) => { el.textContent = longDate(oldest); });
-
 
 // Feedback form. It is not loaded until the section is first opened, so the page asks Google for nothing before that.
 $("feedback").addEventListener("toggle", () => {

@@ -135,16 +135,14 @@ a { color: var(--brand); text-underline-offset: 0.15em; }
   .tagline { font-size: 1rem; max-width: min(16.42em, calc(100% - 104px)); }
   .holiday-art { width: 96px; right: 14px; bottom: 14px; }
 }
-/* Just below the green band: a small row with the About link and the date the list last changed,
-   then the page heading. Filters, Sort and the count follow right under the heading. */
+/* Just below the green band: a small row with the About link, the page heading and a short introduction.
+   Filters, Sort and the count follow right under them. */
 .intro { padding-bottom: 22px; }
-/* The small row just below the green band, on both pages. List page: the About link and the date, side by side
-   on the left (on a narrow phone the date can wrap under the link). About page: "Back to the list". */
+/* The small row just below the green band, on both pages: "About this project" on the list page,
+   "Back to the list" on the About page. */
 .topline { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: 20px; padding-top: 4px; }
 /* The link keeps its 44px tap height */
 .topline .page-link { font-size: 0.9375rem; }
-/* The small gray text uses weight 500: at 400, DM Sans looks fainter than the old font at this size */
-.updated { font-size: 0.875rem; font-weight: 500; color: var(--ink-soft); }
 /* The page heading on both pages: "Find your way to give in New York City" and "About this project" */
 .intro-title { font-family: var(--font-display); font-weight: 700; font-size: 2rem; line-height: 1.1; color: var(--ink); margin: 4px 0 0; }
 /* A short introduction under the heading on the list page, no wider than 60 characters (41.04em) */
@@ -346,6 +344,8 @@ details.msg > summary { cursor: pointer; font-weight: 600; color: var(--brand); 
 .about h2 { font-family: var(--font-display); font-size: 1.25rem; }
 .about .wrap > p { max-width: 41.04em; }
 .about .footnote { font-size: 0.875rem; font-weight: 500; color: var(--ink-soft); }
+/* The fine print is four short lines. The footer's grid puts 12px between items; these sit 6px apart. */
+.about .footnote + .footnote { margin-top: -6px; }
 .about .form-link { justify-self: start; }
 /* Feedback form: folded away, and not loaded until it is first opened */
 details.feedback > summary { cursor: pointer; font-weight: 600; color: var(--brand); padding: 11px 0; min-height: 44px; }
