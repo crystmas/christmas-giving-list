@@ -180,6 +180,8 @@ a { color: var(--brand); text-underline-offset: 0.15em; }
 .filters fieldset > legend + * { clear: both; }
 .filters .check { align-items: center; min-height: 44px; padding: 4px 6px; margin: 0 -6px; }
 .filters .check input { width: 22px; height: 22px; margin: 0; }
+/* A short hint under one option ("Anywhere in NYC"). It lines up with the option's words: checkbox width plus the 10px gap. */
+.check-hint { font-size: 0.875rem; color: var(--ink-soft); line-height: 1.4; margin: -6px 0 6px; padding-left: 32px; }
 .filters-body > label.check { padding: 8px 14px; margin: 0; border-radius: 0; }
 /* "Reset filters" as an underlined text button: in the filter panel (#clear) and in the line above the list (#clear3) */
 #clear, #clear3 { border-color: transparent; text-decoration: underline; padding: 6px 0; min-height: 44px; }
@@ -301,8 +303,9 @@ details.more[open] > summary { margin-bottom: 0; }
 .card-action { display: grid; gap: 0; container-type: inline-size; }
 .give-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; }
 .give { display: grid; gap: 6px; }
-/* A way with no button gets a little more room above and below it, so it reads as its own item */
-.give:not(.has-act):not(:first-child), .give:not(.has-act) + .give { padding-top: 8px; }
+/* A way with no button gets a little more room above and below it, so it reads as its own item.
+   The email help (.give-help) sits right under the buttons, so it doesn't. */
+.give:not(.has-act):not(.give-help):not(:first-child), .give:not(.has-act):not(.give-help) + .give { padding-top: 8px; }
 .give-text { min-width: 0; padding: 0 2px; }
 .give-act { order: -1; display: grid; gap: 8px; }
 .give-act .btn { width: 100%; min-height: 48px; }
@@ -318,10 +321,14 @@ details.more[open] > summary { margin-bottom: 0; }
 .give-detail .signup-first { color: var(--note-ink); }
 @container (min-width: 480px) {
   /* All the buttons on one card share the left-hand column. It is as wide as the widest button, so they all match.
-     Words and the email help use the whole width. */
+     Rows with no button line up with the buttons and wrap inside that column without making it wider
+     (width 0, then stretched to the column). The email help uses the whole width. */
   .give-list { grid-template-columns: fit-content(100%) minmax(0, 1fr); }
   .give { grid-column: 1 / -1; grid-template-columns: subgrid; }
-  .give-text, .give > details.msg { grid-column: 1 / -1; padding: 0; }
+  .give-text { grid-column: 1; width: 0; min-width: 100%; padding: 0; }
+  /* If a card has no button at all (every way with a button has ended), the words use the whole width instead */
+  .give-list:not(:has(.give-act)) .give-text { grid-column: 1 / -1; width: auto; }
+  .give > details.msg { grid-column: 1 / -1; padding: 0; }
   .give-act { grid-column: 1; }
   .give-act .btn { min-height: 44px; padding: 9px 12px; }
 }
@@ -382,6 +389,7 @@ details.feedback > summary { cursor: pointer; font-weight: 600; color: var(--bra
   .filters fieldset > legend { font-size: 0.8125rem; color: var(--ink-soft); }
   .filters .check { font-size: 0.9375rem; }
   .filters .check input { width: 18px; height: 18px; }
+  .check-hint { padding-left: 28px; margin-top: -8px; }
   .filters-body > label.check { padding: 8px 0; }
 }
 
@@ -432,6 +440,7 @@ details.feedback > summary { cursor: pointer; font-weight: 600; color: var(--bra
   .filters fieldset > legend { font-size: 0.8125rem; color: var(--ink-soft); }
   .filters .check { min-height: 48px; font-size: 0.9375rem; }
   .filters .check input { width: 20px; height: 20px; }
+  .check-hint { padding-left: 30px; }
   .filters-body > label.check { padding: 8px 16px; }
   /* The usual light-green highlight would not show on the tint, so rows you tap or point at turn white */
   .filters .check:hover { background: var(--surface); }
