@@ -141,9 +141,12 @@ a { color: var(--brand); text-underline-offset: 0.15em; }
 .updated { font-size: 0.875rem; font-weight: 500; color: var(--ink-soft); }
 /* The page heading on both pages: "Find your way to give in New York City" and "About this project" */
 .intro-title { font-family: var(--font-display); font-weight: 700; font-size: 2rem; line-height: 1.1; color: var(--ink); margin: 4px 0 0; }
+/* A short introduction under the heading on the list page, no wider than 60 characters (41.04em) */
+.intro-lead { font-size: 1.0625rem; line-height: 1.5; color: var(--ink); max-width: 41.04em; margin: 8px 0 0; text-wrap: pretty; }
 @media (max-width: 699px) {
   .intro { padding-bottom: 12px; }
   .intro-title { font-size: 1.375rem; }
+  .intro-lead { font-size: 1rem; margin-top: 6px; }
 }
 
 /* Page grid. Wide screens: filters at the side, list heading and sort menu on one row above the list. */
