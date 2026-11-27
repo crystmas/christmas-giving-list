@@ -136,37 +136,39 @@ a { color: var(--brand); text-underline-offset: 0.15em; }
 
 /* Header: a solid evergreen band with the site's name, a short tagline, and the tree. The tree is decoration only. */
 .site-head { position: relative; background: var(--head-bg); color: var(--head-ink); }
-.site-head .wrap { position: relative; display: grid; gap: 14px; padding-top: 44px; padding-bottom: 48px; }
+.site-head .wrap { position: relative; display: grid; gap: 6px; padding-top: 30px; padding-bottom: 32px; }
 .site-title {
-  font-family: var(--font-display); font-weight: 700; font-size: 3.5rem; line-height: 1.05; letter-spacing: -0.01em;
-  color: #fbf6ec; max-width: 7.63em; /* 12ch in Lora */
+  font-family: var(--font-display); font-weight: 700; font-size: 2.75rem; line-height: 1.05; letter-spacing: -0.01em;
+  color: #fbf6ec; text-wrap: balance;
+  max-width: calc(100% - 160px); /* stops before the tree, so the title never runs under it */
 }
 .site-title .dot { color: #f2c14e; }
 /* On the About page the title links back to the list: no underline until it is hovered or focused */
 .site-title a { color: inherit; text-decoration: none; }
 .site-title a:hover, .site-title a:focus-visible { text-decoration: underline; text-decoration-thickness: 0.06em; }
-.tagline { font-size: 1.375rem; line-height: 1.45; color: #e6f2ec; text-wrap: balance; max-width: 16.42em; /* 24ch in DM Sans */ }
+.tagline { font-size: 1.1875rem; line-height: 1.45; color: #e6f2ec; text-wrap: balance; }
 .site-head :focus-visible { outline-color: var(--head-ink); }
 /* The tree and gifts sit at the bottom right of the band */
-.holiday-art { position: absolute; right: 40px; bottom: 36px; width: 220px; height: auto; }
+.holiday-art { position: absolute; right: 20px; bottom: 20px; width: 124px; height: auto; }
 @media (max-width: 699px) {
-  .site-head .wrap { gap: 10px; padding-top: 28px; padding-bottom: 30px; }
-  .site-title { font-size: 2.125rem; }
+  .site-head .wrap { padding-top: 20px; padding-bottom: 22px; }
+  /* On phones the title always breaks as "The Christmas / Giving List." */
+  .site-title { font-size: 1.875rem; max-width: 7.63em; /* 12ch in Lora */ }
   /* The tagline stops before the tree, so the two never touch */
-  .tagline { font-size: 1.0625rem; max-width: min(16.42em, calc(100% - 116px)); }
-  .holiday-art { width: 112px; right: 16px; bottom: 18px; }
+  .tagline { font-size: 1rem; max-width: min(16.42em, calc(100% - 104px)); }
+  .holiday-art { width: 96px; right: 14px; bottom: 14px; }
 }
 /* The opening paragraph sits just below the green band, in dark text on the light page, so it is easy to read.
    The link to the About page and the small print under it share one column, as wide as the paragraph. */
 .intro { padding-top: 18px; padding-bottom: 22px; display: grid; grid-template-columns: minmax(0, 41.04em); gap: 4px; font-size: 1.0625rem; }
-.intro-title { font-family: var(--font-display); font-weight: 700; font-size: 2.25rem; line-height: 1.1; color: var(--ink); margin: 0 0 4px; }
+.intro-title { font-family: var(--font-display); font-weight: 700; font-size: 2rem; line-height: 1.1; color: var(--ink); margin: 0 0 4px; }
 .lead { max-width: 41.04em; font-size: 1.0625rem; line-height: 1.55; color: var(--ink); }
 /* The About link keeps its 44px tap height but sits close to the words around it */
 .intro .page-link { margin: -6px 0 -10px; }
 /* The small gray text uses weight 500: at 400, DM Sans looks fainter than the old font at this size */
 .fineprint { margin-top: 0; font-size: 0.8125rem; font-weight: 500; color: var(--ink-soft); }
 @media (max-width: 699px) {
-  .intro { padding-top: 22px; }
+  .intro { padding-top: 16px; }
   .intro-title { font-size: 1.375rem; }
 }
 @media (max-width: 519px) {

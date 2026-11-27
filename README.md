@@ -23,4 +23,8 @@ https://docs.google.com/forms/d/e/1FAIpQLSfdwLZCQvjUqEZg6rhdhUFrDyp4WQBQvWkwpQ0r
 - It uses no libraries and needs no build step.
 - GitHub Pages publishes it from the `main` branch.
 
+## How to edit
+
+- Whenever `styles.css` changes, change the `v=` value in both pages (for example, to today's date plus a number), so visitors' browsers download the new file instead of reusing an old one.
+
 Made by Crystal Marte.
