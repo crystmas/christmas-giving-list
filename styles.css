@@ -167,7 +167,7 @@ a { color: var(--brand); text-underline-offset: 0.15em; }
 .fineprint { margin-top: 0; font-size: 0.8125rem; font-weight: 500; color: var(--ink-soft); }
 @media (max-width: 699px) {
   .intro { padding-top: 22px; }
-  .intro-title { font-size: 1.625rem; }
+  .intro-title { font-size: 1.375rem; }
 }
 @media (max-width: 519px) {
   .intro { padding-bottom: 14px; font-size: 1rem; }
@@ -248,7 +248,8 @@ input[type="search"], select {
 .btn.secondary:hover { background: var(--calm-bg); filter: none; }
 
 /* Results bar */
-#count { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+#count { color: var(--ink-soft); font-variant-numeric: tabular-nums; font-size: 0.9375rem; }
+@media (max-width: 699px) { #count { font-size: 0.875rem; } }
 /* Sort control. What you see is the "face": a box that reads "Sort: Deadline, soonest first" with an arrow.
    The real menu sits on top of it and is see-through, so the control looks the same in every
    browser and still opens the phone's or computer's own menu. */
@@ -276,6 +277,7 @@ input[type="search"], select {
 }
 .card-main { display: grid; gap: 13px; align-content: start; }
 .card h3 { font-family: var(--font-display); font-size: 1.25rem; line-height: 1.25; text-wrap: balance; }
+@media (max-width: 699px) { .card h3 { font-size: 1.125rem; } }
 .org { color: var(--ink-soft); font-weight: 400; margin-top: -7px; font-size: 0.9375rem; text-wrap: balance; }
 .badges { display: flex; flex-wrap: wrap; gap: 8px; }
 /* Card header: name, then organization, then the deadline and who it helps on their own row */
