@@ -21,7 +21,7 @@
 <!-- The heading font and the main text font start loading right away -->
 <link rel="preload" href="fonts/lora-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=2026-11-27-14">
+<link rel="stylesheet" href="styles.css?v=2026-11-27-15">
 <!-- The folded feedback form needs JavaScript. Without it, only the plain link to the form shows. -->
 <noscript><style>#feedback { display: none; }</style></noscript>
 </head>
@@ -114,7 +114,7 @@
   </div>
   <div class="sort">
     <label for="sort" class="sr-only">Sort by</label>
-    <span class="sort-face" aria-hidden="true"><span id="sortText">Sort: Deadline, soonest first</span><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></span>
+    <span class="sort-face" aria-hidden="true"><span id="sortText"><span class="sort-by">Sort by</span> <span class="sort-name">Deadline, soonest first</span></span><svg aria-hidden="true" width="12" height="12" viewBox="0 0 12 12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 4.5 6 8l3.5-3.5"/></svg></span>
     <select id="sort">
       <option value="deadline">Deadline, soonest first</option>
       <option value="name">Name, A to Z</option>
@@ -3279,8 +3279,9 @@ const SORT_NAMES = {
   short: { deadline: "Deadline", name: "Name" }
 };
 const phone = window.matchMedia("(max-width: 519px)");
+// "Sort by" and the option name are separate spans in #sortText, so they can be styled apart. Only the name changes.
 function showSort() {
-  $("sortText").textContent = "Sort: " + SORT_NAMES[phone.matches ? "short" : "full"][$("sort").value];
+  $("sortText").querySelector(".sort-name").textContent = SORT_NAMES[phone.matches ? "short" : "full"][$("sort").value];
 }
 phone.addEventListener("change", showSort);
 

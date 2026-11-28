@@ -163,7 +163,8 @@ a { color: var(--brand); text-underline-offset: 0.15em; }
   grid-template-areas: "filters head sort" "filters results results";
   column-gap: 24px; row-gap: 12px; align-items: start; padding-bottom: 48px;
 }
-.results-head { grid-area: head; align-self: end; }
+/* The count line and the Sort text share a baseline, so on wide screens their words line up */
+.results-head { grid-area: head; align-self: baseline; }
 #results { grid-area: results; min-width: 0; }
 
 /* Filters */
@@ -223,24 +224,25 @@ select {
 /* Results bar */
 #count { color: var(--ink-soft); font-variant-numeric: tabular-nums; font-size: 0.9375rem; }
 @media (max-width: 699px) { #count { font-size: 0.875rem; } }
-/* Sort control. What you see is the "face": a small pill that reads "Sort: Deadline, soonest first" with an arrow.
-   The real menu sits on top of it and is see-through, so the control looks the same in every
-   browser and still opens the phone's or computer's own menu. The pill looks 36px tall; the menu reaches
+/* Sort control. What you see is the "face": plain text that reads "Sort by Deadline, soonest first" with a down arrow.
+   "Sort by" is soft gray; the option name and the arrow are in the brand color. The real menu sits on top of it
+   and is see-through, so the control looks the same in every browser and still opens the phone's or computer's
+   own menu. The face is 36px tall, like the Filters button beside it on phones; the menu reaches
    4px above and below it, so the tap area is 44px tall. */
-.sort { grid-area: sort; align-self: end; position: relative; display: inline-flex; min-width: 0; }
+.sort { grid-area: sort; align-self: baseline; position: relative; display: inline-flex; min-width: 0; }
 .sort-face {
   display: flex; align-items: center; justify-content: space-between; gap: 8px; box-sizing: border-box;
-  width: 100%; min-width: 0; min-height: 36px; padding: 0 12px 0 14px; white-space: nowrap; font-size: 0.875rem; font-weight: 600;
-  border: 1px solid var(--line); border-radius: 18px; background: var(--surface);
+  width: 100%; min-width: 0; min-height: 36px; white-space: nowrap; font-size: 0.875rem; font-weight: 600; color: var(--brand);
 }
 .sort-face svg { flex: none; }
+.sort-by { color: var(--ink-soft); font-weight: 400; }
 /* With large text or wide letter spacing the label wraps onto a second line. It is never cut off. */
 #sortText { min-width: 0; white-space: normal; line-height: 1.25; padding: 4px 0; }
 .sort select {
   position: absolute; inset: -4px 0; width: 100%; height: calc(100% + 8px); min-height: 0; padding: 0; border: 0; opacity: 0;
   -webkit-appearance: none; appearance: none; font-size: 1rem; cursor: pointer;
 }
-.sort:hover .sort-face { border-color: var(--brand); }
+.sort:hover .sort-name { text-decoration: underline; }
 .sort:focus-within .sort-face { outline: 3px solid var(--brand); outline-offset: 3px; }
 
 /* Cards */
@@ -407,15 +409,15 @@ details.feedback > summary { cursor: pointer; font-weight: 600; color: var(--bra
   /* The Filters button is as wide as its label, and a little wider when it shows how many filters are on */
   .page { grid-template-columns: 6.25rem minmax(0, 1fr); grid-template-rows: none; grid-template-areas: none; column-gap: 8px; }
   .page:has(.fs-count) { grid-template-columns: 7.75rem minmax(0, 1fr); }
-  /* The panel spans the full width. The sort menu sits over its empty top right corner. */
+  /* The panel spans the full width. The sort menu sits over its empty top right corner, at the right edge. */
   .filters { grid-area: auto; grid-column: 1 / -1; grid-row: 1; border: 0; border-radius: 0; background: transparent; }
   .filters.sticky { position: static; }
-  .sort { grid-area: auto; grid-column: 2; grid-row: 1; align-self: start; justify-self: start; position: relative; z-index: 1; }
+  .sort { grid-area: auto; grid-column: 2; grid-row: 1; align-self: start; justify-self: end; position: relative; z-index: 1; }
   #sortText { overflow-wrap: anywhere; }   /* with very large text the label breaks instead of pushing the page sideways */
   .results-head { grid-area: auto; grid-column: 1 / -1; grid-row: 2; }
   #results { grid-area: auto; grid-column: 1 / -1; grid-row: 3; }
 
-  /* The Filters button. It matches the sort pill beside it: it looks 36px tall, and its tap area is 44px tall. */
+  /* The Filters button. It looks 36px tall, like the Sort text beside it, and its tap area is 44px tall. */
   .filters > summary {
     position: relative; display: flex; align-items: center; gap: 6px; box-sizing: border-box; width: 6.25rem; min-height: 36px;
     padding: 0 12px; white-space: nowrap; font-size: 0.875rem; font-weight: 600;
@@ -461,10 +463,10 @@ details.feedback > summary { cursor: pointer; font-weight: 600; color: var(--bra
   .glance { grid-template-columns: minmax(0, 1fr); }
   .action-row .btn { width: 100%; }
 }
-/* Very narrow phones: no room for two controls in a row, so "Sort by" drops below "Filters" */
+/* Very narrow phones: no room for two controls in a row, so "Sort by" drops below "Filters", on the left */
 @media (max-width: 359px), (max-width: 22.4em) {
   .page, .page:has(.fs-count) { grid-template-columns: minmax(0, 1fr); }
-  .sort { grid-column: 1; grid-row: 2; }
+  .sort { grid-column: 1; grid-row: 2; justify-self: start; }
   .results-head { grid-row: 3; }
   #results { grid-row: 4; }
 }
