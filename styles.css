@@ -453,8 +453,9 @@ details.feedback > summary { cursor: pointer; font-weight: 600; color: var(--bra
   /* The usual light-green highlight would not show on the tint, so rows you tap or point at turn white */
   .filters .check:hover { background: var(--surface); }
   /* The bar with "Reset filters" and "Show programs" stays in view while you scroll the options.
-     It keeps the tint, and its bottom corners follow the box's: 12px less the 1.5px border. */
-  .sheet-foot { display: flex; align-items: center; gap: 12px; position: sticky; bottom: 0; background: var(--calm-bg); border-radius: 0 0 10.5px 10.5px; }
+     It keeps the tint, and its bottom corners follow the box's: 12px less the 1.5px border.
+     With very large text the two buttons don't fit side by side, so "Show programs" moves to its own line. */
+  .sheet-foot { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; position: sticky; bottom: 0; background: var(--calm-bg); border-radius: 0 0 10.5px 10.5px; }
   #showResults { display: inline-flex; flex: 1; min-height: 44px; }
 }
 /* Phones: cards stack and buttons run the full width */

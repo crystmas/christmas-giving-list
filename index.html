@@ -21,7 +21,7 @@
 <!-- The heading font and the main text font start loading right away -->
 <link rel="preload" href="fonts/lora-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
 <link rel="preload" href="fonts/dm-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="styles.css?v=2026-11-27-15">
+<link rel="stylesheet" href="styles.css?v=2026-11-27-16">
 <!-- The folded feedback form needs JavaScript. Without it, only the plain link to the form shows. -->
 <noscript><style>#feedback { display: none; }</style></noscript>
 </head>
@@ -3279,15 +3279,28 @@ const SORT_NAMES = {
   short: { deadline: "Deadline", name: "Name" }
 };
 const phone = window.matchMedia("(max-width: 519px)");
+const sideBySide = window.matchMedia("(min-width: 700px)");   // the count line and Sort share a row
+// How many lines the "Showing … of …" text takes up
+function countLines() {
+  const r = document.createRange();
+  r.selectNodeContents($("count"));
+  return new Set(Array.from(r.getClientRects(), (x) => Math.round(x.top))).size;
+}
 // "Sort by" and the option name are separate spans in #sortText, so they can be styled apart. Only the name changes.
+// Wide screens show the full name, unless it would squeeze the "Showing … of …" line beside it onto more than
+// 2 lines (with very large text). Then they show the short name, like phones.
 function showSort() {
-  $("sortText").querySelector(".sort-name").textContent = SORT_NAMES[phone.matches ? "short" : "full"][$("sort").value];
+  const name = $("sortText").querySelector(".sort-name");
+  const v = $("sort").value;
+  name.textContent = SORT_NAMES[phone.matches ? "short" : "full"][v];
+  if (!phone.matches && sideBySide.matches && countLines() > 2) name.textContent = SORT_NAMES.short[v];
 }
 phone.addEventListener("change", showSort);
+// The window width, the text size and the web fonts loading all change how much room the count line has
+if (window.ResizeObserver) new ResizeObserver(() => requestAnimationFrame(showSort)).observe($("count"));
 
 
 function update() {
-  showSort();
   refreshDates();
   const f = {
     areas: checked("areas"), ways: checked("ways"),
@@ -3322,6 +3335,7 @@ function update() {
     ? PROGRAMS.filter((p) => !isActionable(p) && matches(p, Object.assign({}, f, { hideClosed: false }))).length : 0;
   $("count").textContent = "Showing " + shown + " of " + PROGRAMS.length + "." +
     (closedHidden ? " " + closedHidden + (closedHidden === 1 ? " is" : " are") + " full or closed." : "");
+  showSort();   // after the count, because the label can depend on how many lines the count takes
   // Showing full and closed programs is a change from the usual view, so it counts as a filter that is on
   const showAll = !f.hideClosed;
   const active = f.areas.length + f.ways.length + (showAll ? 1 : 0);
